@@ -23,7 +23,7 @@ class HyperlinkedRelatedField(rest_framework.relations.RelatedField):
     """
     read_only = False
     lookup_field = 'pk'
-    domain_lookup_field = 'domain_pk'
+    domain_lookup_field = 'domain__pk'
 
     default_error_messages = {
         'no_match': _('Invalid hyperlink - No URL match'),
@@ -52,6 +52,7 @@ class HyperlinkedRelatedField(rest_framework.relations.RelatedField):
         attributes are not configured to correctly match the URL conf.
         """
         lookup_field = getattr(obj, self.lookup_field)
+        domain_lookup_field = getattr(obj, self.domain_lookup_field)
         # TODO find out domain_lookup_field
         kwargs = {self.lookup_field: lookup_field,
                   self.domain_lokup_field: domain_lookup_field}
