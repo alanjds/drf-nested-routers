@@ -13,6 +13,7 @@ setup(
     author='Alan Justino and Oscar Vilaplana',
     author_email='alan.justino@yahoo.com.br, dev@oscarvilaplana.cat',
     url='https://github.com/alanjds/drf-nested-routers',
-    install_requires=[],
+    install_requires=['restframework'],
+    setup_requires=['setuptools']
     packages=find_packages(curdir),
 )
