@@ -20,11 +20,11 @@ Example:
 
     url_patterns = patterns('',
         url(r'^', include(router.urls)),
-            url(r'^', include(domains_router.urls)),
-            )
+        url(r'^', include(domains_router.urls)),
+    )
 
-        router = routers.DefaultRouter()
-        router.register('users', UserViewSet, 'user')
-        router.register('accounts', AccountViewSet, 'account')
+    router = routers.DefaultRouter()
+    router.register('users', UserViewSet, 'user')
+    router.register('accounts', AccountViewSet, 'account')
 
-        urlpatterns = router.urls
+    urlpatterns = router.urls
