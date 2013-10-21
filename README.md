@@ -1,4 +1,5 @@
-**This is a work in progress, and it does not fully work yet.**
+**This is a work in progress. It "works for me" at www.apiregistro.com.br, 
+but I cannot warranty that it fully "works everywhere" yet.**
 
 rest_framework_nested
 =====================
@@ -23,10 +24,6 @@ url_patterns = patterns('',
     url(r'^', include(router.urls)),
     url(r'^', include(domains_router.urls)),
 )
-
-router = routers.DefaultRouter()
-router.register('users', UserViewSet, 'user')
-router.register('accounts', AccountViewSet, 'account')
 
 urlpatterns = router.urls
 ```
