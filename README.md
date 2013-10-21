@@ -20,10 +20,9 @@ router.register(r'domains', DomainViewSet)
 domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
 domains_router.register(r'nameservers', NameserverViewSet)
 
-url_patterns = patterns('',
+urlpatterns = patterns('',
     url(r'^', include(router.urls)),
     url(r'^', include(domains_router.urls)),
 )
 
-urlpatterns = router.urls
 ```
