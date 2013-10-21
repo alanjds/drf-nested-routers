@@ -8,23 +8,25 @@ Django Rest Framework
 
 Example:
 
-    # urls.py
+```python
+# urls.py
 
-    from rest_framework_nested import routers
+from rest_framework_nested import routers
 
-    router = routers.SimpleRouter()
-    router.register(r'domains', DomainViewSet)
+router = routers.SimpleRouter()
+router.register(r'domains', DomainViewSet)
 
-    domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
-    domains_router.register(r'nameservers', NameserverViewSet)
+domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
+domains_router.register(r'nameservers', NameserverViewSet)
 
-    url_patterns = patterns('',
-        url(r'^', include(router.urls)),
-        url(r'^', include(domains_router.urls)),
-    )
+url_patterns = patterns('',
+    url(r'^', include(router.urls)),
+    url(r'^', include(domains_router.urls)),
+)
 
-    router = routers.DefaultRouter()
-    router.register('users', UserViewSet, 'user')
-    router.register('accounts', AccountViewSet, 'account')
+router = routers.DefaultRouter()
+router.register('users', UserViewSet, 'user')
+router.register('accounts', AccountViewSet, 'account')
 
-    urlpatterns = router.urls
+urlpatterns = router.urls
+```
