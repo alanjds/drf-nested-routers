@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 curdir = os.path.dirname(os.path.abspath(__file__))
 
 setup(
-    name='rest_framework_nested',
+    name='drf-nested-routers',
     description='Nested resources for the Django Rest Framework',
     long_description=open('README.md').read(),
     license='Apache',
