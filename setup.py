@@ -8,6 +8,7 @@ curdir = os.path.dirname(os.path.abspath(__file__))
 setup(
     name='rest_framework_nested',
     description='Nested resources for the Django Rest Framework',
+    long_description=open('README.md').read(),
     license='Apache',
     version='0.1.0',
     author='Alan Justino and Oscar Vilaplana',
