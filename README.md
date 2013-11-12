@@ -12,6 +12,16 @@ The following example is about Domains and DNS Nameservers.
 There is many domains, and each have many nameservers. The "nameserver" resource does not
 exist without a domain, so you need it "nested" inside the domain.
 
+Installation
+------------
+
+You can install this library using pip:
+
+```pip install drf-nested-routers```
+
+Quickstart
+----------
+
 The desired URL signatures are:
 ```
 \domain\ <- Domains list
