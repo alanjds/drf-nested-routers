@@ -4,8 +4,7 @@ but I cannot warranty that it fully "works everywhere" yet.**
 rest_framework_nested
 =====================
 
-This package provides routers and relations to create nested resources in the
-Django Rest Framework
+This package provides routers and relations to create nested resources in the [Django Rest Framework](http://django-rest-framework.org/)
 
 Nested resources are needed for full REST URL structure, if one resource lives inside another.
 
