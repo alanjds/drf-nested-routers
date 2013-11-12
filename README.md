@@ -1,17 +1,26 @@
 **This is a work in progress. It "works for me" at www.apiregistro.com.br, 
 but I cannot warranty that it fully "works everywhere" yet.**
 
-rest_framework_nested
+drf-nested-routers
 =====================
 
-This package provides routers and relations to create nested resources in the
-Django Rest Framework
+This package provides routers and relations to create nested resources in the [Django Rest Framework](http://django-rest-framework.org/)
 
 Nested resources are needed for full REST URL structure, if one resource lives inside another.
 
 The following example is about Domains and DNS Nameservers. 
 There is many domains, and each have many nameservers. The "nameserver" resource does not
 exist without a domain, so you need it "nested" inside the domain.
+
+Installation
+------------
+
+You can install this library using pip:
+
+```pip install drf-nested-routers```
+
+Quickstart
+----------
 
 The desired URL signatures are:
 ```
