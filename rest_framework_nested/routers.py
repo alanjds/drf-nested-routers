@@ -52,7 +52,7 @@ class NestedSimpleRouter(SimpleRouter):
         self.nest_prefix = kwargs.pop('lookup', 'nested_%i' % self.nest_count) + '_'
         super(NestedSimpleRouter, self).__init__(*args, **kwargs)
 
-        parent_registry = filter(lambda registered: registered[0] == self.parent_prefix, self.parent_router.registry)
+        parent_registry = [registered for registered in self.parent_router.registry if registered[0] == self.parent_prefix]
         try:
             parent_registry = parent_registry[0]
             parent_prefix, parent_viewset, parent_basename = parent_registry
