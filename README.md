@@ -9,7 +9,7 @@ This package provides routers and relations to create nested resources in the [D
 Nested resources are needed for full REST URL structure, if one resource lives inside another.
 
 The following example is about Domains and DNS Nameservers. 
-There is many domains, and each have many nameservers. The "nameserver" resource does not
+There are many domains, and each domain has many nameservers. The "nameserver" resource does not
 exist without a domain, so you need it "nested" inside the domain.
 
 Installation
