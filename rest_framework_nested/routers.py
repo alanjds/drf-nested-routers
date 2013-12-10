@@ -5,12 +5,13 @@ Example:
 
     # urls.py
 
-    from rest_framework_nested import routers
+    from rest_framework import routers
+    from rest_framework_nested import routers as nested_routers
 
     router = routers.SimpleRouter()
     router.register(r'domains', DomainViewSet)
 
-    domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
+    domains_router = nested_routers.NestedSimpleRouter(router, r'domains', lookup='domain')
     domains_router.register(r'nameservers', NameserverViewSet)
 
     url_patterns = patterns('',
@@ -27,22 +28,7 @@ Example:
 
 from __future__ import unicode_literals
 
-import rest_framework.routers
-
-
-class SimpleRouter(rest_framework.routers.SimpleRouter):
-    """ Improvement of rest_framework.routers.SimpleRouter that allows the
-    lookup of urls of nested resources.
-
-    """
-    def get_lookup_regex(self, viewset, lookup_prefix=''):
-        """
-        Given a viewset, return the portion of URL regex that is used
-        to match against a single instance.
-        """
-        base_regex = '(?P<{lookup_prefix}{lookup_field}>[^/]+)'
-        lookup_field = getattr(viewset, 'lookup_field', 'pk')
-        return base_regex.format(lookup_field=lookup_field, lookup_prefix=lookup_prefix)
+from rest_framework.routers import SimpleRouter, Route
 
 class NestedSimpleRouter(SimpleRouter):
     def __init__(self, parent_router, parent_prefix, *args, **kwargs):
@@ -66,6 +52,6 @@ class NestedSimpleRouter(SimpleRouter):
             parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(parent_prefix=parent_prefix, parent_lookup_regex=parent_lookup_regex)
 
             route_contents['url'] = route.url.replace('^', '^'+parent_regex)
-            nested_routes.append(rest_framework.routers.Route(**route_contents))
+            nested_routes.append(Route(**route_contents))
 
         self.routes = nested_routes
