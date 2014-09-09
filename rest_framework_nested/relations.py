@@ -158,6 +158,7 @@ class HyperlinkedIdentityField(Field):
 
     slug_field = 'slug'
     slug_url_kwarg = None  # Defaults to same as `slug_field` unless overridden
+    pk_url_kwarg = 'pk'
 
     def __init__(self, *args, **kwargs):
         try:
