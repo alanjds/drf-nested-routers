@@ -47,7 +47,8 @@ urlpatterns = patterns('',
     url(r'^', include(router.urls)),
     url(r'^', include(domains_router.urls)),
 )
-
+```
+```python
 # views.py
 class NameserverViewSet(viewsets.ViewSet):
     def list(self, request, domain_pk=None):
