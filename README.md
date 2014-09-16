@@ -47,6 +47,18 @@ urlpatterns = patterns('',
     url(r'^', include(router.urls)),
     url(r'^', include(domains_router.urls)),
 )
+
+# views.py
+class NameserverViewSet(viewsets.ViewSet):
+    def list(self, request, domain_pk=None):
+        nameservers = self.queryset.filter(domain=domain_pk)
+        (...)
+        return Response([...])
+
+    def retrieve(self, request, pk=None, domain_pk=None):
+        nameservers = self.queryset.get(pk=pk, domain=domain_pk)
+        (...)
+        return Response(serializer.data)
 ```
 
 License
