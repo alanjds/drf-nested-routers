@@ -7,18 +7,19 @@ from rest_framework import serializers
 def foobar():
     return 'foobar'
 
+
 class A(models.Model):
-    name=models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
 
 
 class B(models.Model):
-    name=models.CharField(max_length=255)
-    parent=models.ForeignKey(A)
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(A)
 
 
 class C(models.Model):
-    name=models.CharField(max_length=255)
-    parent=models.ForeignKey(B)
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(B)
 
 
 class CustomField(models.CharField):
@@ -47,7 +48,11 @@ class Anchor(RESTFrameworkModel):
 
 
 class BasicModel(RESTFrameworkModel):
-    text = models.CharField(max_length=100, verbose_name=_("Text comes here"), help_text=_("Text description."))
+    text = models.CharField(
+        max_length=100,
+        verbose_name=_("Text comes here"),
+        help_text=_("Text description.")
+    )
 
 
 class SlugBasedModel(RESTFrameworkModel):
