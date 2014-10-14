@@ -7,6 +7,19 @@ from rest_framework import serializers
 def foobar():
     return 'foobar'
 
+class A(models.Model):
+    name=models.CharField(max_length=255)
+
+
+class B(models.Model):
+    name=models.CharField(max_length=255)
+    parent=models.ForeignKey(A)
+
+
+class C(models.Model):
+    name=models.CharField(max_length=255)
+    parent=models.ForeignKey(B)
+
 
 class CustomField(models.CharField):
 
@@ -20,7 +33,7 @@ class RESTFrameworkModel(models.Model):
     Base for test models that sets app_label, so they play nicely.
     """
     class Meta:
-        app_label = 'tests'
+        app_label = 'testapp'
         abstract = True
 
 

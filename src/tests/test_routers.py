@@ -5,15 +5,9 @@ from django.db import models
 from django.test import TestCase
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_nested.routers import SimpleRouter, NestedSimpleRouter
+from testapp.models import A, B, C
 
-class A(models.Model):
-    name=models.CharField(max_length=255)
-class B(models.Model):
-    name=models.CharField(max_length=255)
-    parent=models.ForeignKey(A)
-class C(models.Model):
-    name=models.CharField(max_length=255)
-    parent=models.ForeignKey(B)
+
 
 class AViewSet(ModelViewSet):
     model = A

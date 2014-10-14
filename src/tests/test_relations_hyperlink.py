@@ -3,7 +3,7 @@ from django.test import TestCase
 from rest_framework import serializers
 from rest_framework.compat import patterns, url
 from rest_framework.test import APIRequestFactory
-from rest_framework_nested.tests.models import (
+from testapp.models import (
     BlogPost,
     ManyToManyTarget, ManyToManySource, ForeignKeyTarget, ForeignKeySource,
     NullableForeignKeySource, OneToOneTarget, NullableOneToOneSource
@@ -71,7 +71,7 @@ class NullableOneToOneTargetSerializer(serializers.HyperlinkedModelSerializer):
 # TODO: Add test that .data cannot be accessed prior to .is_valid
 
 class HyperlinkedManyToManyTests(TestCase):
-    urls = 'rest_framework_nested.tests.test_relations_hyperlink'
+    urls = __name__
 
     def setUp(self):
         for idx in range(1, 4):
@@ -179,7 +179,7 @@ class HyperlinkedManyToManyTests(TestCase):
 
 
 class HyperlinkedForeignKeyTests(TestCase):
-    urls = 'rest_framework_nested.tests.test_relations_hyperlink'
+    urls = __name__
 
     def setUp(self):
         target = ForeignKeyTarget(name='target-1')
@@ -307,7 +307,7 @@ class HyperlinkedForeignKeyTests(TestCase):
 
 
 class HyperlinkedNullableForeignKeyTests(TestCase):
-    urls = 'rest_framework_nested.tests.test_relations_hyperlink'
+    urls = __name__
 
     def setUp(self):
         target = ForeignKeyTarget(name='target-1')
@@ -435,7 +435,7 @@ class HyperlinkedNullableForeignKeyTests(TestCase):
 
 
 class HyperlinkedNullableOneToOneTests(TestCase):
-    urls = 'rest_framework_nested.tests.test_relations_hyperlink'
+    urls = __name__
 
     def setUp(self):
         target = OneToOneTarget(name='target-1')
@@ -458,7 +458,7 @@ class HyperlinkedNullableOneToOneTests(TestCase):
 # Regression tests for #694 (`source` attribute on related fields)
 
 class HyperlinkedRelatedFieldSourceTests(TestCase):
-    urls = 'rest_framework_nested.tests.test_relations_hyperlink'
+    urls = __name__
 
     def test_related_manager_source(self):
         """

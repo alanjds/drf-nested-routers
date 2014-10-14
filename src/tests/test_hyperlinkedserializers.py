@@ -4,7 +4,7 @@ from django.test import TestCase
 from rest_framework import generics, status, serializers
 from rest_framework.compat import patterns, url
 from rest_framework.test import APIRequestFactory
-from rest_framework_nested.tests.models import (
+from testapp.models import (
     Anchor, BasicModel, ManyToManyModel, BlogPost, BlogPostComment,
     Album, Photo, OptionalRelationModel
 )
@@ -109,7 +109,7 @@ urlpatterns = patterns('',
 
 
 class TestBasicHyperlinkedView(TestCase):
-    urls = 'rest_framework_nested.tests.test_hyperlinkedserializers'
+    urls = __name__
 
     def setUp(self):
         """
@@ -146,7 +146,7 @@ class TestBasicHyperlinkedView(TestCase):
 
 
 class TestManyToManyHyperlinkedView(TestCase):
-    urls = 'rest_framework_nested.tests.test_hyperlinkedserializers'
+    urls = __name__
 
     def setUp(self):
         """
@@ -194,7 +194,7 @@ class TestManyToManyHyperlinkedView(TestCase):
 
 
 class TestHyperlinkedIdentityFieldLookup(TestCase):
-    urls = 'rest_framework_nested.tests.test_hyperlinkedserializers'
+    urls = __name__
 
     def setUp(self):
         """
@@ -224,7 +224,7 @@ class TestHyperlinkedIdentityFieldLookup(TestCase):
 
 
 class TestCreateWithForeignKeys(TestCase):
-    urls = 'rest_framework_nested.tests.test_hyperlinkedserializers'
+    urls = __name__
 
     def setUp(self):
         """
@@ -249,7 +249,7 @@ class TestCreateWithForeignKeys(TestCase):
 
 
 class TestCreateWithForeignKeysAndCustomSlug(TestCase):
-    urls = 'rest_framework_nested.tests.test_hyperlinkedserializers'
+    urls = __name__
 
     def setUp(self):
         """
@@ -274,7 +274,7 @@ class TestCreateWithForeignKeysAndCustomSlug(TestCase):
 
 
 class TestOptionalRelationHyperlinkedView(TestCase):
-    urls = 'rest_framework_nested.tests.test_hyperlinkedserializers'
+    urls = __name__
 
     def setUp(self):
         """
