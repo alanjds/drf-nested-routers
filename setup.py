@@ -14,5 +14,6 @@ setup(
     author_email='alan.justino@yahoo.com.br, dev@oscarvilaplana.cat',
     url='https://github.com/alanjds/drf-nested-routers',
     install_requires=['djangorestframework>=2.0.0, < 2.5.0'],
-    packages=find_packages(),
+    packages=find_packages('src', exclude=('tests',)),
+    package_dir={'': 'src'},
 )
