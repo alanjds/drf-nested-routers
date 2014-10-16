@@ -8,6 +8,20 @@ def foobar():
     return 'foobar'
 
 
+class A(models.Model):
+    name = models.CharField(max_length=255)
+
+
+class B(models.Model):
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(A)
+
+
+class C(models.Model):
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(B)
+
+
 class CustomField(models.CharField):
 
     def __init__(self, *args, **kwargs):
@@ -20,7 +34,7 @@ class RESTFrameworkModel(models.Model):
     Base for test models that sets app_label, so they play nicely.
     """
     class Meta:
-        app_label = 'tests'
+        app_label = 'testapp'
         abstract = True
 
 
@@ -34,7 +48,11 @@ class Anchor(RESTFrameworkModel):
 
 
 class BasicModel(RESTFrameworkModel):
-    text = models.CharField(max_length=100, verbose_name=_("Text comes here"), help_text=_("Text description."))
+    text = models.CharField(
+        max_length=100,
+        verbose_name=_("Text comes here"),
+        help_text=_("Text description.")
+    )
 
 
 class SlugBasedModel(RESTFrameworkModel):

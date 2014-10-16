@@ -1,28 +1,23 @@
 """
 based upon https://github.com/alanjds/drf-nested-routers/issues/15
 """
-from django.db import models
 from django.test import TestCase
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_nested.routers import SimpleRouter, NestedSimpleRouter
+from testapp.models import A, B, C
 
-class A(models.Model):
-    name=models.CharField(max_length=255)
-class B(models.Model):
-    name=models.CharField(max_length=255)
-    parent=models.ForeignKey(A)
-class C(models.Model):
-    name=models.CharField(max_length=255)
-    parent=models.ForeignKey(B)
 
 class AViewSet(ModelViewSet):
     model = A
 
+
 class BViewSet(ModelViewSet):
     model = B
 
+
 class CViewSet(ModelViewSet):
     model = C
+
 
 class TestNestedSimpleRouter(TestCase):
     def setUp(self):
@@ -44,10 +39,22 @@ class TestNestedSimpleRouter(TestCase):
         urls = self.a_router.urls
         self.assertEquals(len(urls), 2)
         self.assertEquals(urls[0].regex.pattern, u'^a/(?P<a_pk>[^/]+)/b/$')
-        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<a_pk>[^/]+)/b/(?P<pk>[^/]+)/$')
+        self.assertEquals(
+            urls[1].regex.pattern,
+            u'^a/(?P<a_pk>[^/]+)/b/(?P<pk>[^/]+)/$'
+        )
 
-        self.assertEqual(self.b_router.parent_regex, u'a/(?P<a_pk>[^/]+)/b/(?P<b_pk>[^/]+)/')
+        self.assertEqual(
+            self.b_router.parent_regex,
+            u'a/(?P<a_pk>[^/]+)/b/(?P<b_pk>[^/]+)/'
+        )
         urls = self.b_router.urls
         self.assertEquals(len(urls), 2)
-        self.assertEquals(urls[0].regex.pattern, u'^a/(?P<a_pk>[^/]+)/b/(?P<b_pk>[^/]+)/c/$')
-        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<a_pk>[^/]+)/b/(?P<b_pk>[^/]+)/c/(?P<pk>[^/]+)/$')
+        self.assertEquals(
+            urls[0].regex.pattern,
+            u'^a/(?P<a_pk>[^/]+)/b/(?P<b_pk>[^/]+)/c/$'
+        )
+        self.assertEquals(
+            urls[1].regex.pattern,
+            u'^a/(?P<a_pk>[^/]+)/b/(?P<b_pk>[^/]+)/c/(?P<pk>[^/]+)/$'
+        )

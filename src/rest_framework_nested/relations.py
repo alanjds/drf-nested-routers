@@ -28,9 +28,13 @@ class HyperlinkedRelatedField(rest_framework.relations.RelatedField):
     default_error_messages = {
         'no_match': _('Invalid hyperlink - No URL match'),
         'incorrect_match': _('Invalid hyperlink - Incorrect URL match'),
-        'configuration_error': _('Invalid hyperlink due to configuration error'),
+        'configuration_error': _(
+            'Invalid hyperlink due to configuration error'
+        ),
         'does_not_exist': _("Invalid hyperlink - object does not exist."),
-        'incorrect_type': _('Incorrect type.  Expected url string, received %s.'),
+        'incorrect_type': _(
+            'Incorrect type.  Expected url string, received %s.'
+        ),
     }
 
     def __init__(self, *args, **kwargs):
@@ -56,7 +60,12 @@ class HyperlinkedRelatedField(rest_framework.relations.RelatedField):
         # TODO find out domain_lookup_field
         kwargs = {self.lookup_field: lookup_field,
                   self.domain_lokup_field: domain_lookup_field}
-        return reverse(view_name, kwargs=kwargs, request=request, format=format)
+        return reverse(
+            view_name,
+            kwargs=kwargs,
+            request=request,
+            format=format
+        )
 
         raise NoReverseMatch()
 
@@ -89,8 +98,8 @@ class HyperlinkedRelatedField(rest_framework.relations.RelatedField):
 
         if request is None:
             msg = (
-                "Using `HyperlinkedRelatedField` without including the request "
-                "in the serializer context is deprecated. "
+                "Using `HyperlinkedRelatedField` without including the request"
+                " in the serializer context is deprecated. "
                 "Add `context={'request': request}` when instantiating "
                 "the serializer."
             )
@@ -117,7 +126,9 @@ class HyperlinkedRelatedField(rest_framework.relations.RelatedField):
         # TODO: Use values_list
         queryset = self.queryset
         if queryset is None:
-            raise Exception('Writable related fields must include a `queryset` argument')
+            raise Exception(
+                'Writable related fields must include a `queryset` argument'
+            )
 
         try:
             http_prefix = value.startswith(('http:', 'https:'))
@@ -172,13 +183,21 @@ class HyperlinkedIdentityField(Field):
 
         # These are pending deprecation
         if 'pk_url_kwarg' in kwargs:
-            msg = 'pk_url_kwarg is pending deprecation. Use lookup_field instead.'
+            msg = (
+                'pk_url_kwarg is pending deprecation. '
+                'Use lookup_field instead.'
+            )
             warnings.warn(msg, PendingDeprecationWarning, stacklevel=2)
         if 'slug_url_kwarg' in kwargs:
-            msg = 'slug_url_kwarg is pending deprecation. Use lookup_field instead.'
+            msg = (
+                'slug_url_kwarg is pending deprecation. '
+                'Use lookup_field instead.'
+            )
             warnings.warn(msg, PendingDeprecationWarning, stacklevel=2)
         if 'slug_field' in kwargs:
-            msg = 'slug_field is pending deprecation. Use lookup_field instead.'
+            msg = (
+                'slug_field is pending deprecation. Use lookup_field instead.'
+            )
             warnings.warn(msg, PendingDeprecationWarning, stacklevel=2)
 
         self.slug_field = kwargs.pop('slug_field', self.slug_field)
@@ -194,10 +213,14 @@ class HyperlinkedIdentityField(Field):
         view_name = self.view_name
 
         if request is None:
-            warnings.warn("Using `HyperlinkedIdentityField` without including the "
-                          "request in the serializer context is deprecated. "
-                          "Add `context={'request': request}` when instantiating the serializer.",
-                          DeprecationWarning, stacklevel=4)
+            warnings.warn(
+                "Using `HyperlinkedIdentityField` without including the "
+                "request in the serializer context is deprecated. "
+                "Add `context={'request': request}` when instantiating "
+                "the serializer.",
+                DeprecationWarning,
+                stacklevel=4
+            )
 
         # By default use whatever format is given for the current context
         # unless the target is a different type to the source.
@@ -238,7 +261,12 @@ class HyperlinkedIdentityField(Field):
             return None
 
         try:
-            return reverse(view_name, kwargs=kwargs, request=request, format=format)
+            return reverse(
+                view_name,
+                kwargs=kwargs,
+                request=request,
+                format=format
+            )
         except NoReverseMatch:
             pass
 
@@ -247,7 +275,12 @@ class HyperlinkedIdentityField(Field):
             # Otherwise, the default `lookup_field = 'pk'` has us covered.
             kwargs = {self.pk_url_kwarg: obj.pk}
             try:
-                return reverse(view_name, kwargs=kwargs, request=request, format=format)
+                return reverse(
+                    view_name,
+                    kwargs=kwargs,
+                    request=request,
+                    format=format
+                )
             except NoReverseMatch:
                 pass
 
@@ -256,10 +289,13 @@ class HyperlinkedIdentityField(Field):
             # Only use slug lookup if a slug field exists on the model
             kwargs = {self.slug_url_kwarg: slug}
             try:
-                return reverse(view_name, kwargs=kwargs, request=request, format=format)
+                return reverse(
+                    view_name,
+                    kwargs=kwargs,
+                    request=request,
+                    format=format
+                )
             except NoReverseMatch:
                 pass
 
         raise NoReverseMatch()
-
-

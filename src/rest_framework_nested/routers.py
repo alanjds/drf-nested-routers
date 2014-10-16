@@ -10,7 +10,9 @@ Example:
     router = routers.SimpleRouter()
     router.register(r'domains', DomainViewSet)
 
-    domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
+    domains_router = routers.NestedSimpleRouter(
+        router, r'domains', lookup='domain'
+    )
     domains_router.register(r'nameservers', NameserverViewSet)
 
     url_patterns = patterns('',
@@ -42,17 +44,29 @@ class SimpleRouter(rest_framework.routers.SimpleRouter):
         """
         base_regex = '(?P<{lookup_prefix}{lookup_field}>[^/]+)'
         lookup_field = getattr(viewset, 'lookup_field', 'pk')
-        return base_regex.format(lookup_field=lookup_field, lookup_prefix=lookup_prefix)
+        return base_regex.format(
+            lookup_field=lookup_field,
+            lookup_prefix=lookup_prefix
+        )
+
 
 class NestedSimpleRouter(SimpleRouter):
     def __init__(self, parent_router, parent_prefix, *args, **kwargs):
         self.parent_router = parent_router
         self.parent_prefix = parent_prefix
-        self.nest_count = getattr(parent_router, 'nest_count', 0) +1
-        self.nest_prefix = kwargs.pop('lookup', 'nested_%i' % self.nest_count) + '_'
+        self.nest_count = getattr(parent_router, 'nest_count', 0) + 1
+        self.nest_prefix = "".join((
+            kwargs.pop('lookup', 'nested_%i' % self.nest_count),
+            '_'
+        ))
         super(NestedSimpleRouter, self).__init__(*args, **kwargs)
 
-        parent_registry = [registered for registered in self.parent_router.registry if registered[0] == self.parent_prefix]
+        parent_registry = []
+
+        for registered in self.parent_router.registry:
+            if registered[0] == self.parent_prefix:
+                parent_registry.append(registered)
+
         try:
             parent_registry = parent_registry[0]
             parent_prefix, parent_viewset, parent_basename = parent_registry
@@ -60,17 +74,28 @@ class NestedSimpleRouter(SimpleRouter):
             raise RuntimeError('parent registered resource not found')
 
         nested_routes = []
-        parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)
-        self.parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(parent_prefix=parent_prefix, parent_lookup_regex=parent_lookup_regex)
+        parent_lookup_regex = parent_router.get_lookup_regex(
+            parent_viewset,
+            self.nest_prefix
+        )
+        self.parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(
+            parent_prefix=parent_prefix,
+            parent_lookup_regex=parent_lookup_regex
+        )
         if hasattr(parent_router, 'parent_regex'):
-            self.parent_regex = parent_router.parent_regex+self.parent_regex
+            self.parent_regex = parent_router.parent_regex + self.parent_regex
 
         for route in self.routes:
             route_contents = route._asdict()
+            Route = type(route)
 
-            route_contents['url'] = route.url.replace('^', '^'+self.parent_regex)
-            if 'mapping' not in route_contents:
-                route_contents['mapping'] = {}
-            nested_routes.append(rest_framework.routers.Route(**route_contents))
+            route_contents['url'] = route.url.replace(
+                '^',
+                '^' + self.parent_regex
+            )
+
+            nested_routes.append(
+                Route(**route_contents)
+            )
 
         self.routes = nested_routes
