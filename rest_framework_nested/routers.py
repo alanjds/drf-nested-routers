@@ -59,18 +59,13 @@ class NestedSimpleRouter(SimpleRouter):
         except:
             raise RuntimeError('parent registered resource not found')
 
-        nested_routes = []
         parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)
         self.parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(parent_prefix=parent_prefix, parent_lookup_regex=parent_lookup_regex)
         if hasattr(parent_router, 'parent_regex'):
             self.parent_regex = parent_router.parent_regex+self.parent_regex
 
+        nested_routes = []
         for route in self.routes:
-            route_contents = route._asdict()
-
-            route_contents['url'] = route.url.replace('^', '^'+self.parent_regex)
-            if 'mapping' not in route_contents:
-                route_contents['mapping'] = {}
-            nested_routes.append(rest_framework.routers.Route(**route_contents))
+            nested_routes.append(route._replace(url=route.url.replace('^', '^'+self.parent_regex)))
 
         self.routes = nested_routes
