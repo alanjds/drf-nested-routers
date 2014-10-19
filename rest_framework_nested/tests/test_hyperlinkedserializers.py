@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 import json
 from django.test import TestCase
+from django.conf.urls import patterns, url
 from rest_framework import generics, status, serializers
-from rest_framework.compat import patterns, url
 from rest_framework.test import APIRequestFactory
 from rest_framework_nested.tests.models import (
     Anchor, BasicModel, ManyToManyModel, BlogPost, BlogPostComment,

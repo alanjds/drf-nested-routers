@@ -37,6 +37,6 @@ setup(
     install_requires=['djangorestframework'],
     setup_requires=['setuptools'],
     packages=find_packages(curdir),
-    tests_require=['djangorestframework<2.4', 'Django<1.7'],
+    tests_require=['Django<1.7'],
     cmdclass={'test': TestCommand},
 )
