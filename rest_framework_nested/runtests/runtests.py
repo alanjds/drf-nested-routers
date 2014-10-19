@@ -25,18 +25,10 @@ def usage():
     """
 
 
-def main():
+def main(test_case=''):
     TestRunner = get_runner(settings)
-    import ipdb;ipdb.set_trace()
 
     test_runner = TestRunner()
-    if len(sys.argv) == 2:
-        test_case = '.' + sys.argv[1]
-    elif len(sys.argv) == 1:
-        test_case = ''
-    else:
-        print(usage())
-        sys.exit(1)
     test_module_name = 'rest_framework_nested.tests'
     if django.VERSION[0] == 1 and django.VERSION[1] < 6:
         test_module_name = 'tests'
@@ -46,4 +38,10 @@ def main():
     sys.exit(failures)
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) == 2:
+        main('.' + sys.argv[1])
+    elif len(sys.argv) == 1:
+        main()
+    else:
+        print(usage())
+        sys.exit(1)
