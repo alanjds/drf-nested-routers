@@ -62,6 +62,15 @@ class NameserverViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
+Contributing
+============
+
+Tests can be run through setup.py:
+
+```
+$ python setup.py test
+```
+
 License
 =======
 
