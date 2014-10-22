@@ -67,10 +67,13 @@ class NestedSimpleRouter(SimpleRouter):
 
         for route in self.routes:
             route_contents = route._asdict()
-
             route_contents['url'] = route.url.replace('^', '^'+self.parent_regex)
-            if 'mapping' not in route_contents:
-                route_contents['mapping'] = {}
-            nested_routes.append(rest_framework.routers.Route(**route_contents))
+
+            if(isinstance(route,rest_framework.routers.Route)):
+                nested_routes.append(rest_framework.routers.Route(**route_contents))
+            if(isinstance(route,rest_framework.routers.DynamicListRoute)):
+                nested_routes.append(rest_framework.routers.DynamicListRoute(**route_contents))
+            if(isinstance(route,rest_framework.routers.DynamicDetailRoute)):
+                nested_routes.append(rest_framework.routers.DynamicDetailRoute(**route_contents))
 
         self.routes = nested_routes
