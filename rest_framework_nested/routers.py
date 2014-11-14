@@ -30,21 +30,7 @@ from __future__ import unicode_literals
 import rest_framework.routers
 
 
-class SimpleRouter(rest_framework.routers.SimpleRouter):
-    """ Improvement of rest_framework.routers.SimpleRouter that allows the
-    lookup of urls of nested resources.
-
-    """
-    def get_lookup_regex(self, viewset, lookup_prefix=''):
-        """
-        Given a viewset, return the portion of URL regex that is used
-        to match against a single instance.
-        """
-        base_regex = '(?P<{lookup_prefix}{lookup_field}>[^/]+)'
-        lookup_field = getattr(viewset, 'lookup_field', 'pk')
-        return base_regex.format(lookup_field=lookup_field, lookup_prefix=lookup_prefix)
-
-class NestedSimpleRouter(SimpleRouter):
+class NestedSimpleRouter(rest_framework.routers.SimpleRouter):
     def __init__(self, parent_router, parent_prefix, *args, **kwargs):
         self.parent_router = parent_router
         self.parent_prefix = parent_prefix
@@ -62,6 +48,11 @@ class NestedSimpleRouter(SimpleRouter):
         nested_routes = []
         parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)
         self.parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(parent_prefix=parent_prefix, parent_lookup_regex=parent_lookup_regex)
+
+        # escape braces in parent_regex
+        # e.g., if it has lookup_value_regex = '[0-9a-f]{32}'
+        self.parent_regex = self.parent_regex.replace('{', '{{').replace('}', '}}')
+
         if hasattr(parent_router, 'parent_regex'):
             self.parent_regex = parent_router.parent_regex+self.parent_regex
 
