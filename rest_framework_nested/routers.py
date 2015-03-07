@@ -30,11 +30,7 @@ from __future__ import unicode_literals
 import rest_framework.routers
 
 
-class SimpleRouter(rest_framework.routers.SimpleRouter):
-    """ Improvement of rest_framework.routers.SimpleRouter that allows the
-    lookup of urls of nested resources.
-
-    """
+class LookupMixin(object):
     def get_lookup_regex(self, viewset, lookup_prefix=''):
         """
         Given a viewset, return the portion of URL regex that is used
@@ -44,15 +40,33 @@ class SimpleRouter(rest_framework.routers.SimpleRouter):
         lookup_field = getattr(viewset, 'lookup_field', 'pk')
         return base_regex.format(lookup_field=lookup_field, lookup_prefix=lookup_prefix)
 
+
+class SimpleRouter(LookupMixin, rest_framework.routers.SimpleRouter):
+    """ Improvement of rest_framework.routers.SimpleRouter that allows the
+    lookup of urls of nested resources.
+
+    """
+    pass
+
+
+class DefaultRouter(LookupMixin, rest_framework.routers.DefaultRouter):
+    """ Improvement of rest_framework.routers.DefaultRouter that allows the
+    lookup of urls of nested resources.
+
+    """
+    pass
+
+
 class NestedSimpleRouter(SimpleRouter):
     def __init__(self, parent_router, parent_prefix, *args, **kwargs):
         self.parent_router = parent_router
         self.parent_prefix = parent_prefix
-        self.nest_count = getattr(parent_router, 'nest_count', 0) +1
+        self.nest_count = getattr(parent_router, 'nest_count', 0) + 1
         self.nest_prefix = kwargs.pop('lookup', 'nested_%i' % self.nest_count) + '_'
         super(NestedSimpleRouter, self).__init__(*args, **kwargs)
-
-        parent_registry = [registered for registered in self.parent_router.registry if registered[0] == self.parent_prefix]
+        parent_registry = [
+            registered for registered in self.parent_router.registry if registered[0] == self.parent_prefix
+        ]
         try:
             parent_registry = parent_registry[0]
             parent_prefix, parent_viewset, parent_basename = parent_registry
@@ -61,7 +75,10 @@ class NestedSimpleRouter(SimpleRouter):
 
         nested_routes = []
         parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)
-        self.parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(parent_prefix=parent_prefix, parent_lookup_regex=parent_lookup_regex)
+        self.parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(
+            parent_prefix=parent_prefix,
+            parent_lookup_regex=parent_lookup_regex
+        )
         if hasattr(parent_router, 'parent_regex'):
             self.parent_regex = parent_router.parent_regex+self.parent_regex
 
