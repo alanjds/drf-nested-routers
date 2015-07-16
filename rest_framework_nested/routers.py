@@ -59,6 +59,23 @@ class DefaultRouter(LookupMixin, rest_framework.routers.DefaultRouter):
 
 class NestedSimpleRouter(SimpleRouter):
     def __init__(self, parent_router, parent_prefix, *args, **kwargs):
+        """ Create a NestedSimpleRouter nested within `parent_router`
+        Args:
+
+        parent_router: Parent router. Mayb be a simple router or another nested
+            router.
+
+        parent_prefix: The url prefix within parent_router under which the
+            routes from this router should be nested.
+
+        lookup:
+            The regex variable that matches an instance of the parent-resource
+            will be called '<lookup>_<parent-viewset.lookup_field>'
+            In the example above, lookup=domain and the parent viewset looks up
+            on 'pk' so the parent lookup regex will be 'domain_pk'.
+            Default: 'nested_<n>' where <n> is 1+parent_router.nest_count
+
+        """
         self.parent_router = parent_router
         self.parent_prefix = parent_prefix
         self.nest_count = getattr(parent_router, 'nest_count', 0) + 1
