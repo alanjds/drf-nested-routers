@@ -62,6 +62,77 @@ class NameserverViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
+Example of nested router 3 levels deep.  You can use this same logic to nest routers as deep as you need.  This example accomplishes the below URL patterns. 
+```
+/clients/
+/clients/{pk}/
+/clients/{client_pk}/maildrops/
+/clients/{client_pk}/maildrops/{maildrop_pk}/
+/clients/{client_pk}/maildrops/{maildrop_pk}/recipients/
+/clients/{client_pk}/maildrops/{maildrop_pk}/recipients/{pk}/
+```
+urls.py
+```
+router = DefaultRouter()
+router.register(r'clients', ClientViewSet, base_name='clients')
+
+client_router = routers.NestedSimpleRouter(router, r'clients', lookup='client')
+client_router.register(r'maildrops', MailDropViewSet, base_name='maildrops')
+
+recipients_router = routers.NestedSimpleRouter(client_router, r'maildrops', lookup='maildrop')
+recipients_router.register(r'recipients', MailRecipientViewSet, base_name='recipients')
+
+urlpatterns = patterns (
+    '',
+    url(r'^', include(router.urls)),
+    url(r'^', include(client_router.urls)),
+    url(r'^', include(recipients_router.urls)),
+)
+```
+views.py
+```
+class ClientViewSet(viewsets.ViewSet):
+    serializer_class = ClientSerializer
+
+    def list(self, request,):
+        queryset = Client.objects.filter()
+        serializer = ClientSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Client.objects.filter()
+        client = get_object_or_404(queryset, pk=pk)
+        serializer = ClientSerializer(client)
+        return Response(serializer.data)
+        
+class MailDropViewSet(viewsets.ViewSet):
+    serializer_class = MailDropSerializer
+
+    def list(self, request, client_pk=None):
+        queryset = MailDrop.objects.filter(client=client_pk)
+        serializer = MailDropSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None, client_pk=None):
+        queryset = MailDrop.objects.filter(pk=pk, client=client_pk)
+        maildrop = get_object_or_404(queryset, pk=pk)
+        serializer = MailDropSerializer(maildrop)
+        return Response(serializer.data)
+        
+class MailRecipientViewSet(viewsets.ViewSet):
+    serializer_class = MailRecipientSerializer
+
+    def list(self, request, client_pk=None, maildrop_pk=None):
+        queryset = MailRecipient.objects.filter(mail_drop__client=client_pk, mail_drop=maildrop_pk)
+        serializer = MailRecipientSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None, client_pk=None, maildrop_pk=None):
+        queryset = MailRecipient.objects.filter(pk=pk, mail_drop=maildrop_pk, mail_drop__client=client_pk)
+        maildrop = get_object_or_404(queryset, pk=pk)
+        serializer = MailRecipientSerializer(maildrop)
+        return Response(serializer.data)
+```
 License
 =======
 
