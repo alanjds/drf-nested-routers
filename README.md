@@ -71,26 +71,28 @@ Example of nested router 3 levels deep.  You can use this same logic to nest rou
 /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/
 /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/{pk}/
 ```
-urls.py
-```
+
+```python
+# urls.py
 router = DefaultRouter()
 router.register(r'clients', ClientViewSet, base_name='clients')
 
 client_router = routers.NestedSimpleRouter(router, r'clients', lookup='client')
 client_router.register(r'maildrops', MailDropViewSet, base_name='maildrops')
 
-recipients_router = routers.NestedSimpleRouter(client_router, r'maildrops', lookup='maildrop')
-recipients_router.register(r'recipients', MailRecipientViewSet, base_name='recipients')
+maildrops_router = routers.NestedSimpleRouter(client_router, r'maildrops', lookup='maildrop')
+maildrops_router.register(r'recipients', MailRecipientViewSet, base_name='recipients')
 
 urlpatterns = patterns (
     '',
     url(r'^', include(router.urls)),
     url(r'^', include(client_router.urls)),
-    url(r'^', include(recipients_router.urls)),
+    url(r'^', include(maildrops_router.urls)),
 )
 ```
-views.py
-```
+
+```python
+# views.py
 class ClientViewSet(viewsets.ViewSet):
     serializer_class = ClientSerializer
 
@@ -133,6 +135,7 @@ class MailRecipientViewSet(viewsets.ViewSet):
         serializer = MailRecipientSerializer(maildrop)
         return Response(serializer.data)
 ```
+
 License
 =======
 
