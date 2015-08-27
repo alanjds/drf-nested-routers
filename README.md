@@ -4,6 +4,8 @@ but I cannot warranty that it fully "works everywhere" yet.**
 drf-nested-routers
 =====================
 
+[![Join the chat at https://gitter.im/alanjds/drf-nested-routers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/alanjds/drf-nested-routers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This package provides routers and relations to create nested resources in the [Django Rest Framework](http://django-rest-framework.org/)
 
 Nested resources are needed for full REST URL structure, if one resource lives inside another.
