@@ -89,7 +89,9 @@ class HyperlinkedRouterField(rest_framework.relations.HyperlinkedRelatedField):
                 and getattr(obj.instance, self.lookup_field) is None:
             return None
 
-        if hasattr(obj, self.lookup_field):
+        if isinstance(obj, rest_framework.relations.PKOnlyObject):
+            lookup_value = getattr(self.root.instance, self.lookup_field)
+        elif hasattr(obj, self.lookup_field):
             lookup_value = getattr(obj, self.lookup_field)
         elif hasattr(obj.instance, self.lookup_field):
             lookup_value = getattr(obj.instance, self.lookup_field)
