@@ -83,7 +83,7 @@ class HyperlinkedRouterField(rest_framework.relations.HyperlinkedRelatedField):
         # Unsaved objects will not yet have a valid URL.
         if hasattr(obj, 'pk') and obj.pk is None:
             return None
-        if hasattr(obj.instance, 'pk') and obj.instance.pk is None:
+        if hasattr(obj, 'instance') and hasattr(obj.instance, 'pk') and obj.instance.pk is None:
             return None
 
         if hasattr(obj, self.lookup_field):
