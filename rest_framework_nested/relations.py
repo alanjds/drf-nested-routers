@@ -62,16 +62,21 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
 
 class HyperlinkedRouterField(rest_framework.relations.HyperlinkedRelatedField):
     """
-    A read-only field that represents the nested router URL for an object relation.
+    A field that represents the nested router URL for an object relation.
 
     This is in contrast to `NestedHyperlinkedRelatedField` which represents the
     nested URLs of relationships to other objects.
     """
 
     def __init__(self, view_name=None, **kwargs):
-        kwargs['read_only'] = True
         kwargs['many'] = False
         super(HyperlinkedRouterField, self).__init__(view_name, **kwargs)
+
+    def get_queryset(self):
+        if not self.queryset:
+            model = self.parent.Meta.model
+            self.queryset = getattr(model, self.source).related
+        super(HyperlinkedRouterField, self).get_queryset()
 
     def get_url(self, obj, view_name, request, format):
         """
@@ -81,12 +86,17 @@ class HyperlinkedRouterField(rest_framework.relations.HyperlinkedRelatedField):
         attributes are not configured to correctly match the URL conf.
         """
         # Unsaved objects will not yet have a valid URL.
-        if hasattr(obj, 'pk') and obj.pk is None:
+        if hasattr(obj, self.lookup_field) \
+                and getattr(obj, self.lookup_field) is None:
             return None
-        if hasattr(obj.instance, 'pk') and obj.instance.pk is None:
+        if hasattr(obj, 'instance') \
+                and hasattr(obj.instance, self.lookup_field) \
+                and getattr(obj.instance, self.lookup_field) is None:
             return None
 
-        if hasattr(obj, self.lookup_field):
+        if isinstance(obj, rest_framework.relations.PKOnlyObject):
+            lookup_value = getattr(self.root.instance, self.lookup_field)
+        elif hasattr(obj, self.lookup_field):
             lookup_value = getattr(obj, self.lookup_field)
         elif hasattr(obj.instance, self.lookup_field):
             lookup_value = getattr(obj.instance, self.lookup_field)
