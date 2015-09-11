@@ -62,16 +62,21 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
 
 class HyperlinkedRouterField(rest_framework.relations.HyperlinkedRelatedField):
     """
-    A read-only field that represents the nested router URL for an object relation.
+    A field that represents the nested router URL for an object relation.
 
     This is in contrast to `NestedHyperlinkedRelatedField` which represents the
     nested URLs of relationships to other objects.
     """
 
     def __init__(self, view_name=None, **kwargs):
-        kwargs['read_only'] = True
         kwargs['many'] = False
         super(HyperlinkedRouterField, self).__init__(view_name, **kwargs)
+
+    def get_queryset(self):
+        if not self.queryset:
+            model = self.parent.Meta.model
+            self.queryset = getattr(model, self.source).related
+        super(HyperlinkedRouterField, self).get_queryset()
 
     def get_url(self, obj, view_name, request, format):
         """
