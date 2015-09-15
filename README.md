@@ -83,7 +83,7 @@ class DomainSerializer(HyperlinkedModelSerializer):
     
 	## OR ##
     
-    nameservers = rest_framework_nested.relations.NestedHyperlinkedRelatedField(
+    nameservers = NestedHyperlinkedRelatedField(
         many=True,
         read_only=True,   # Or add a queryset
         view_name='domain-nameservers-detail'
