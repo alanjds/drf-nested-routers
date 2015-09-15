@@ -67,7 +67,7 @@ class NameserverViewSet(viewsets.ViewSet):
 ```
 ```python
 # serializers.py
-# (needed only if you want hyperlinks for nested on API)
+# (needed only if you want hyperlinks for nested relations on API)
 class DomainSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Domain
