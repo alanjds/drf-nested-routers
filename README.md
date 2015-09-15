@@ -70,6 +70,8 @@ class NameserverViewSet(viewsets.ViewSet):
 ```python
 # serializers.py
 # (needed only if you want hyperlinks for nested relations on API)
+from rest_framework_nested.relations import NestedHyperlinkedRelatedField
+
 class DomainSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Domain
@@ -81,7 +83,7 @@ class DomainSerializer(HyperlinkedModelSerializer):
     
 	## OR ##
     
-    nameservers = NestedHyperlinkedRelatedField(
+    nameservers = rest_framework_nested.relations.NestedHyperlinkedRelatedField(
         many=True,
         read_only=True,   # Or add a queryset
         view_name='domain-nameservers-detail'
