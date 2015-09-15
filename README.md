@@ -69,12 +69,12 @@ class DomainSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Domain
 
-    organizations = HyperlinkedIdentityField(
+    nameservers = HyperlinkedIdentityField(
         view_name='domain-nameservers-list',
         lookup_url_kwarg='domain_pk'
     )
 	// OR
-    organizations = NestedHyperlinkedRelatedField(
+    nameservers = NestedHyperlinkedRelatedField(
         many=True,
         read_only=True, // Or add a queryset
         view_name='domain-nameservers-detail'
