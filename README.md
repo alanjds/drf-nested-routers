@@ -1,12 +1,12 @@
 **This is a work in progress. It "works for me" at www.apiregistro.com.br, 
-but I cannot warranty that it fully "works everywhere" yet.**
+but I cannot warranty that it fully "works everywhere" yet. Join us on Gitter (below) if you need some help.**
 
 drf-nested-routers
 =====================
 
 [![Join the chat at https://gitter.im/alanjds/drf-nested-routers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/alanjds/drf-nested-routers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This package provides routers and relations to create nested resources in the [Django Rest Framework](http://django-rest-framework.org/)
+This package provides routers and fields to create nested resources in the [Django Rest Framework](http://django-rest-framework.org/)
 
 Nested resources are needed for full REST URL structure, if one resource lives inside another.
 
@@ -43,7 +43,7 @@ router = routers.SimpleRouter()
 router.register(r'domains', DomainViewSet)
 
 domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
-domains_router.register(r'nameservers', NameserverViewSet)
+domains_router.register(r'nameservers', NameserverViewSet, base_name=domain-nameservers)
 
 urlpatterns = patterns('',
     url(r'^', include(router.urls)),
@@ -63,6 +63,25 @@ class NameserverViewSet(viewsets.ViewSet):
         (...)
         return Response(serializer.data)
 ```
+```python
+# serializers.py
+class DomainSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Domain
+
+    organizations = HyperlinkedIdentityField(
+        view_name='domain-nameservers-list',
+        lookup_url_kwarg='domain_pk'
+    )
+	// OR
+    organizations = NestedHyperlinkedRelatedField(
+        many=True,
+        read_only=True, // Or add a queryset
+        view_name='domain-nameservers-detail'
+        parent_lookup_url_kwarg='domain_pk'
+    )
+```
+
 
 Example of nested router 3 levels deep.  You can use this same logic to nest routers as deep as you need.  This example accomplishes the below URL patterns. 
 ```
