@@ -43,7 +43,7 @@ router = routers.SimpleRouter()
 router.register(r'domains', DomainViewSet)
 
 domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
-domains_router.register(r'nameservers', NameserverViewSet, base_name=domain-nameservers)
+domains_router.register(r'nameservers', NameserverViewSet, base_name='domain-nameservers')
 // the base_name argument is facultative but is required if the same viewset is registered more than once
 // the official documentation on this is available here: http://www.django-rest-framework.org/api-guide/routers/
 
@@ -67,6 +67,7 @@ class NameserverViewSet(viewsets.ViewSet):
 ```
 ```python
 # serializers.py
+# (needed only if you want hyperlinks for nested on API)
 class DomainSerializer(HyperlinkedModelSerializer):
     class Meta:
         model = Domain
