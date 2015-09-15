@@ -44,8 +44,8 @@ router.register(r'domains', DomainViewSet)
 
 domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
 domains_router.register(r'nameservers', NameserverViewSet, base_name='domain-nameservers')
-// the base_name argument is facultative but is required if the same viewset is registered more than once
-// the official documentation on this is available here: http://www.django-rest-framework.org/api-guide/routers/
+# 'base_name' is optional. Needed only if the same viewset is registered more than once
+# Official DRF docs on this option: http://www.django-rest-framework.org/api-guide/routers/
 
 urlpatterns = patterns('',
     url(r'^', include(router.urls)),
@@ -65,6 +65,8 @@ class NameserverViewSet(viewsets.ViewSet):
         (...)
         return Response(serializer.data)
 ```
+
+(optional) If you need hyperlinks for nested relations, you need need a custom serializer.
 ```python
 # serializers.py
 # (needed only if you want hyperlinks for nested relations on API)
@@ -76,10 +78,12 @@ class DomainSerializer(HyperlinkedModelSerializer):
         view_name='domain-nameservers-list',
         lookup_url_kwarg='domain_pk'
     )
-	// OR
+    
+	## OR ##
+    
     nameservers = NestedHyperlinkedRelatedField(
         many=True,
-        read_only=True, // Or add a queryset
+        read_only=True,   # Or add a queryset
         view_name='domain-nameservers-detail'
         parent_lookup_url_kwarg='domain_pk'
     )
