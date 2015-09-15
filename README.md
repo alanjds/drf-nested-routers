@@ -44,6 +44,8 @@ router.register(r'domains', DomainViewSet)
 
 domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
 domains_router.register(r'nameservers', NameserverViewSet, base_name=domain-nameservers)
+// the base_name argument is facultative but is required if the same viewset is registered more than once
+// the official documentation on this is available here: http://www.django-rest-framework.org/api-guide/routers/
 
 urlpatterns = patterns('',
     url(r'^', include(router.urls)),
