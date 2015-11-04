@@ -27,7 +27,7 @@ Quickstart
 The desired URL signatures are:
 ```
 \domain\ <- Domains list
-\domain\{pk}\ <- One domain, from {pk]
+\domain\{pk}\ <- One domain, from {pk}
 \domain\{domain_pk}\nameservers\ <- Nameservers of domain from {domain_pk}
 \domain\{domain_pk}\nameservers\{pk} <- Specific nameserver from {pk}, of domain from {domain_pk}
 ```
