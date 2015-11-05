@@ -27,34 +27,15 @@ Example:
 
 from __future__ import unicode_literals
 
-import rest_framework.routers
+from rest_framework.routers import SimpleRouter, DefaultRouter
 
 
 class LookupMixin(object):
-    def get_lookup_regex(self, viewset, lookup_prefix=''):
-        """
-        Given a viewset, return the portion of URL regex that is used
-        to match against a single instance.
-        """
-        base_regex = '(?P<{lookup_prefix}{lookup_field}>[^/]+)'
-        lookup_field = getattr(viewset, 'lookup_field', 'pk')
-        return base_regex.format(lookup_field=lookup_field, lookup_prefix=lookup_prefix)
-
-
-class SimpleRouter(LookupMixin, rest_framework.routers.SimpleRouter):
     """
-    Improvement of rest_framework.routers.SimpleRouter that allows the
-    lookup of urls of nested resources.
-    """
-    pass
+    Deprecated.
 
-
-class DefaultRouter(LookupMixin, rest_framework.routers.DefaultRouter):
+    No method override is needed since Django Rest Framework 2.4.
     """
-    Improvement of rest_framework.routers.DefaultRouter that allows the
-    lookup of urls of nested resources.
-    """
-    pass
 
 
 class NestedSimpleRouter(SimpleRouter):
