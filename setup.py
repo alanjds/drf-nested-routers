@@ -10,7 +10,7 @@ setup(
     description='Nested resources for the Django Rest Framework',
     long_description=open('README.md').read(),
     license='Apache',
-    version='0.11.0',
+    version='0.11.1',
     author='Alan Justino et al.',
     author_email='alan.justino@yahoo.com.br',
     url='https://github.com/alanjds/drf-nested-routers',
