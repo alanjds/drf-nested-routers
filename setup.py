@@ -75,7 +75,10 @@ setup(
     author_email=author_email,
     packages=get_packages(package),
     package_data=get_package_data(package),
-    install_requires=['djangorestframework>=2.4'],
+    install_requires=[
+        'djangorestframework>=2.4.3',
+        'Django>=1.6',
+    ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
