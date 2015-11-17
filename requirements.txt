@@ -1,15 +1,11 @@
+# TOX requirements
+-r requirements-tox.txt
+
 # Minimum Django and REST framework version
 Django>=1.6
 djangorestframework>=2.4.3
 
 # Test requirements
-pytest-django==2.6
 pytest==2.5.2
-pytest-cov==1.6
+pytest-django==2.6
 flake8==2.2.2
-
-# wheel for PyPI installs
-wheel==0.24.0
-
-# MkDocs for documentation previews/deploys
-mkdocs==0.11.1
