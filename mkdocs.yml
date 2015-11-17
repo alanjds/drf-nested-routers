@@ -1,0 +1,4 @@
+site_name: drf-nested-routers
+site_description: Nested resources for the Django Rest Framework
+repo_url: https://github.com/alanjds/drf-nested-routers
+site_dir: html
