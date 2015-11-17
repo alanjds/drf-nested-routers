@@ -1,5 +1,6 @@
 # Test requirements
 pytest-cov==1.6
+flake8==2.4.0
 
 # wheel for PyPI installs
 wheel==0.24.0
