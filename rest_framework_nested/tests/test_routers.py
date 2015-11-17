@@ -38,16 +38,16 @@ class TestNestedSimpleRouter(TestCase):
         urls = self.router.urls
         self.assertEquals(len(urls), 2)
         self.assertEquals(urls[0].regex.pattern, u'^a/$')
-        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<pk>[^/]+)/$')
+        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<pk>[^/.]+)/$')
 
-        self.assertEqual(self.a_router.parent_regex, u'a/(?P<a_pk>[^/]+)/')
+        self.assertEqual(self.a_router.parent_regex, u'a/(?P<a_pk>[^/.]+)/')
         urls = self.a_router.urls
         self.assertEquals(len(urls), 2)
-        self.assertEquals(urls[0].regex.pattern, u'^a/(?P<a_pk>[^/]+)/b/$')
-        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<a_pk>[^/]+)/b/(?P<pk>[^/]+)/$')
+        self.assertEquals(urls[0].regex.pattern, u'^a/(?P<a_pk>[^/.]+)/b/$')
+        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<a_pk>[^/.]+)/b/(?P<pk>[^/.]+)/$')
 
-        self.assertEqual(self.b_router.parent_regex, u'a/(?P<a_pk>[^/]+)/b/(?P<b_pk>[^/]+)/')
+        self.assertEqual(self.b_router.parent_regex, u'a/(?P<a_pk>[^/.]+)/b/(?P<b_pk>[^/.]+)/')
         urls = self.b_router.urls
         self.assertEquals(len(urls), 2)
-        self.assertEquals(urls[0].regex.pattern, u'^a/(?P<a_pk>[^/]+)/b/(?P<b_pk>[^/]+)/c/$')
-        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<a_pk>[^/]+)/b/(?P<b_pk>[^/]+)/c/(?P<pk>[^/]+)/$')
+        self.assertEquals(urls[0].regex.pattern, u'^a/(?P<a_pk>[^/.]+)/b/(?P<b_pk>[^/.]+)/c/$')
+        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<a_pk>[^/.]+)/b/(?P<b_pk>[^/.]+)/c/(?P<pk>[^/.]+)/$')
