@@ -71,6 +71,7 @@ class NestedSimpleRouter(SimpleRouter):
 
         nested_routes = []
         parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)
+
         self.parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(
             parent_prefix=parent_prefix,
             parent_lookup_regex=parent_lookup_regex
@@ -81,7 +82,11 @@ class NestedSimpleRouter(SimpleRouter):
         for route in self.routes:
             route_contents = route._asdict()
 
-            route_contents['url'] = route.url.replace('^', '^'+self.parent_regex)
+            # This will get passed through .format in a little bit, so we need
+            # to escape it
+            escaped_parent_regex = self.parent_regex.replace('{', '{{').replace('}', '}}')
+
+            route_contents['url'] = route.url.replace('^', '^'+escaped_parent_regex)
             nested_routes.append(type(route)(**route_contents))
 
         self.routes = nested_routes
