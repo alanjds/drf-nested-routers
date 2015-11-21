@@ -1,10 +1,16 @@
 """
 based upon https://github.com/alanjds/drf-nested-routers/issues/15
 """
+from collections import namedtuple
+
 from django.db import models
 from django.test import TestCase
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_nested.routers import SimpleRouter, NestedSimpleRouter
+
+
+QS = namedtuple('Queryset', ['model'])
+
 
 class A(models.Model):
     name=models.CharField(max_length=255)
@@ -18,12 +24,15 @@ class C(models.Model):
 class AViewSet(ModelViewSet):
     lookup_value_regex = '[0-9a-f]{32}'
     model = A
+    queryset = QS(A)
 
 class BViewSet(ModelViewSet):
     model = B
+    queryset = QS(B)
 
 class CViewSet(ModelViewSet):
     model = C
+    queryset = QS(C)
 
 class TestNestedSimpleRouter(TestCase):
     def setUp(self):
