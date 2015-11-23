@@ -14,6 +14,8 @@ QS = namedtuple('Queryset', ['model'])
 
 class BasicModel(models.Model):
     name=models.CharField(max_length=255)
+    class Meta:
+        app_label = 'testapp'
 
 
 try:
