@@ -90,3 +90,12 @@ class NestedSimpleRouter(SimpleRouter):
             nested_routes.append(type(route)(**route_contents))
 
         self.routes = nested_routes
+
+
+class NestedDefaultRouter(DefaultRouter, NestedSimpleRouter):
+    """
+    The default router extends the NestedSimpleRouter, but also adds in a default
+    API root view, and adds format suffix patterns to the URLs.
+    """
+    pass
+
