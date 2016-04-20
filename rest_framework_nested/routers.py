@@ -28,6 +28,7 @@ Example:
 from __future__ import unicode_literals
 
 from rest_framework.routers import SimpleRouter, DefaultRouter  # noqa: F401
+from rest_framework.urlpatterns import format_suffix_patterns
 
 
 class LookupMixin(object):
@@ -39,6 +40,8 @@ class LookupMixin(object):
 
 
 class NestedSimpleRouter(SimpleRouter):
+    include_format_suffixes = True
+
     def __init__(self, parent_router, parent_prefix, *args, **kwargs):
         """ Create a NestedSimpleRouter nested within `parent_router`
         Args:
@@ -90,3 +93,11 @@ class NestedSimpleRouter(SimpleRouter):
             nested_routes.append(type(route)(**route_contents))
 
         self.routes = nested_routes
+
+    def get_urls(self):
+        urls = super(NestedSimpleRouter, self).get_urls()
+
+        if self.include_format_suffixes:
+            urls = format_suffix_patterns(urls)
+
+        return urls
