@@ -66,7 +66,7 @@ class NameserverViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
-(optional) If you need hyperlinks for nested relations, you need need a custom serializer.
+(optional) If you need hyperlinks for nested relations, you need a custom serializer.
 ```python
 # serializers.py
 # (needed only if you want hyperlinks for nested relations on API)
