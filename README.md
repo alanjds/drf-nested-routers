@@ -1,6 +1,8 @@
 **This is a work in progress. It "works for me" at www.apiregistro.com.br, 
 but I cannot warranty that it fully "works everywhere" yet. Join us on Gitter (below) if you need some help.**
 
+[![Build Status](https://travis-ci.org/alanjds/drf-nested-routers.svg?branch=master)](https://travis-ci.org/alanjds/drf-nested-routers)
+
 drf-nested-routers
 =====================
 
