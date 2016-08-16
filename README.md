@@ -167,6 +167,17 @@ class MailRecipientViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
+Testing
+=======
+In order to get started with testing, you will need to install [tox](https://tox.readthedocs.io/en/latest/).
+Once installed, you can then run one environment locally, to speed up your development cycle:
+
+```
+$ tox -e py27-django1.6-drf3.0
+```
+
+Once you submit a pull request, your changes will be run against many environments with Travis.
+
 License
 =======
 
