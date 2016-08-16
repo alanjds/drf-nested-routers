@@ -1,4 +1,4 @@
-**This is a work in progress. It "works for me" at www.apiregistro.com.br, 
+**This is a work in progress. It "works for me" at www.apiregistro.com.br,
 but I cannot warranty that it fully "works everywhere" yet. Join us on Gitter (below) if you need some help.**
 
 [![Build Status](https://travis-ci.org/alanjds/drf-nested-routers.svg?branch=master)](https://travis-ci.org/alanjds/drf-nested-routers)
@@ -12,7 +12,7 @@ This package provides routers and fields to create nested resources in the [Djan
 
 Nested resources are needed for full REST URL structure, if one resource lives inside another.
 
-The following example is about Domains and DNS Nameservers. 
+The following example is about Domains and DNS Nameservers.
 There are many domains, and each domain has many nameservers. The "nameserver" resource does not
 exist without a domain, so you need it "nested" inside the domain.
 
@@ -82,9 +82,9 @@ class DomainSerializer(HyperlinkedModelSerializer):
         view_name='domain-nameservers-list',
         lookup_url_kwarg='domain_pk'
     )
-    
+
 	## OR ##
-    
+
     nameservers = NestedHyperlinkedRelatedField(
         many=True,
         read_only=True,   # Or add a queryset
@@ -94,7 +94,7 @@ class DomainSerializer(HyperlinkedModelSerializer):
 ```
 
 
-Example of nested router 3 levels deep.  You can use this same logic to nest routers as deep as you need.  This example accomplishes the below URL patterns. 
+Example of nested router 3 levels deep.  You can use this same logic to nest routers as deep as you need.  This example accomplishes the below URL patterns.
 ```
 /clients/
 /clients/{pk}/
@@ -138,7 +138,7 @@ class ClientViewSet(viewsets.ViewSet):
         client = get_object_or_404(queryset, pk=pk)
         serializer = ClientSerializer(client)
         return Response(serializer.data)
-        
+
 class MailDropViewSet(viewsets.ViewSet):
     serializer_class = MailDropSerializer
 
@@ -152,7 +152,7 @@ class MailDropViewSet(viewsets.ViewSet):
         maildrop = get_object_or_404(queryset, pk=pk)
         serializer = MailDropSerializer(maildrop)
         return Response(serializer.data)
-        
+
 class MailRecipientViewSet(viewsets.ViewSet):
     serializer_class = MailRecipientSerializer
 
