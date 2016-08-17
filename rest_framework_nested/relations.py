@@ -6,6 +6,8 @@ model relationships with hyperlinks.
 """
 from __future__ import unicode_literals
 
+from collections import Iterable
+
 import rest_framework.relations
 
 
@@ -59,3 +61,35 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
             self.parent_lookup_field: parent_lookup_value,
         }
         return self.get_queryset().get(**lookup_kwargs)
+
+
+class NestedHyperlinkedIdentityField(rest_framework.relations.HyperlinkedIdentityField):
+    """HyperlinkedIdentifyField for nested relations."""
+
+    lookup_fields = ()
+
+    def __init__(self, *args, **kwargs):
+        self.lookup_fields = kwargs.pop('lookup_fields', None)
+        super(NestedHyperlinkedIdentityField, self).__init__(*args, **kwargs)
+
+    def get_url(self, obj, view_name, request, format):
+        if hasattr(obj, 'pk') and obj.pk is None:
+            return None
+
+        if not isinstance(self.lookup_fields, Iterable):
+            # FIXME: raise improperly configured error
+            pass
+
+        kwargs = {}
+        for underscored_lookup in self.lookup_fields:
+            # FIXME: handle errors
+            lookups = underscored_lookup.split('__', 1)
+            value = reduce(getattr, [obj]+lookups)
+            kwargs.update({underscored_lookup: value})
+
+        return self.reverse(
+            view_name,
+            kwargs=kwargs,
+            request=request,
+            format=format
+        )
