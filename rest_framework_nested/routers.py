@@ -43,7 +43,7 @@ class NestedSimpleRouter(SimpleRouter):
         """ Create a NestedSimpleRouter nested within `parent_router`
         Args:
 
-        parent_router: Parent router. Mayb be a simple router or another nested
+        parent_router: Parent router. Maybe be a simple router or another nested
             router.
 
         parent_prefix: The url prefix within parent_router under which the
