@@ -59,3 +59,14 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
             self.parent_lookup_field: parent_lookup_value,
         }
         return self.get_queryset().get(**lookup_kwargs)
+
+
+class NestedHyperlinkedIdentityField(NestedHyperlinkedRelatedField):
+    def __init__(self, view_name=None, **kwargs):
+        assert view_name is not None, 'The `view_name` argument is required.'
+        kwargs['read_only'] = True
+        kwargs['source'] = '*'
+        super(NestedHyperlinkedIdentityField, self).__init__(view_name=view_name, **kwargs)
+
+    def use_pk_only_optimization(self):
+        return False
