@@ -6,6 +6,5 @@ Django>=1.6
 djangorestframework>=2.4.3
 
 # Test requirements
-pytest==2.5.2
-pytest-django==2.6
-flake8==2.2.2
+pytest==3.0.2
+pytest-django==2.8.0
