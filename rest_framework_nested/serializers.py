@@ -1,9 +1,22 @@
 import rest_framework.serializers
 from rest_framework_nested.relations import NestedHyperlinkedIdentityField
-from rest_framework.utils.field_mapping import get_nested_relation_kwargs
+try:
+    from rest_framework.utils.field_mapping import get_nested_relation_kwargs
+except ImportError:
+    pass # passing because NestedHyperlinkedModelSerializer can't be used anyway
+         #    if version too old.
 
 
 class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedModelSerializer):
+    """
+    A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead
+    of primary key relationships.  Specifically:
+
+    * A 'url' field is included instead of the 'id' field.
+    * Relationships to other instances are hyperlinks, instead of primary keys.
+
+    NOTE: this only works with DRF 3.1.0 and above.
+    """
     parent_lookup_field = 'parent'
     parent_lookup_related_field = 'pk'
     parent_lookup_url_kwarg = 'parent_pk'

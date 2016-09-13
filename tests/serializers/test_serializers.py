@@ -1,4 +1,5 @@
 import json
+import pytest
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -14,6 +15,7 @@ class TestSerializers(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        drf = pytest.importorskip("rest_framework", minversion="3.1.0")
         parent = Parent.objects.create(name='Parent')
 
         Child1.objects.create(parent=parent, name='Child1-A')
