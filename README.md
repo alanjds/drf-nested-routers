@@ -92,6 +92,32 @@ class DomainSerializer(HyperlinkedModelSerializer):
     )
 ```
 
+(optional) If you want a little bit more control over the fields displayed for the nested relations while looking at the parent, you need a custom serializer using NestedHyperlinkedModelSerializer.
+```python
+from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
+
+class NameserverSerializers(HyperlinkedModelSerializer):
+	class Meta:
+		model = Nameserver
+		fields = (...)
+
+
+class DomainNameserverSerializers(NestedHyperlinkedModelSerializer):
+	parent_lookup_url_kwarg='domain_pk'
+	class Meta:
+		model = Nameserver
+		fields = ('url', ...)
+
+
+class DomainSerializer(HyperlinkedModelSerializer):
+	class Meta:
+		model = Domain
+		fields = (..., 'nameservers')
+
+	nameservers = DomainNameserverSerializers(many=True, read_only=True)
+```
+
 
 Example of nested router 3 levels deep.  You can use this same logic to nest routers as deep as you need.  This example accomplishes the below URL patterns.
 ```
