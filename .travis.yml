@@ -1,9 +1,6 @@
 language: python
 language: python
 python: # test various python versions, Django supports all of them
-  - "2.7"
-  - "3.3"
-  - "3.4"
   - "3.5"
 
 cache: pip
