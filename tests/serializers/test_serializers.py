@@ -56,3 +56,8 @@ class TestSerializers(TestCase):
         data = self.get_json_response(url)
 
         self.assertEqual(len(data['first']), 0)
+
+    def test_nested_urls(self):
+        url = reverse('parent3-list')
+        data = self.get_json_response(url)
+        print(data)
