@@ -17,6 +17,11 @@ class Child2(models.Model):
     root = models.ForeignKey(Parent, related_name='second')
 
 
+class GrandChild1(models.Model):
+    name = models.CharField(max_length=10)
+    parent = models.ForeignKey(Child2, related_name='grand')
+
+
 class Child1Serializer(serializers.ModelSerializer):
     class Meta:
         model = Child1
@@ -35,13 +40,24 @@ class ParentChild1Serializer(nested_serializers.NestedHyperlinkedModelSerializer
         fields = ('url', 'name')
 
 
+class ParentChild2GrandChild1Serializer(nested_serializers.NestedHyperlinkedModelSerializer):
+    parent_lookup_url_kwarg = ('parent__pk', 'parent__root__pk')
+    parent_lookup_field = 'parent'
+
+    class Meta:
+        model = GrandChild1
+        fields = ('url', 'name')
+
+
 class ParentChild2Serializer(nested_serializers.NestedHyperlinkedModelSerializer):
     parent_lookup_url_kwarg = 'root_pk'
     parent_lookup_field = 'root'
 
     class Meta:
         model = Child2
-        fields = ('url', 'name')
+        fields = ('url', 'name', 'grand')
+
+    grand = ParentChild2GrandChild1Serializer(many=True, read_only=True)
 
 
 class Parent1Serializer(serializers.ModelSerializer):
@@ -78,3 +94,8 @@ class Child1Viewset(viewsets.ModelViewSet):
 class Child2Viewset(viewsets.ModelViewSet):
     serializer_class = Child2Serializer
     queryset = Child2.objects.all()
+
+
+class ParentChild2GrandChild1Viewset(viewsets.ModelViewSet):
+    serializer_class = ParentChild2GrandChild1Serializer
+    queryset = GrandChild1.objects.all()
