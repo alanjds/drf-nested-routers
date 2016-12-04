@@ -1,3 +1,4 @@
+from django.core.exceptions import ImproperlyConfigured
 import rest_framework.serializers
 from rest_framework_nested.relations import NestedHyperlinkedIdentityField
 try:
@@ -21,13 +22,28 @@ class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedMod
     parent_lookup_field = 'parent'
     parent_lookup_related_field = 'pk'
     parent_lookup_url_kwarg = 'parent_pk'
+    parent_lookup_kwargs = {}
 
     serializer_url_field = NestedHyperlinkedIdentityField
 
     def __init__(self, *args, **kwargs):
-        self.parent_lookup_field = kwargs.pop('parent_lookup_field', self.parent_lookup_field)
-        self.parent_lookup_related_field = kwargs.pop('parent_lookup_related_field', self.parent_lookup_related_field)
-        self.parent_lookup_url_kwarg = kwargs.pop('parent_lookup_url_kwarg', self.parent_lookup_url_kwarg)
+        # check that config parameters are not mixed
+        if 'parent_lookup_kwargs' in kwargs and \
+                ('parent_lookup_field' in kwargs or 'parent_lookup_related_field' in kwargs
+                 or 'parent_lookup_url_kwarg' in kwargs):
+            raise ImproperlyConfigured("Do not mix parent_lookup_kwargs with any of the following: "
+                                       "parent_lookup_field, parent_lookup_related_field, parent_lookup_url_kwarg")
+
+        if 'parent_lookup_kwargs' in kwargs:
+            self.parent_lookup_kwargs = kwargs.pop('parent_lookup_kwargs', self.parent_lookup_kwargs)
+            self.parent_lookup_field = None
+            self.parent_lookup_related_field = None
+            self.parent_lookup_url_kwarg = None
+        else:
+            self.parent_lookup_kwargs = None
+            self.parent_lookup_field = kwargs.pop('parent_lookup_field', self.parent_lookup_field)
+            self.parent_lookup_related_field = kwargs.pop('parent_lookup_related_field', self.parent_lookup_related_field)
+            self.parent_lookup_url_kwarg = kwargs.pop('parent_lookup_url_kwarg', self.parent_lookup_url_kwarg)
 
         return super(NestedHyperlinkedModelSerializer, self).__init__(*args, **kwargs)
 
@@ -39,6 +55,7 @@ class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedMod
         field_kwargs['parent_lookup_field'] = self.parent_lookup_field
         field_kwargs['parent_lookup_related_field'] = self.parent_lookup_related_field
         field_kwargs['parent_lookup_url_kwarg'] = self.parent_lookup_url_kwarg
+        field_kwargs['parent_lookup_kwargs'] = self.parent_lookup_kwargs
 
         return field_class, field_kwargs
 
