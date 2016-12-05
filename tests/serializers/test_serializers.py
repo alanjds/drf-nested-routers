@@ -3,7 +3,7 @@ import pytest
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from tests.serializers.models import Parent, Child1, Child2
+from tests.serializers.models import Parent, Child1, Child2, GrandChild1
 
 
 class TestSerializers(TestCase):
@@ -22,9 +22,14 @@ class TestSerializers(TestCase):
         Child1.objects.create(parent=parent, name='Child1-B')
         Child1.objects.create(parent=parent, name='Child1-C')
 
-        Child2.objects.create(root=parent, name='Child2-A')
+        child2 = Child2.objects.create(root=parent, name='Child2-A')
         Child2.objects.create(root=parent, name='Child2-B')
         Child2.objects.create(root=parent, name='Child2-C')
+
+        GrandChild1.objects.create(parent=child2, name='Child2-GrandChild1-A')
+        GrandChild1.objects.create(parent=child2, name='Child2-GrandChild1-B')
+        GrandChild1.objects.create(parent=child2, name='Child2-GrandChild1-C')
+
 
         Parent.objects.create(name='Parent2')
         return super(TestSerializers, cls).setUpClass()
@@ -40,7 +45,6 @@ class TestSerializers(TestCase):
         self.assertIn('/parent1/1/child1/3/', data['first'][2]['url'])
 
     def test_custom(self):
-        return
         url = reverse('parent2-detail', kwargs={'pk': 1})
         data = self.get_json_response(url)
 
