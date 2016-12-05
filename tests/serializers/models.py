@@ -20,19 +20,19 @@ class Child2(models.Model):
 class Child1Serializer(serializers.ModelSerializer):
     class Meta:
         model = Child1
-        fields = ('name')
+        fields = ('name', )
 
 
 class Child2Serializer(serializers.ModelSerializer):
     class Meta:
         model = Child2
-        fields = ('name')
+        fields = ('name', )
 
 
 class ParentChild1Serializer(nested_serializers.NestedHyperlinkedModelSerializer):
     class Meta:
         model = Child1
-        fields = ('url', 'name')
+        fields = ('name', 'url')
 
 
 class ParentChild2Serializer(nested_serializers.NestedHyperlinkedModelSerializer):
@@ -41,8 +41,32 @@ class ParentChild2Serializer(nested_serializers.NestedHyperlinkedModelSerializer
 
     class Meta:
         model = Child2
+        fields = ('name', 'url')
+
+
+class ParentChild1Serializer2(nested_serializers.NestedHyperlinkedModelSerializer):
+    class Meta:
+        model = Child1
         fields = ('url', 'name')
 
+    url = nested_serializers.NestedHyperlinkedIdentityField(
+        lookup_fields=('parent__pk', 'pk',),
+        view_name='parent3-child1-detail'
+    )
+
+
+class ParentChild2Serializer2(nested_serializers.NestedHyperlinkedModelSerializer):
+    parent_lookup_url_kwarg = 'root_pk'
+    parent_lookup_field = 'root'
+
+    class Meta:
+        model = Child2
+        fields = ('url', 'name')
+
+    url = nested_serializers.NestedHyperlinkedIdentityField(
+        lookup_fields=('root__pk', 'pk',),
+        view_name='parent3-child2-detail'
+    )
 
 class Parent1Serializer(serializers.ModelSerializer):
     class Meta:
@@ -60,6 +84,15 @@ class Parent2Serializer(serializers.ModelSerializer):
     second = ParentChild2Serializer(many=True, read_only=True)
 
 
+class Parent3Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parent
+        fields = ('name', 'first', 'second', )
+
+    first = ParentChild1Serializer2(many=True, read_only=True)
+    second = ParentChild2Serializer2(many=True, read_only=True)
+
+
 class Parent1Viewset(viewsets.ModelViewSet):
     serializer_class = Parent1Serializer
     queryset = Parent.objects.all()
@@ -67,6 +100,11 @@ class Parent1Viewset(viewsets.ModelViewSet):
 
 class Parent2Viewset(viewsets.ModelViewSet):
     serializer_class = Parent2Serializer
+    queryset = Parent.objects.all()
+
+
+class Parent3Viewset(viewsets.ModelViewSet):
+    serializer_class = Parent3Serializer
     queryset = Parent.objects.all()
 
 
@@ -78,3 +116,4 @@ class Child1Viewset(viewsets.ModelViewSet):
 class Child2Viewset(viewsets.ModelViewSet):
     serializer_class = Child2Serializer
     queryset = Child2.objects.all()
+
