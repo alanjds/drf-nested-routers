@@ -46,6 +46,18 @@ env:
     - TOX_ENV=py34-django1.9-drf3.5
     - TOX_ENV=py34-django1.10-drf3.3
     - TOX_ENV=py34-django1.10-drf3.5
+    - TOX_ENV=py35-django1.8-drf3.3
+    - TOX_ENV=py35-django1.8-drf3.5
+    - TOX_ENV=py35-django1.9-drf3.3
+    - TOX_ENV=py35-django1.9-drf3.5
+    - TOX_ENV=py35-django1.10-drf3.3
+    - TOX_ENV=py35-django1.10-drf3.5
+    - TOX_ENV=py36-django1.8-drf3.3
+    - TOX_ENV=py36-django1.8-drf3.5
+    - TOX_ENV=py36-django1.9-drf3.3
+    - TOX_ENV=py36-django1.9-drf3.5
+    - TOX_ENV=py36-django1.10-drf3.3
+    - TOX_ENV=py36-django1.10-drf3.5
 
 matrix:
   fast_finish: true
