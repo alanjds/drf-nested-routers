@@ -88,7 +88,7 @@ class DomainSerializer(HyperlinkedModelSerializer):
         many=True,
         read_only=True,   # Or add a queryset
         view_name='domain-nameservers-detail'
-        parent_lookup_url_kwarg='domain_pk'
+        parent_lookup_url_kwargs={'domain_pk': 'domain__pk'}
     )
 ```
 
@@ -104,7 +104,9 @@ class NameserverSerializers(HyperlinkedModelSerializer):
 
 
 class DomainNameserverSerializers(NestedHyperlinkedModelSerializer):
-	parent_lookup_url_kwarg='domain_pk'
+	parent_lookup_kwargs = {
+		'domain_pk': 'domain__pk',
+	}
 	class Meta:
 		model = Nameserver
 		fields = ('url', ...)

@@ -42,9 +42,8 @@ class ParentChild1Serializer(nested_serializers.NestedHyperlinkedModelSerializer
 
 class ParentChild2GrandChild1Serializer(nested_serializers.NestedHyperlinkedModelSerializer):
     parent_lookup_kwargs = {
-        'pk': 'pk',
         'parent_pk': 'parent__pk',
-        'root_pk': 'parent__root__pk'
+        'root_pk': 'parent__root__pk',
     }
 
     class Meta:
@@ -53,8 +52,9 @@ class ParentChild2GrandChild1Serializer(nested_serializers.NestedHyperlinkedMode
 
 
 class ParentChild2Serializer(nested_serializers.NestedHyperlinkedModelSerializer):
-    parent_lookup_url_kwarg = 'root_pk'
-    parent_lookup_field = 'root'
+    parent_lookup_kwargs = {
+        'root_pk': 'root__pk',
+    }
 
     class Meta:
         model = Child2
