@@ -27,7 +27,7 @@ Example:
 
 from __future__ import unicode_literals
 
-from rest_framework.routers import SimpleRouter, DefaultRouter
+from rest_framework.routers import SimpleRouter, DefaultRouter  # noqa: F401
 
 
 class LookupMixin(object):
@@ -77,7 +77,7 @@ class NestedSimpleRouter(SimpleRouter):
             parent_lookup_regex=parent_lookup_regex
         )
         if hasattr(parent_router, 'parent_regex'):
-            self.parent_regex = parent_router.parent_regex+self.parent_regex
+            self.parent_regex = parent_router.parent_regex + self.parent_regex
 
         for route in self.routes:
             route_contents = route._asdict()
@@ -86,7 +86,7 @@ class NestedSimpleRouter(SimpleRouter):
             # to escape it
             escaped_parent_regex = self.parent_regex.replace('{', '{{').replace('}', '}}')
 
-            route_contents['url'] = route.url.replace('^', '^'+escaped_parent_regex)
+            route_contents['url'] = route.url.replace('^', '^' + escaped_parent_regex)
             nested_routes.append(type(route)(**route_contents))
 
         self.routes = nested_routes

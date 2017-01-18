@@ -14,7 +14,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3',  # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3', 'oracle'.
         'NAME': 'sqlite.db',                     # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
@@ -68,7 +68,7 @@ SECRET_KEY = 'u@x-aj9(hoh#rb-^ymf#g2jx_hp0vj7u5#b@ag1n^seu9e!%cy'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -97,15 +97,15 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    #'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
     'rest_framework_nested',
     'rest_framework_nested.tests',
 )
 
 # OAuth is optional and won't work if there is no oauth_provider & oauth2
 try:
-    import oauth_provider
-    import oauth2
+    import oauth_provider  # noqa: F401
+    import oauth2  # noqa: F401
 except ImportError:
     pass
 else:
@@ -114,7 +114,7 @@ else:
     )
 
 try:
-    import provider
+    import provider  # noqa: F401
 except ImportError:
     pass
 else:
@@ -125,13 +125,13 @@ else:
 
 # guardian is optional
 try:
-    import guardian
+    import guardian  # noqa: F401
 except ImportError:
     pass
 else:
     ANONYMOUS_USER_ID = -1
     AUTHENTICATION_BACKENDS = (
-        'django.contrib.auth.backends.ModelBackend', # default
+        'django.contrib.auth.backends.ModelBackend',  # default
         'guardian.backends.ObjectPermissionBackend',
     )
     INSTALLED_APPS += (

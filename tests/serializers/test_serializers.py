@@ -15,7 +15,7 @@ class TestSerializers(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        drf = pytest.importorskip("rest_framework", minversion="3.1.0")
+        pytest.importorskip("rest_framework", minversion="3.1.0")
         parent = Parent.objects.create(name='Parent')
 
         Child1.objects.create(parent=parent, name='Child1-A')

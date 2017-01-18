@@ -3,8 +3,9 @@ from rest_framework_nested.relations import NestedHyperlinkedIdentityField
 try:
     from rest_framework.utils.field_mapping import get_nested_relation_kwargs
 except ImportError:
-    pass # passing because NestedHyperlinkedModelSerializer can't be used anyway
-         #    if version too old.
+    pass
+    # passing because NestedHyperlinkedModelSerializer can't be used anyway
+    #    if version too old.
 
 
 class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedModelSerializer):
@@ -31,7 +32,10 @@ class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedMod
         return super(NestedHyperlinkedModelSerializer, self).__init__(*args, **kwargs)
 
     def build_url_field(self, field_name, model_class):
-        field_class, field_kwargs = super(NestedHyperlinkedModelSerializer, self).build_url_field(field_name, model_class)
+        field_class, field_kwargs = super(NestedHyperlinkedModelSerializer, self).build_url_field(
+            field_name,
+            model_class
+        )
         field_kwargs['parent_lookup_field'] = self.parent_lookup_field
         field_kwargs['parent_lookup_related_field'] = self.parent_lookup_related_field
         field_kwargs['parent_lookup_url_kwarg'] = self.parent_lookup_url_kwarg

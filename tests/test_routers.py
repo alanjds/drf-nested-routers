@@ -13,26 +13,34 @@ QS = namedtuple('Queryset', ['model'])
 
 
 class A(models.Model):
-    name=models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+
+
 class B(models.Model):
-    name=models.CharField(max_length=255)
-    parent=models.ForeignKey(A)
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(A)
+
+
 class C(models.Model):
-    name=models.CharField(max_length=255)
-    parent=models.ForeignKey(B)
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(B)
+
 
 class AViewSet(ModelViewSet):
     lookup_value_regex = '[0-9a-f]{32}'
     model = A
     queryset = QS(A)
 
+
 class BViewSet(ModelViewSet):
     model = B
     queryset = QS(B)
 
+
 class CViewSet(ModelViewSet):
     model = C
     queryset = QS(C)
+
 
 class TestNestedSimpleRouter(TestCase):
     def setUp(self):
