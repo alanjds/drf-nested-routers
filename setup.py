@@ -77,7 +77,7 @@ setup(
     package_data=get_package_data(package),
     install_requires=[
         'djangorestframework>=2.4.3',
-        'Django>=1.6',
+        'Django>=1.8',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -92,6 +92,8 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Internet :: WWW/HTTP',
     ]
 )

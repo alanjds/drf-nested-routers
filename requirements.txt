@@ -2,7 +2,7 @@
 -r requirements-tox.txt
 
 # Minimum Django and REST framework version
-Django>=1.6
+Django>=1.8
 djangorestframework>=2.4.3
 
 # Test requirements

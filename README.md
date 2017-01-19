@@ -201,7 +201,7 @@ In order to get started with testing, you will need to install [tox](https://tox
 Once installed, you can then run one environment locally, to speed up your development cycle:
 
 ```
-$ tox -e py27-django1.6-drf3.0
+$ tox -e py27-django1.8-drf3.0
 ```
 
 Once you submit a pull request, your changes will be run against many environments with Travis.
