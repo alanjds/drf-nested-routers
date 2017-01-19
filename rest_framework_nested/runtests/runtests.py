@@ -27,7 +27,8 @@ def usage():
 
 def main():
     TestRunner = get_runner(settings)
-    import ipdb;ipdb.set_trace()
+    import ipdb
+    ipdb.set_trace()
 
     test_runner = TestRunner()
     if len(sys.argv) == 2:

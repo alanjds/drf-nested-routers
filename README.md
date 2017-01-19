@@ -88,7 +88,7 @@ class DomainSerializer(HyperlinkedModelSerializer):
         many=True,
         read_only=True,   # Or add a queryset
         view_name='domain-nameservers-detail'
-        parent_lookup_url_kwarg='domain_pk'
+        parent_lookup_url_kwargs={'domain_pk': 'domain__pk'}
     )
 ```
 
@@ -104,7 +104,9 @@ class NameserverSerializers(HyperlinkedModelSerializer):
 
 
 class DomainNameserverSerializers(NestedHyperlinkedModelSerializer):
-	parent_lookup_url_kwarg='domain_pk'
+	parent_lookup_kwargs = {
+		'domain_pk': 'domain__pk',
+	}
 	class Meta:
 		model = Nameserver
 		fields = ('url', ...)
@@ -199,7 +201,7 @@ In order to get started with testing, you will need to install [tox](https://tox
 Once installed, you can then run one environment locally, to speed up your development cycle:
 
 ```
-$ tox -e py27-django1.6-drf3.0
+$ tox -e py27-django1.8-drf3.0
 ```
 
 Once you submit a pull request, your changes will be run against many environments with Travis.

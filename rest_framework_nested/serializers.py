@@ -3,8 +3,9 @@ from rest_framework_nested.relations import NestedHyperlinkedIdentityField
 try:
     from rest_framework.utils.field_mapping import get_nested_relation_kwargs
 except ImportError:
-    pass # passing because NestedHyperlinkedModelSerializer can't be used anyway
-         #    if version too old.
+    pass
+    # passing because NestedHyperlinkedModelSerializer can't be used anyway
+    #    if version too old.
 
 
 class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedModelSerializer):
@@ -17,24 +18,22 @@ class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedMod
 
     NOTE: this only works with DRF 3.1.0 and above.
     """
-    parent_lookup_field = 'parent'
-    parent_lookup_related_field = 'pk'
-    parent_lookup_url_kwarg = 'parent_pk'
+    parent_lookup_kwargs = {
+        'parent_pk': 'parent__pk'
+    }
 
     serializer_url_field = NestedHyperlinkedIdentityField
 
     def __init__(self, *args, **kwargs):
-        self.parent_lookup_field = kwargs.pop('parent_lookup_field', self.parent_lookup_field)
-        self.parent_lookup_related_field = kwargs.pop('parent_lookup_related_field', self.parent_lookup_related_field)
-        self.parent_lookup_url_kwarg = kwargs.pop('parent_lookup_url_kwarg', self.parent_lookup_url_kwarg)
-
-        return super(NestedHyperlinkedModelSerializer, self).__init__(*args, **kwargs)
+        self.parent_lookup_kwargs = kwargs.pop('parent_lookup_kwargs', self.parent_lookup_kwargs)
+        super(NestedHyperlinkedModelSerializer, self).__init__(*args, **kwargs)
 
     def build_url_field(self, field_name, model_class):
-        field_class, field_kwargs = super(NestedHyperlinkedModelSerializer, self).build_url_field(field_name, model_class)
-        field_kwargs['parent_lookup_field'] = self.parent_lookup_field
-        field_kwargs['parent_lookup_related_field'] = self.parent_lookup_related_field
-        field_kwargs['parent_lookup_url_kwarg'] = self.parent_lookup_url_kwarg
+        field_class, field_kwargs = super(NestedHyperlinkedModelSerializer, self).build_url_field(
+            field_name,
+            model_class
+        )
+        field_kwargs['parent_lookup_kwargs'] = self.parent_lookup_kwargs
 
         return field_class, field_kwargs
 
