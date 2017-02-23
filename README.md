@@ -216,7 +216,7 @@ and can undestand more at http://choosealicense.com/licenses/apache/ on the
 sidebar notes.
 
 Apache Licence v2.0 is a MIT-like licence. This means, in plain English:
-- Its trully open source
+- It's truly open source
 - You can use it as you wish, for money or not
 - You can sublicence it (change the licence!!)
 - This way, you can even use it on your closed-source project
