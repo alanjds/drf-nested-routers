@@ -2,7 +2,6 @@
 based upon https://github.com/alanjds/drf-nested-routers/issues/15
 """
 from collections import namedtuple
-
 from django.db import models
 from django.test import TestCase
 from rest_framework.viewsets import ModelViewSet
@@ -69,3 +68,18 @@ class TestNestedSimpleRouter(TestCase):
         self.assertEquals(len(urls), 2)
         self.assertEquals(urls[0].regex.pattern, u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/$')
         self.assertEquals(urls[1].regex.pattern, u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/(?P<pk>[^/.]+)/$')
+
+
+class TestEmptyPrefix(TestCase):
+    def setUp(self):
+        self.router = SimpleRouter()
+        self.router.register(r'', AViewSet)
+        self.a_router = NestedSimpleRouter(self.router, r'', lookup='a')
+        self.a_router.register(r'b', BViewSet)
+
+    def test_empty_prefix(self):
+        urls = self.router.urls
+        urls = self.a_router.urls
+        self.assertEquals(len(urls), 2)
+        self.assertEquals(urls[0].regex.pattern, u'^(?P<a_pk>[0-9a-f]{32})/b/$')
+        self.assertEquals(urls[1].regex.pattern, u'^(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')

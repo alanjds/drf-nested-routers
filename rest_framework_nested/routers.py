@@ -63,6 +63,12 @@ class NestedMixin(object):
             parent_prefix=parent_prefix,
             parent_lookup_regex=parent_lookup_regex
         )
+        # If there is no parent prefix, the first part of the url is probably
+        #   controlled by the project's urls.py and the router is in an app,
+        #   so a slash in the beginning will (A) cause Django to give warnings
+        #   and (B) generate URLs that will require using `//`
+        if not self.parent_prefix and self.parent_regex[0] == '/':
+            self.parent_regex = self.parent_regex[1:]
         if hasattr(parent_router, 'parent_regex'):
             self.parent_regex = parent_router.parent_regex + self.parent_regex
 
