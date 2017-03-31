@@ -1,10 +1,9 @@
 __author__ = 'wangyi'
 
-import django_filters
-from rest_framework import filters
-from rest_framework.response import Response
 MODEL_PREFIX = 'third_party.models.'
 SERIALIZER_PREFIX = 'third_party.serializer'
+
+
 # magic method
 def get_args_by_req(req,
                     prop_args=None,
@@ -24,14 +23,14 @@ def get_args_by_req(req,
         ol = _full_args
     else:
         if isinstance(prop_args, str):
-            ol = {key:_full_args[key] for \
-                    key in prop_args.split(',')}
+            ol = {key: _full_args[key] for key in prop_args.split(',')}
         else:
             raise Exception("Not Implemented!")
 
     if f is not None:
         ol = f(ol)
     return ol
+
 
 # help function for get_res_model
 def to_kls(short_cut):
@@ -40,6 +39,7 @@ def to_kls(short_cut):
     if short_cut.lower() == 'messages':
         return 'WeChatMSG'
     return short_cut
+
 
 def Import_factory(*args, **kwargs):
     if kwargs == {}:
@@ -58,6 +58,3 @@ def Import_factory(*args, **kwargs):
 
     else:
         raise Exception("Not Implemented!")
-    # from third_party.models import WeChatMSG
-    # res_label = WeChatMSG.__name__
-    # return res_label, WeChatMSG

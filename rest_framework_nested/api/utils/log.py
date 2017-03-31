@@ -5,6 +5,7 @@ import logging
 # desired formmat e.g:
 #  [%(levelname)s] module_name.class_name %(asctime)s:
 
+
 class LoggerAdaptor(logging.LoggerAdapter):
 
     def __init__(self, prefix, logger):
@@ -14,4 +15,3 @@ class LoggerAdaptor(logging.LoggerAdapter):
 
     def process(self, msg, kwargs):
         return "%s %s" % (self.prefix, msg), kwargs
-

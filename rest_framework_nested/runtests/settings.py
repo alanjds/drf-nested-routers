@@ -175,14 +175,14 @@ LOGGING = {
     'formatters': {
         'verbose': {
             'format': u"%(asctime)s [%(levelname)s]:%(filename)s, %(name)s, in line %(lineno)s >> \n%(message)s".encode('utf-8'),
-            'datefmt': "%a, %d, %b, %Y %H:%M:%S",#"%d/%b/%Y %H:%M:%S"
+            'datefmt': "%a, %d, %b, %Y %H:%M:%S",  # "%d/%b/%Y %H:%M:%S"
         },
         'simple': {
             'format': u'[%(levelname)s] %(filename)s %(lineno)s: %(message)s'.encode('utf-8')
         },
-        'classic_formatter':{
+        'classic_formatter': {
             'format': u"%(asctime)s %(filename)s [line:%(lineno)d] %(levelname)s >>  %(message)s".encode('utf-8'),
-            'datefmt' : "%a, %d, %b, %Y %H:%M:%S",
+            'datefmt': "%a, %d, %b, %Y %H:%M:%S",
         },
         'default': {
             'format': u"%(asctime)s [%(levelname)s] [%(name)s:%(lineno)s] >> %(message)s".encode('utf-8'),
@@ -190,13 +190,13 @@ LOGGING = {
         }
     },
     'handlers': {
-        'console':{
-            'level':'INFO',
-            'class':'logging.StreamHandler',
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
             'stream': sys.stdout,
             'formatter': 'verbose'
         },
-        'email_info_tracer':{
+        'email_info_tracer': {
             'level': 'ERROR',
             'class': 'logging.handlers.SMTPHandler',
             'formatter': 'verbose',
@@ -215,17 +215,17 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers':['console', 'file',],
+            'handlers': ['console', 'file'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
         },
-        'api.tests':{
+        'api.tests': {
             'handlers': ['console'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
 
         },
-        'third_party.tests':{
+        'third_party.tests': {
             'handlers': ['console'],
             'propagate': True,
             'level': 'INFO',

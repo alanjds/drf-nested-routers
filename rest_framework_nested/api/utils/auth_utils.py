@@ -8,10 +8,11 @@ import random
 import string
 
 from django.utils import timezone
-from api.utils.datetime import to_seconds_from_datetime
+
 
 def app_key_gen():
     return ''.join([random.SystemRandom().choice("{}".format(string.ascii_uppercase)) for i in range(16)])
+
 
 def app_secret_coder(api_secret, msg, algorithm="hmac-sha256"):
     algo, hash_scheme = algorithm.split("-")
@@ -21,11 +22,13 @@ def app_secret_coder(api_secret, msg, algorithm="hmac-sha256"):
         raise Exception("(%s, %s) Not Be Supported Yet!" % (algo, hash_scheme))
     return base64.b64encode(digest_obj).decode()
 
+
 def app_secret_gen():
     coder = hashlib.sha256()
     salt = uuid4().hex
-    coder.update(timezone.now().strftime('%H%M%S')+salt)
+    coder.update(timezone.now().strftime('%H%M%S') + salt)
     return coder.hexdigest()
+
 
 def check_sign_sim(sign_req, sign_serv):
     # check algorithm

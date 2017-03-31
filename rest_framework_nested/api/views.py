@@ -43,7 +43,6 @@ class NestedViewRouter(generics.GenericAPIView):
     def _req_method(self):
         return self.request.method.lower()
 
-
     def dispatch(self, request,
                  *args, **kwargs):
         """
@@ -60,11 +59,10 @@ class NestedViewRouter(generics.GenericAPIView):
             # Get the appropriate handler method
             handler = getattr(self, self._req_method, self.http_method_not_allowed) \
                 if self._req_method in self.http_method_names else \
-                            self.http_method_not_allowed
+                self.http_method_not_allowed
 
             # from dill.source import getsource
             # self.logger.info(getsource(handler))
-            import pdb
             # https://www.ibm.com/developerworks/cn/linux/l-cn-pythondebugger/
             self.logger.info(handler)
             # pdb.set_trace()
@@ -78,14 +76,13 @@ class NestedViewRouter(generics.GenericAPIView):
         self.response = self.finalize_response(request, response, *args, **kwargs)
         return self.response
 
-
     def _init_req(self, request):
         self.query_params = get_args_by_req(request)
         parser_context = self.get_parser_context(request)
 
         self.request = Request(request, parsers=self.get_parsers(), parser_context=parser_context,
                                authenticators=self.get_authenticators(),
-                               negotiator= self.get_content_negotiator())
+                               negotiator=self.get_content_negotiator())
         return self.request
     # hook to initialize_request
     initialize_request = _init_req
@@ -96,7 +93,6 @@ class NestedViewRouter(generics.GenericAPIView):
         self.sign, self.cols = sign, cols
         return query_set
 
-
     # override the original mehtod to perform magic filtering
     def get_queryset(self, query_set=None, serializer_class=None):
 
@@ -106,6 +102,7 @@ class NestedViewRouter(generics.GenericAPIView):
 
         query_set = self.filter_queryset(query_set)
         selector_args = {}
+
         # filtering fields on serializer
         def get_valid_fields(serializer_class):
             valid_fields = [
@@ -122,7 +119,7 @@ class NestedViewRouter(generics.GenericAPIView):
         limit = self._LIMIT
         for k, v in self.query_params.items():
             if k not in self.exclude_from_selector_fields and \
-                            k in valid_fields:
+                    k in valid_fields:
                 selector_args[k] = v
 
             elif k == u'offset':
@@ -144,22 +141,18 @@ class NestedViewRouter(generics.GenericAPIView):
         query_set = query_set.filter(**selector_args)
         return query_set
 
-
     def get_args(self):
         return (self.args, self.kwargs)
-
 
     def get_object(self, req, pk):
         selector_args = get_args_by_req(req, f=_extract_args)
         query_set = self.get_queryset().filter(**selector_args)
         label = self.query_key
-        ob = None
-        __code = "ob=query_set.get({pk}='{val}', **selector_args)"
-        exec(__code.format(pk=label, val=pk))
+        selector_args[label] = pk
+        ob = query_set(**selector_args)
         return ob
 
-
-    def get_object_plural(self, req, pk=None): # plural
+    def get_object_plural(self, req, pk=None):  # plural
         selector_args = get_args_by_req(req, f=_extract_args)
         if pk is not None:
             query_set = self.get_queryset().filter(**selector_args)
@@ -171,19 +164,17 @@ class NestedViewRouter(generics.GenericAPIView):
             query_set = self.get_queryset() \
                             .filter(**selector_args) \
                             .__getitem__(self._slicer)
-                          # .order_by('-{query_key}'.format(query_key=self.query_key))\
+        # .order_by('-{query_key}'.format(query_key=self.query_key))\
         page = self.paginate_queryset(query_set)
         return page
-
 
     def get_response(self, req, pk=None):
 
         def group(req):
-
             page = self.get_object_plural(req)
             repr = self.serializer(page, many=True)
             if hasattr(repr, '__len__') and \
-                            len(repr) < self.PAGINATION_DEF:
+                    len(repr) < self.PAGINATION_DEF:
                 return Response(data=repr)
             else:
                 return self.get_paginated_response(data=repr)
@@ -210,7 +201,8 @@ class NestedViewRouter(generics.GenericAPIView):
 
 def _extract_args(args):
     black_list = NestedViewRouter.exclude_from_selector_fields
-    return {k:v for k, v in args.items() if k.lower() not in black_list}
+    return {k: v for k, v in args.items() if k.lower() not in black_list}
+
 
 class HeadlineViewRouter(NestedViewRouter):
 
@@ -232,7 +224,6 @@ class HeadlineViewRouter(NestedViewRouter):
         return self.get_response(req, title)
 
 
-
 class WebSiteViewRouter(NestedViewRouter):
 
     queryset = WebSite.objects.all()
@@ -252,7 +243,6 @@ class WebSiteViewRouter(NestedViewRouter):
     def get_website_by_name(self, req, name):
         return self.get_response(req, name)
 
-
     def create_website_by_name(self, req, name, **param):
         url = req.query_params.get("url", '')
         tags = req.query_params.get("tags", '')
@@ -271,7 +261,6 @@ class WebSiteViewRouter(NestedViewRouter):
         serialized = WebSiteSerializer(website)
         return Response(data=serialized.data, status=status.HTTP_201_CREATED,
                         headers={'Location': serialized.data.get('url', None)})
-
 
     def update_partially_website_by_name(self, req, name, **param):
         pass

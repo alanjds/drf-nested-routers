@@ -17,17 +17,18 @@ FIELDS_ARRAY_RE = re.compile(FIELDS_ARRAY)
 ret_array = None
 sign = None
 
+
 def filed_parse(fields_string):
     sign = '+'
-    ret_array = {'+':[], '-':[]}
+    ret_array = {'+': [], '-': []}
 
     mtch = FIELDS_SIGN_RE.match(fields_string)
-    if mtch.group() is not '' and \
-                    mtch.group() in (u'+', u'-'):
+    if mtch.group() is not '' and mtch.group() in (u'+', u'-'):
         sign = mtch.group()
     _, end = mtch.span()
     mtched, new_string = _open_bracket(fields_string[end:])
     return sign, ret_array[sign]
+
 
 def _open_bracket(raw_string):
     mtch = FIELDS_OPEN_BRACKET_RE.match(raw_string)
@@ -52,12 +53,14 @@ def _open_bracket(raw_string):
 
     return mtched, ''
 
+
 def _close_bracket(raw_string):
     mtch = FIELDS_CLOSE_BRACKET_RE.match(raw_string)
     if not mtch:
         raise Exception("Fields not properly closed!")
     _, end = mtch.span()
     return mtch.group(), raw_string[end:]
+
 
 def _group_figure(raw_string):
     mtch = FIELDS_LIMIT_RE.match(raw_string)
@@ -66,6 +69,7 @@ def _group_figure(raw_string):
     _, end = mtch.span()
     return mtch.group(), raw_string[end:]
 
+
 def _array_figure(raw_string):
     mtch = FIELDS_ARRAY_RE.match(raw_string)
     if mtch is None:
@@ -73,8 +77,7 @@ def _array_figure(raw_string):
     _, end = mtch.span()
     return mtch.group(), raw_string[end:]
 
+
 if __name__ == "__main__":
     fields = "+(1,2,3,45)"
     print(filed_parse(fields))
-
-

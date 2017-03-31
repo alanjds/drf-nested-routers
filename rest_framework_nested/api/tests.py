@@ -3,12 +3,13 @@ from __future__ import unicode_literals
 __author__ = 'wangyi'
 
 
-from django.test import SimpleTestCase, TestCase
+from django.test import SimpleTestCase
 import json
 
 import logging
 from utils.log import LoggerAdaptor
 _logger = logging.getLogger("api.tests")
+
 
 class DynamicQueryRouterTest(SimpleTestCase):
 

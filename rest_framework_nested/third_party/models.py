@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
+
 class WebSite(models.Model):
 
     id = models.AutoField(primary_key=True, auto_created=True, null=False)
@@ -18,7 +19,7 @@ class WebSite(models.Model):
 class User(models.Model):
 
     auth = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='custom_info',
-                                on_delete=models.CASCADE, verbose_name=_("User")     )
+                                on_delete=models.CASCADE, verbose_name=_("User"))
     username = models.CharField(max_length=64, null=False, unique=True)
 
     class Meta:
@@ -34,6 +35,7 @@ class UserWebSite(models.Model):
     class Meta:
         db_table = "user_website"
 
+
 class Headline(models.Model):
 
     url = models.URLField(max_length=256, null=False)
@@ -45,4 +47,3 @@ class Headline(models.Model):
 
     class Meta:
         db_table = "headline"
-

@@ -2,8 +2,6 @@ from __future__ import unicode_literals
 
 __author__ = 'wangyi'
 
-import json
-
 from collections import OrderedDict, namedtuple
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch
@@ -21,7 +19,7 @@ from utils.log import LoggerAdaptor
 _logger = logging.getLogger("api.router")
 
 TYPE_RE = u"(?P<{type}>[a-z0-9_][a-z0-9\s_]+?)"
-QUERY_KEY_RE = u"(?P<{query_key}>[a-z0-9_\s\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\x00-\xff]+)" # ^(?!accounts$)
+QUERY_KEY_RE = u"(?P<{query_key}>[a-z0-9_\s\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\x00-\xff]+)"  # ^(?!accounts$)
 RESOURCE_NAME_RE = u"(?P<resource_name>[^a-z0-9_\s\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\x00-\xff]+)"
 RESOURCE_QK_RE = u"(?P<res_query_key>[a-z0-9_\s\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\x00-\xff]+)"
 FORMAT_RE = u"?\.(?P<format>[a-z0-9]+)"
@@ -38,59 +36,60 @@ NestedRouter = namedtuple('NestedRouter', ['url_regex_tpl', 'mapping', 'name_tpl
 DyDetailRouter = namedtuple('DyDetailRouter', ['url_regex_tpl', 'name_tpl', 'init_kwargs'])
 DyListRouter = namedtuple('DyListRouter', ['url_regex_tpl', 'name_tpl', 'init_kwargs'])
 
+
 class SimpleDynamicQueryRouter(SimpleRouter):
 
     logger = LoggerAdaptor("SimpleDynamicQueryRouter", _logger)
     _attached = []
 
     routers = [
-        Router(#list
+        Router(  # list
             url_regex_tpl='{prefix}/',
-            mapping = {
+            mapping={
                 'get': 'get_{verbose_key}s',
             },
-            name_tpl = '{prefix_abbr}_{verbose_key}(s)', # 'wct_accounts', must be in plural form
-            init_kwargs = {}
+            name_tpl='{prefix_abbr}_{verbose_key}(s)',  # 'wct_accounts', must be in plural form
+            init_kwargs={}
         ),
         Router(
             url_regex_tpl='{prefix}/{look_at}/',
-            mapping = {
+            mapping={
                 'get': 'get_{verbose_key}_by_{query_key}',
                 'post': 'create_{verbose_key}_by_{query_key}',
                 'put': 'update_{verbose_key}_by_{query_key}',
                 'patch': 'update_partially_{verbose_key}_by_{query_key}',
                 'delete': 'delete_{verbose_key}_by_{query_key}',
             },
-            name_tpl = '{prefix_abbr}_{verbose_key}',
-            init_kwargs = {}
+            name_tpl='{prefix_abbr}_{verbose_key}',
+            init_kwargs={}
         ),
-        Router(#list
+        Router(  # list
             url_regex_tpl='{prefix}/resources/',
-            mapping = {
+            mapping={
                 'get': 'get_resources',
             },
-            name_tpl = '{prefix_abbr}_resource(s)',
-            init_kwargs = {}
+            name_tpl='{prefix_abbr}_resource(s)',
+            init_kwargs={}
         ),
-        NestedRouter(#list
+        NestedRouter(  # list
             url_regex_tpl='{prefix}/{resource_name}/',
-            mapping = {
-                'get': 'get_{resource_name}s_within_{prefix}', # plural = True
+            mapping={
+                'get': 'get_{resource_name}s_within_{prefix}',  # plural = True
             },
             name_tpl='{prefix_abbr}_{resource_name}_by_name',
             init_kwargs={}
         ),
-        NestedRouter(#detailed->list
+        NestedRouter(  # detailed->list
             url_regex_tpl='{prefix}/{look_at}/resources/',
-            mapping = {
-                'get': 'get_resources_from_{verbose_key}', # plural = True
+            mapping={
+                'get': 'get_resources_from_{verbose_key}',  # plural = True
             },
             name_tpl='{prefix_abbr}_resource(s)_from_{verbose_key}',
             init_kwargs={}
         ),
         NestedRouter(
             url_regex_tpl='{prefix}/{look_at}/{resource_name}/',
-            mapping = {
+            mapping={
                 'get': 'get_{resource_name}_from_{verbose_key}',
                 'post': 'create_{resource_name}_from_{verbose_key}',
                 'put': 'update_{resource_name}_from_{verbose_key}',
@@ -102,12 +101,12 @@ class SimpleDynamicQueryRouter(SimpleRouter):
         ),
         DyDetailRouter(
             url_regex_tpl='{prefix}/{look_at}/',
-            name_tpl = '{method}-detail',
+            name_tpl='{method}-detail',
             init_kwargs={}
         ),
         DyListRouter(
             url_regex_tpl='{prefix}/',
-            name_tpl = '{method}-list',
+            name_tpl='{method}-list',
             init_kwargs={}
         )
 
@@ -118,6 +117,10 @@ class SimpleDynamicQueryRouter(SimpleRouter):
         self._resource_name = resource_name
         self._attached = []
         self.clear()
+        self._verbose_key = None
+        self._query_key = None
+        self._prefix_abbr = None
+        self._resource_name = None
         super(SimpleRouter, self).__init__()
 
     def clear(self):
@@ -127,7 +130,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
         self._resource_name = None
 
     def register(self, prefix, viewset, base_name=None):
-        if base_name != None:
+        if base_name is not None:
             self._prefix_abbr = base_name
         super(SimpleDynamicQueryRouter, self).register(prefix, viewset, base_name)
 
@@ -189,7 +192,6 @@ class SimpleDynamicQueryRouter(SimpleRouter):
         look_at_regex = QUERY_KEY_RE.format(look_at_prefix=look_at_prefix, query_key=query_key)
         return look_at_regex
 
-
     def get_routers(self, nested_view_router, **kwargs):
 
         # known actions
@@ -208,20 +210,19 @@ class SimpleDynamicQueryRouter(SimpleRouter):
                 if methodname in known_actions:
                     raise ImproperlyConfigured('method {0} has already been in router method mapping')
                 if detail:
-                    detail_router.append(({http_action:methodname for http_action in http_methods}, methodname))
+                    detail_router.append(({http_action: methodname for http_action in http_methods}, methodname))
                 else:
-                    list_router.append(({http_action:methodname for http_action in http_methods}, methodname))
+                    list_router.append(({http_action: methodname for http_action in http_methods}, methodname))
 
         def _get_query_router(router):
             return [Router(
-                url_regex_tpl = router.url_regex_tpl,
+                url_regex_tpl=router.url_regex_tpl,
                 mapping=router.mapping,
                 name_tpl=router.name_tpl,
                 init_kwargs=router.init_kwargs
             )]
 
         def _get_detail_router(router, detail_ret):
-
             ret = []
             for _mapping, methodname in detail_ret:
 
@@ -258,7 +259,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
                         _map[k] = REL_RE.sub(name, v)
 
                     ret.append(NestedRouter(
-                        url_regex_tpl=REL_RE.sub('(?P<resource_name>{name})'.format(name=name)+'/'+RESOURCE_QK_RE, router.url_regex_tpl),# !important
+                        url_regex_tpl=REL_RE.sub('(?P<resource_name>{name})'.format(name=name) + '/' + RESOURCE_QK_RE, router.url_regex_tpl),  # !important
                         mapping=_map,
                         name_tpl=REL_RE.sub(name, router.name_tpl),
                         init_kwargs=router.init_kwargs))
@@ -271,7 +272,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
         for router in self.routers:
             # add method routing to every router
 
-            if   isinstance(router, NestedRouter):
+            if isinstance(router, NestedRouter):
                 ret += _compose_nested_router(router, kwargs.get('resource_name', None))
             elif isinstance(router, Router):
                 ret += _get_query_router(router)
@@ -286,7 +287,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
 
         ret = []
         for prefix, nested_view_router, \
-            basename in self.registry:
+                basename in self.registry:
             self.clear()
             # get 'look_at' regex, verbose_key, prefix_abbr
             look_at = self.get_look_at_regex(nested_view_router)
@@ -313,7 +314,7 @@ class SimpleDynamicQueryRouter(SimpleRouter):
                 name = self.compose_name(router.name_tpl, prefix_abbr, verbose_key, resource_name)
                 # produce view function
                 try:
-                    view_func = nested_view_router.as_view(method_mapping, **router.init_kwargs) # ?
+                    view_func = nested_view_router.as_view(method_mapping, **router.init_kwargs)  # ?
                 except TypeError as err:
                     self.logger.info(err)
                     self.logger.info('method_mapping: %s', method_mapping)
@@ -323,7 +324,6 @@ class SimpleDynamicQueryRouter(SimpleRouter):
                 ret.append(url(url_regex, view_func, name=name))
 
         return ret
-
 
     def compose_url_regex(self, url_regex_tpl, look_at, prefix, resource_name_re):
         # self.logger.info("look_at: %s", look_at)
@@ -336,12 +336,13 @@ class SimpleDynamicQueryRouter(SimpleRouter):
         name = name_tpl.format(prefix_abbr=prefix_abbr, verbose_key=verbose_key, resource_name=resource_name_re)
         return name
 
+
 class RelationalDynamicQueryRouter(SimpleDynamicQueryRouter):
 
     logger = LoggerAdaptor("RelationalDynamicQueryRouter", _logger)
 
     def _process_view(self, viewset, methodname, query_key, prefix):
-        if   methodname.upper() == 'GET':
+        if methodname.upper() == 'GET':
             self._process_get_view(self, viewset, methodname, query_key, prefix)
         elif methodname.upper() == 'POST':
             self._process_create_view(self, viewset, methodname, query_key, prefix)
@@ -366,12 +367,11 @@ setattr(viewset, '{method_name}', _gen_func_hook)
         """
         viewset._logger = self.logger
         __code = __code.format(method_name=methodname, query_key=query_key)
-        self.logger.info('_code_gen of %s: %s', viewset.__name__ , __code)
+        self.logger.info('_code_gen of %s: %s', viewset.__name__, __code)
         try:
             exec(__code)
         except Exception as err:
             raise(err)
-
 
     def _process_create_view(self, viewset, methodname, query_key, prefix):
 
@@ -388,12 +388,11 @@ setattr(viewset, '{method_name}', _gen_func_hook)
         """
         viewset._logger = self.logger
         __code = __code.format(method_name=methodname, query_key=query_key)
-        self.logger.info('_code_gen of %s: %s', viewset.__name__ , __code)
+        self.logger.info('_code_gen of %s: %s', viewset.__name__, __code)
         try:
             exec(__code)
         except Exception as err:
             raise(err)
-
 
     def _process_update_view(self, viewset, methodname, query_key, prefix):
 
@@ -410,12 +409,11 @@ setattr(viewset, '{method_name}', _gen_func_hook)
         """
         viewset._logger = self.logger
         __code = __code.format(method_name=methodname, query_key=query_key)
-        self.logger.info('_code_gen of %s: %s', viewset.__name__ , __code)
+        self.logger.info('_code_gen of %s: %s', viewset.__name__, __code)
         try:
             exec(__code)
         except Exception as err:
             raise(err)
-
 
     def _proces_partially_update(self, viewset, methodname, query_key, prefix):
 
@@ -432,12 +430,11 @@ setattr(viewset, '{method_name}', _gen_func_hook)
         """
         viewset._logger = self.logger
         __code = __code.format(method_name=methodname, query_key=query_key)
-        self.logger.info('_code_gen of %s: %s', viewset.__name__ , __code)
+        self.logger.info('_code_gen of %s: %s', viewset.__name__, __code)
         try:
             exec(__code)
         except Exception as err:
             raise(err)
-
 
     def _process_get_view(self, viewset, methodname, query_key, prefix):
 
@@ -488,7 +485,7 @@ setattr(viewset, '{method_name}', _gen_func_hook)
         """
         viewset._logger = self.logger
         __code = __code.format(method_name=methodname, query_key=query_key)
-        self.logger.info('_code_gen of %s: %s', viewset.__name__ , __code)
+        self.logger.info('_code_gen of %s: %s', viewset.__name__, __code)
         try:
             exec(__code)
         except Exception as err:
@@ -511,7 +508,7 @@ setattr(viewset, '{method_name}', _gen_func_hook)
         return bounded_method
 
 
-class DefaultDynamicQueryRouter(RelationalDynamicQueryRouter):#SimpleDynamicQueryRouter
+class DefaultDynamicQueryRouter(RelationalDynamicQueryRouter):  # SimpleDynamicQueryRouter
 
     logger = LoggerAdaptor("DefaultDynamicQueryRouter", _logger)
 

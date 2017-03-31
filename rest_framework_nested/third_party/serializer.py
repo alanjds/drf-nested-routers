@@ -7,6 +7,7 @@ import contextlib
 
 __all__ = ['WebSiteSerializer', 'UserSerializer', 'HeadlineSerializer', 'SerializerManager']
 
+
 class SerializerManager(object):
 
     def __init__(self, cls):
@@ -65,7 +66,6 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
             return cls.many_init(*args, **kwargs)
         return super(DynamicFieldsModelSerializer, cls).__new__(cls, *args, **kwargs)
 
-
     @property
     def data(self):
         data = super(DynamicFieldsModelSerializer, self).data
@@ -92,11 +92,9 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
             target['password'] = "********"
         return data
 
-
     def __init__(self, *args, **kwargs):
         super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
         self._drop_cols()
-
 
     def _drop_cols(self):
         if hasattr(self.Meta, '__sign') and \
@@ -119,13 +117,12 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                     for fields_name in self.__fields:
                         self.fields.pop(fields_name)
 
-
     @classmethod
     def drop_cols(cls, sign=None, fields=None):
         if fields is not None:
             allowed = set(fields)
             _cls_fields = cls().fields
-            if   sign == u'+':
+            if sign == u'+':
                 existing = set(_cls_fields.keys())
                 for field_name in existing - allowed:
                     _cls_fields.pop(field_name)
@@ -144,12 +141,14 @@ class UserSerializer(DynamicFieldsModelSerializer):
         fields = '__all__'
         depth = 3
 
+
 class WebSiteSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = WebSite
         fields = '__all__'
         depth = 3
+
 
 class HeadlineSerializer(DynamicFieldsModelSerializer):
 
@@ -158,10 +157,10 @@ class HeadlineSerializer(DynamicFieldsModelSerializer):
         fields = '__all__'
         depth = 3
 
+
 class UserWebsiteSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = UserWebSite
         fields = '__all__'
         depth = 3
-
