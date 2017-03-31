@@ -1,20 +1,21 @@
 Quick Start
 -----------
 
-The historical approach to "nested routers" can be devided into two categries:
-1) First proposed in Microsoft .net asp framework, aka user explicitly specify the relationship between resources. Hence,
-It also require developer to implement their corresponding vew method to handle the relationship query.
+The historical approaches to "nested routers" can be devided into two categries:
+1) First proposed in Microsoft .net asp framework, aka users explicitly specify the relationship between resources. Hence,
+it also requires developers to implement their corresponding view methods to handle the relationship queries.
 2) In RESTful scheme, we rarely concern about the relationship but refines the relationship in logics. i.e we have resources "A", then we define CRUD operations upon it using query key or looking up key. The relationships maintained by develpers' logics.
 
-Hence this brought redundancies for a fast and hight level templated programmes. Here I proposed a another approach, as far as I concerned, no people really use it. Please update the historical approach to let me know.
+
+Hence this broughts redundancies for a fast and hight level templated programmes. Here I proposed another approach, as far as I concerned, no people really use it. Please update the historical approaches to let me know.
 
 The plan is :
-> relationship is actually a tree based, we have foreign key for children to find their parent, what if we have some tools to help parents to list their children
+> relationship is actually a tree based concept. We have foreign keys for children to find their parents, and what if we have some tools to help parents to list their children?
 We also need "inferring engine" to deal with the problems like "A's Parent's child' uncle C, what is the relationship between A & C" (in progress, I am working AI problems) 
 
 i.e 
 > a url like "parent/childB/blablabla" can be converted by engine as "childB/blablabla/?query\_key=constrained\_by\_`parent`"
-The process is finite states machine if we have the relationship graph
+The process is a finite states machine if we have the relationship graph.
 
 Hence it is the users' responsibility to specify the path from parent to children in viewsets like:
 ```python
