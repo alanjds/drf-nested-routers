@@ -1,0 +1,60 @@
+Creating test database for alias 'default'...
+Fri, 31, Mar, 2017 08:23:30 [INFO]:tests.py, api.tests, in line 25 >> 
+TestDynamicQueryRouter router.urls: [
+    "<RegexURLPattern root ^$>", 
+    "<RegexURLPattern root ^\\.(?P<format>[a-z0-9]+)/?$>", 
+    "<RegexURLPattern ws_website(s) website/$>", 
+    "<RegexURLPattern ws_website(s) website\\.(?P<format>[a-z0-9]+)/?$>", 
+    "<RegexURLPattern ws_website website/(?P<name>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)/$>", 
+    "<RegexURLPattern ws_website website/(?P<name>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)\\.(?P<format>[a-z0-9]+)/?$>", 
+    "<RegexURLPattern ws_resource(s) website/resources/$>", 
+    "<RegexURLPattern ws_resource(s) website/resources\\.(?P<format>[a-z0-9]+)/?$>", 
+    "<RegexURLPattern ws_headline_by_name website/(?P<resource_name>headline)/(?P<res_query_key>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)/$>", 
+    "<RegexURLPattern ws_headline_by_name website/(?P<resource_name>headline)/(?P<res_query_key>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)\\.(?P<format>[a-z0-9]+)/?$>", 
+    "<RegexURLPattern ws_resource(s)_from_website website/(?P<name>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)/resources/$>", 
+    "<RegexURLPattern ws_resource(s)_from_website website/(?P<name>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)/resources\\.(?P<format>[a-z0-9]+)/?$>", 
+    "<RegexURLPattern ws_headline_from_website website/(?P<name>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)/(?P<resource_name>headline)/(?P<res_query_key>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)/$>", 
+    "<RegexURLPattern ws_headline_from_website website/(?P<name>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)/(?P<resource_name>headline)/(?P<res_query_key>[a-z0-9_\\s\\w\uff1f]+|[\u4e00-\u9fa5\uff1f]+|[^\u0000-\u00ff]+)\\.(?P<format>[a-z0-9]+)/?$>"
+]
+Fri, 31, Mar, 2017 08:23:30 [INFO]:tests.py, api.tests, in line 26 >> 
+TestDynamicQueryRouter attached methods: [
+    {
+        "WebSite": {
+            "get": "get_websites"
+        }
+    }, 
+    {
+        "WebSite": {
+            "delete": "delete_website_by_name", 
+            "get": "get_website_by_name", 
+            "patch": "update_partially_website_by_name", 
+            "post": "create_website_by_name", 
+            "put": "update_website_by_name"
+        }
+    }, 
+    {
+        "WebSite": {
+            "get": "get_resources"
+        }
+    }, 
+    {
+        "WebSite": {
+            "get": "get_headlines_within_website"
+        }
+    }, 
+    {
+        "WebSite": {
+            "get": "get_resources_from_website"
+        }
+    }, 
+    {
+        "WebSite": {
+            "delete": "delete_headline_from_website", 
+            "get": "get_headline_from_website", 
+            "patch": "update_partially_headline_from_website", 
+            "post": "create_headline_from_website", 
+            "put": "update_headline_from_website"
+        }
+    }
+]
+Destroying test database for alias 'default'...

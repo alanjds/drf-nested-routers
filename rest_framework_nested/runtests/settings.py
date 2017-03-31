@@ -99,7 +99,10 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     # 'rest_framework.authtoken',
     'rest_framework_nested',
-    'rest_framework_nested.tests',
+    # This is not implemented by author, which will raise error by django commandline tool
+    # 'rest_framework_nested.tests',
+    # for test purpose and integration, we should separate data structure or db models
+    'rest_framework_nested.third_party'
 )
 
 # OAuth is optional and won't work if there is no oauth_provider & oauth2
@@ -159,8 +162,73 @@ if django.VERSION < (1, 3):
 
 # If we're running on the Jenkins server we want to archive the coverage reports as XML.
 import os
+import sys
 if os.environ.get('HUDSON_URL', None):
     TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
     TEST_OUTPUT_VERBOSE = True
     TEST_OUTPUT_DESCRIPTIONS = True
     TEST_OUTPUT_DIR = 'xmlrunner'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': u"%(asctime)s [%(levelname)s]:%(filename)s, %(name)s, in line %(lineno)s >> \n%(message)s".encode('utf-8'),
+            'datefmt': "%a, %d, %b, %Y %H:%M:%S",#"%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': u'[%(levelname)s] %(filename)s %(lineno)s: %(message)s'.encode('utf-8')
+        },
+        'classic_formatter':{
+            'format': u"%(asctime)s %(filename)s [line:%(lineno)d] %(levelname)s >>  %(message)s".encode('utf-8'),
+            'datefmt' : "%a, %d, %b, %Y %H:%M:%S",
+        },
+        'default': {
+            'format': u"%(asctime)s [%(levelname)s] [%(name)s:%(lineno)s] >> %(message)s".encode('utf-8'),
+            'datefmt': "%d/%b/%Y %H:%M:%S",
+        }
+    },
+    'handlers': {
+        'console':{
+            'level':'INFO',
+            'class':'logging.StreamHandler',
+            'stream': sys.stdout,
+            'formatter': 'verbose'
+        },
+        'email_info_tracer':{
+            'level': 'ERROR',
+            'class': 'logging.handlers.SMTPHandler',
+            'formatter': 'verbose',
+            'mailhost': '',
+            'fromaddr': 'info_tracker_notify@weiboyi.com',
+            'toaddrs': '',
+            'subject': 'Info tracker API ERROR !',
+            'credentials': ('', '')
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': 'sys.log'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers':['console', 'file',],
+            'propagate': True,
+            'level':'INFO',
+        },
+        'api.tests':{
+            'handlers': ['console'],
+            'propagate': True,
+            'level':'INFO',
+
+        },
+        'third_party.tests':{
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+    }
+}
