@@ -1,6 +1,7 @@
 from django.db import models
 from rest_framework import serializers, viewsets
 from rest_framework_nested import serializers as nested_serializers
+from rest_framework_nested import relations
 
 
 class Parent(models.Model):
@@ -45,10 +46,12 @@ class ParentChild2GrandChild1Serializer(nested_serializers.NestedHyperlinkedMode
         'parent_pk': 'parent__pk',
         'root_pk': 'parent__root__pk',
     }
+    parent = relations.NestedHyperlinkedRelatedField(parent_lookup_kwargs={'root_pk': 'root__pk'},
+                                                     view_name='child2-detail', queryset=Child2.objects.all())
 
     class Meta:
         model = GrandChild1
-        fields = ('url', 'name')
+        fields = ('url', 'name', 'parent')
 
 
 class ParentChild2Serializer(nested_serializers.NestedHyperlinkedModelSerializer):

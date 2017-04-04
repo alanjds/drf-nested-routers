@@ -15,6 +15,13 @@ class TestSerializers(TestCase):
         print(response_data)
         return json.loads(response_data)
 
+    def post_json_request(self, url, data):
+        response = self.client.post(url, json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 201, msg=response)
+        response_data = response.content.decode('utf-8')
+        print(response_data)
+        return json.loads(response_data)
+
     @classmethod
     def setUpClass(cls):
         pytest.importorskip("rest_framework", minversion="3.1.0")
@@ -55,6 +62,19 @@ class TestSerializers(TestCase):
         self.assertIn('/parent2/1/child2/1/grandchild1/1/', data['second'][0]['grand'][0]['url'])
         self.assertIn('/parent2/1/child2/1/grandchild1/2/', data['second'][0]['grand'][1]['url'])
         self.assertIn('/parent2/1/child2/1/grandchild1/3/', data['second'][0]['grand'][2]['url'])
+
+    def test_multi_level_parent_ref(self):
+        url = reverse('grandchild1-detail', kwargs={'root_pk': 1, 'parent_pk': 2, 'pk': 1})
+        data = self.get_json_response(url)
+        self.assertIn('/parent2/1/child2/1/', data['parent'])
+
+    def test_multi_level_parent_ref_reverse(self):
+        url = reverse('grandchild1-list', kwargs={'root_pk': 1, 'parent_pk': 2})
+        data = self.post_json_request(url, {
+            'name': 'NewChild',
+            'parent': reverse('child2-detail', kwargs={'root_pk': 1, 'pk': 2})
+        })
+        self.assertEqual(data['name'], 'NewChild')
 
     def test_custom(self):
         url = reverse('parent2-detail', kwargs={'pk': 1})
