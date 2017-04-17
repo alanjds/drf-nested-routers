@@ -8,18 +8,20 @@ python:
   - "3.5"
   - "3.6"
 env:
-  - DJANGO="1.8"
-  - DJANGO="1.9"
-  - DJANGO="1.10"
-  - DJANGO="1.11"
-  - DRF="2.4"
-  - DRF="3.0"
-  - DRF="3.1"
-  - DRF="3.2"
-  - DRF="3.3"
-  - DRF="3.4"
-  - DRF="3.5"
-  - DRF="3.6"
+  global:
+    - DJANGO="1.8"
+    - DJANGO="1.9"
+    - DJANGO="1.10"
+    - DJANGO="1.11"
+  matrix:
+    - DRF="2.4"
+    - DRF="3.0"
+    - DRF="3.1"
+    - DRF="3.2"
+    - DRF="3.3"
+    - DRF="3.4"
+    - DRF="3.5"
+    - DRF="3.6"
 
 install: pip install tox-travis
 script: tox
