@@ -59,9 +59,10 @@ class NestedMixin(object):
         nested_routes = []
         parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)
 
-        self.parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(
+        self.parent_regex = '{parent_prefix}/{parent_lookup_regex}{trailing_slash}'.format(
             parent_prefix=parent_prefix,
-            parent_lookup_regex=parent_lookup_regex
+            parent_lookup_regex=parent_lookup_regex,
+            trailing_slash=self.trailing_slash,
         )
         # If there is no parent prefix, the first part of the url is probably
         #   controlled by the project's urls.py and the router is in an app,
