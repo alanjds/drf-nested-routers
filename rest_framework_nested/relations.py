@@ -76,6 +76,9 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
             kwargs.update({parent_lookup_kwarg: lookup_value})
 
             return self.get_queryset().get(**kwargs)
+            
+    def use_pk_only_optimization(self):
+        return False
 
 
 class NestedHyperlinkedIdentityField(NestedHyperlinkedRelatedField):
