@@ -58,6 +58,9 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
 
         return self.reverse(view_name, kwargs=kwargs, request=request, format=format)
 
+    def use_pk_only_optimization(self):
+        return False
+
     def get_object(self, view_name, view_args, view_kwargs):
         """
         Return the object corresponding to a matched URL.
@@ -73,9 +76,9 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
         # multi-level lookup
         for parent_lookup_kwarg in list(self.parent_lookup_kwargs.keys()):
             lookup_value = view_kwargs[parent_lookup_kwarg]
-            kwargs.update({parent_lookup_kwarg: lookup_value})
+            kwargs.update({self.parent_lookup_kwargs[parent_lookup_kwarg]: lookup_value})
 
-            return self.get_queryset().get(**kwargs)
+        return self.get_queryset().get(**kwargs)
 
     def use_pk_only_optimization(self):
         return False
@@ -87,6 +90,3 @@ class NestedHyperlinkedIdentityField(NestedHyperlinkedRelatedField):
         kwargs['read_only'] = True
         kwargs['source'] = '*'
         super(NestedHyperlinkedIdentityField, self).__init__(view_name=view_name, **kwargs)
-
-    def use_pk_only_optimization(self):
-        return False
