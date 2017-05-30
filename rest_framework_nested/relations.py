@@ -77,6 +77,9 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
 
             return self.get_queryset().get(**kwargs)
 
+    def use_pk_only_optimization(self):
+        return False
+
 
 class NestedHyperlinkedIdentityField(NestedHyperlinkedRelatedField):
     def __init__(self, view_name=None, **kwargs):
