@@ -58,9 +58,6 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
 
         return self.reverse(view_name, kwargs=kwargs, request=request, format=format)
 
-    def use_pk_only_optimization(self):
-        return False
-
     def get_object(self, view_name, view_args, view_kwargs):
         """
         Return the object corresponding to a matched URL.
