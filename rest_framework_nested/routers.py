@@ -45,6 +45,7 @@ class NestedMixin(object):
         self.nest_count = getattr(parent_router, 'nest_count', 0) + 1
         self.nest_prefix = kwargs.pop('lookup', 'nested_%i' % self.nest_count) + '_'
 
+        kwargs['trailing_slash'] = getattr(parent_router, 'trailing_slash', '/')
         super(NestedMixin, self).__init__(*args, **kwargs)
 
         parent_registry = [registered for registered
