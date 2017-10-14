@@ -56,15 +56,8 @@ urlpatterns = patterns('',
 ```python
 # views.py
 class NameserverViewSet(viewsets.ViewSet):
-    def list(self, request, domain_pk=None):
-        nameservers = self.queryset.filter(domain=domain_pk)
-        (...)
-        return Response([...])
-
-    def retrieve(self, request, pk=None, domain_pk=None):
-        nameservers = self.queryset.get(pk=pk, domain=domain_pk)
-        (...)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return Nameserver.objects.filter(domain=self.kwargs['domain_pk'])
 ```
 
 (optional) If you need hyperlinks for nested relations, you need a custom serializer.
