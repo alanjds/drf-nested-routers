@@ -26,8 +26,15 @@ Example:
 """
 
 from __future__ import unicode_literals
-
+import sys
+import re
 from rest_framework.routers import SimpleRouter, DefaultRouter  # noqa: F401
+
+
+if sys.version_info[0] < 3:
+    IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*$")
+else:
+    IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*$", re.UNICODE)
 
 
 class LookupMixin(object):
@@ -56,6 +63,8 @@ class NestedMixin(object):
         except:
             raise RuntimeError('parent registered resource not found')
 
+        self.check_valid_name(self.nest_prefix)
+
         nested_routes = []
         parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)
 
@@ -83,6 +92,10 @@ class NestedMixin(object):
             nested_routes.append(type(route)(**route_contents))
 
         self.routes = nested_routes
+
+    def check_valid_name(self, value):
+        if IDENTIFIER_REGEX.match(value) is None:
+            raise ValueError("lookup argument '{}' needs to be valid python identifier".format(value))
 
 
 class NestedSimpleRouter(NestedMixin, SimpleRouter):

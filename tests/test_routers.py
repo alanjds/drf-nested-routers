@@ -17,12 +17,12 @@ class A(models.Model):
 
 class B(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey(A)
+    parent = models.ForeignKey(A, on_delete=models.CASCADE)
 
 
 class C(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey(B)
+    parent = models.ForeignKey(B, on_delete=models.CASCADE)
 
 
 class AViewSet(ModelViewSet):
@@ -83,3 +83,14 @@ class TestEmptyPrefix(TestCase):
         self.assertEquals(len(urls), 2)
         self.assertEquals(urls[0].regex.pattern, u'^(?P<a_pk>[0-9a-f]{32})/b/$')
         self.assertEquals(urls[1].regex.pattern, u'^(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
+
+
+class TestBadLookupValue(TestCase):
+    def setUp(self):
+        self.router = SimpleRouter()
+        self.router.register(r'parents', AViewSet, base_name='ui-parent_1')
+
+    def test_bad_lookup(self):
+        with self.assertRaises(ValueError):
+            self.a_router = NestedSimpleRouter(self.router, r'parents', lookup='ui-parent_2')
+            self.a_router.register(r'child', BViewSet, base_name='ui-parent-child')
