@@ -1,9 +1,13 @@
 import json
 import pytest
-from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from tests.serializers.models import Parent, Child1, Child2, GrandChild1
+
+try:
+    from django.core.urlresolvers import reverse
+except ImportError:
+    from django.urls import reverse
 
 
 class TestSerializers(TestCase):

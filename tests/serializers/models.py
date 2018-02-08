@@ -10,17 +10,17 @@ class Parent(models.Model):
 
 class Child1(models.Model):
     name = models.CharField(max_length=10)
-    parent = models.ForeignKey(Parent, related_name='first')
+    parent = models.ForeignKey(Parent, related_name='first', on_delete=models.CASCADE)
 
 
 class Child2(models.Model):
     name = models.CharField(max_length=10)
-    root = models.ForeignKey(Parent, related_name='second')
+    root = models.ForeignKey(Parent, related_name='second', on_delete=models.CASCADE)
 
 
 class GrandChild1(models.Model):
     name = models.CharField(max_length=10)
-    parent = models.ForeignKey(Child2, related_name='grand')
+    parent = models.ForeignKey(Child2, related_name='grand', on_delete=models.CASCADE)
 
 
 class Child1Serializer(serializers.ModelSerializer):

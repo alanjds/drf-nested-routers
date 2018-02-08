@@ -9,6 +9,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_nested.routers import SimpleRouter, NestedSimpleRouter
 from rest_framework.response import Response
 
+from tests.helpers import get_regex_pattern
+
 
 QS = namedtuple('Queryset', ['model'])
 
@@ -67,14 +69,14 @@ else:
             self.assertFalse(hasattr(self.router, 'parent_regex'))
             urls = map_by_name(self.router.urls)
             self.assertEquals(
-                urls['basicmodel-list'].regex.pattern, u'^detail/$'
+                get_regex_pattern(urls['basicmodel-list']), u'^detail/$'
             )
             self.assertEquals(
-                urls['basicmodel-detail'].regex.pattern,
+                get_regex_pattern(urls['basicmodel-detail']),
                 u'^detail/(?P<pk>[^/.]+)/$'
             )
             self.assertEquals(
-                urls['basicmodel-set-password'].regex.pattern,
+                get_regex_pattern(urls['basicmodel-set-password']),
                 u'^detail/(?P<pk>[^/.]+)/set_password/$'
             )
 
@@ -86,17 +88,17 @@ else:
             urls = map_by_name(self.detail_router.urls)
 
             self.assertEquals(
-                urls['basicmodel-list'].regex.pattern,
+                get_regex_pattern(urls['basicmodel-list']),
                 u'^detail/(?P<detail_pk>[^/.]+)/list/$'
             )
 
             self.assertEquals(
-                urls['basicmodel-recent-users'].regex.pattern,
+                get_regex_pattern(urls['basicmodel-recent-users']),
                 u'^detail/(?P<detail_pk>[^/.]+)/list/recent_users/$'
             )
 
             self.assertEquals(
-                urls['basicmodel-detail'].regex.pattern,
+                get_regex_pattern(urls['basicmodel-detail']),
                 u'^detail/(?P<detail_pk>[^/.]+)/list/(?P<pk>[^/.]+)/$'
             )
 

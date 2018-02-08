@@ -89,7 +89,7 @@ class Person(RESTFrameworkModel):
 
 class BlogPost(RESTFrameworkModel):
     title = models.CharField(max_length=100)
-    writer = models.ForeignKey(Person, null=True, blank=True)
+    writer = models.ForeignKey(Person, null=True, blank=True, on_delete=models.CASCADE)
 
     def get_first_comment(self):
         return self.blogpostcomment_set.all()[0]
@@ -97,7 +97,7 @@ class BlogPost(RESTFrameworkModel):
 
 class BlogPostComment(RESTFrameworkModel):
     text = models.TextField()
-    blog_post = models.ForeignKey(BlogPost)
+    blog_post = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
 
 
 class Album(RESTFrameworkModel):
@@ -106,7 +106,7 @@ class Album(RESTFrameworkModel):
 
 class Photo(RESTFrameworkModel):
     description = models.TextField()
-    album = models.ForeignKey(Album)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
 
 
 # Model for issue #324
@@ -116,7 +116,7 @@ class BlankFieldModel(RESTFrameworkModel):
 
 # Model for issue #380
 class OptionalRelationModel(RESTFrameworkModel):
-    other = models.ForeignKey('OptionalRelationModel', blank=True, null=True)
+    other = models.ForeignKey('OptionalRelationModel', blank=True, null=True, on_delete=models.CASCADE)
 
 
 # Model for RegexField
@@ -142,14 +142,14 @@ class ForeignKeyTarget(RESTFrameworkModel):
 
 class ForeignKeySource(RESTFrameworkModel):
     name = models.CharField(max_length=100)
-    target = models.ForeignKey(ForeignKeyTarget, related_name='sources')
+    target = models.ForeignKey(ForeignKeyTarget, related_name='sources', on_delete=models.CASCADE)
 
 
 # Nullable ForeignKey
 class NullableForeignKeySource(RESTFrameworkModel):
     name = models.CharField(max_length=100)
     target = models.ForeignKey(ForeignKeyTarget, null=True, blank=True,
-                               related_name='nullable_sources')
+                               related_name='nullable_sources', on_delete=models.CASCADE)
 
 
 # OneToOne
@@ -160,7 +160,7 @@ class OneToOneTarget(RESTFrameworkModel):
 class NullableOneToOneSource(RESTFrameworkModel):
     name = models.CharField(max_length=100)
     target = models.OneToOneField(OneToOneTarget, null=True, blank=True,
-                                  related_name='nullable_source')
+                                  related_name='nullable_source', on_delete=models.CASCADE)
 
 
 # Serializer used to test BasicModel

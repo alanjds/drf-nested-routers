@@ -7,6 +7,8 @@ from django.test import TestCase
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_nested.routers import SimpleRouter, NestedSimpleRouter
 
+from tests.helpers import get_regex_pattern
+
 
 QS = namedtuple('Queryset', ['model'])
 
@@ -17,12 +19,12 @@ class A(models.Model):
 
 class B(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey(A)
+    parent = models.ForeignKey(A, on_delete=models.CASCADE)
 
 
 class C(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey(B)
+    parent = models.ForeignKey(B, on_delete=models.CASCADE)
 
 
 class AViewSet(ModelViewSet):
@@ -54,20 +56,20 @@ class TestNestedSimpleRouter(TestCase):
         self.assertFalse(hasattr(self.router, 'parent_regex'))
         urls = self.router.urls
         self.assertEquals(len(urls), 2)
-        self.assertEquals(urls[0].regex.pattern, u'^a/$')
-        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<pk>[0-9a-f]{32})/$')
+        self.assertEquals(get_regex_pattern(urls[0]), u'^a/$')
+        self.assertEquals(get_regex_pattern(urls[1]), u'^a/(?P<pk>[0-9a-f]{32})/$')
 
         self.assertEqual(self.a_router.parent_regex, u'a/(?P<a_pk>[0-9a-f]{32})/')
         urls = self.a_router.urls
         self.assertEquals(len(urls), 2)
-        self.assertEquals(urls[0].regex.pattern, u'^a/(?P<a_pk>[0-9a-f]{32})/b/$')
-        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
+        self.assertEquals(get_regex_pattern(urls[0]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/$')
+        self.assertEquals(get_regex_pattern(urls[1]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
 
         self.assertEqual(self.b_router.parent_regex, u'a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/')
         urls = self.b_router.urls
         self.assertEquals(len(urls), 2)
-        self.assertEquals(urls[0].regex.pattern, u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/$')
-        self.assertEquals(urls[1].regex.pattern, u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/(?P<pk>[^/.]+)/$')
+        self.assertEquals(get_regex_pattern(urls[0]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/$')
+        self.assertEquals(get_regex_pattern(urls[1]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/(?P<pk>[^/.]+)/$')
 
 
 class TestEmptyPrefix(TestCase):
@@ -81,5 +83,5 @@ class TestEmptyPrefix(TestCase):
         urls = self.router.urls
         urls = self.a_router.urls
         self.assertEquals(len(urls), 2)
-        self.assertEquals(urls[0].regex.pattern, u'^(?P<a_pk>[0-9a-f]{32})/b/$')
-        self.assertEquals(urls[1].regex.pattern, u'^(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
+        self.assertEquals(get_regex_pattern(urls[0]), u'^(?P<a_pk>[0-9a-f]{32})/b/$')
+        self.assertEquals(get_regex_pattern(urls[1]), u'^(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
