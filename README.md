@@ -1,9 +1,7 @@
 **This is a work in progress. It "works for me" at www.apiregistro.com.br,
 but I cannot warranty that it fully "works everywhere" yet. Join us on Gitter (below) if you need some help.**
 
-=====================
-drf-nested-routers
-=====================
+# drf-nested-routers
 
 [![Join the chat at https://gitter.im/alanjds/drf-nested-routers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/alanjds/drf-nested-routers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/alanjds/drf-nested-routers.svg?branch=master)](https://travis-ci.org/alanjds/drf-nested-routers)
@@ -16,22 +14,22 @@ The following example is about Domains and DNS Nameservers.
 There are many domains, and each domain has many nameservers. The "nameserver" resource does not
 exist without a domain, so you need it "nested" inside the domain.
 
-Requirements & Compatibility
-============================
+
+## Requirements & Compatibility
 
 -  Python (2.7, 3.3, 3.4, 3.5, 3.6)
 -  Django (1.8, 1.9, 1.10, 1.11, 2.0)
 -  Django REST Framework (2.4.3, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7)
 
-Installation
-============
+
+## Installation
 
 You can install this library using pip:
 
 ```pip install drf-nested-routers```
 
-Quickstart
-==========
+
+## Quickstart
 
 The desired URL signatures are:
 ```
@@ -109,11 +107,9 @@ class DomainSerializer(HyperlinkedModelSerializer):
     )
 ```
 
-Advanced
-========
+## Advanced
 
-Hyperlinks for Nested resources
--------------------------------
+### Hyperlinks for Nested resources
 
 (optional) If you want a little bit more control over the fields displayed for the nested relations while looking at the parent, you need a custom serializer using NestedHyperlinkedModelSerializer.
 ```python
@@ -143,8 +139,7 @@ class DomainSerializer(HyperlinkedModelSerializer):
 	nameservers = DomainNameserverSerializers(many=True, read_only=True)
 ```
 
-Infinite-depth Nesting
-----------------------
+### Infinite-depth Nesting
 
 Example of nested router 3 levels deep.  You can use this same logic to nest routers as deep as you need.  This example accomplishes the below URL patterns.
 ```
@@ -220,8 +215,8 @@ class MailRecipientViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
-Testing
-=======
+## Testing
+
 In order to get started with testing, you will need to install [tox](https://tox.readthedocs.io/en/latest/).
 Once installed, you can then run one environment locally, to speed up your development cycle:
 
@@ -231,8 +226,8 @@ $ tox -e py27-django1.8-drf3.0
 
 Once you submit a pull request, your changes will be run against many environments with Travis.
 
-License
-=======
+
+## License
 
 This package is licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
