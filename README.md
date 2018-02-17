@@ -82,7 +82,12 @@ class NameserverViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
-(optional) If you need hyperlinks for nested relations, you need a custom serializer.
+
+## Advanced
+
+### Hyperlinks for Nested resources
+
+**(optional)** If you need hyperlinks for nested relations, you need a custom serializer.
 ```python
 # serializers.py
 # (needed only if you want hyperlinks for nested relations on API)
@@ -107,11 +112,7 @@ class DomainSerializer(HyperlinkedModelSerializer):
     )
 ```
 
-## Advanced
-
-### Hyperlinks for Nested resources
-
-(optional) If you want a little bit more control over the fields displayed for the nested relations while looking at the parent, you need a custom serializer using NestedHyperlinkedModelSerializer.
+**(optional)** If you want a little bit more control over the fields displayed for the nested relations while looking at the parent, you need a custom serializer using NestedHyperlinkedModelSerializer.
 ```python
 from rest_framework.serializers import HyperlinkedModelSerializer
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
@@ -224,7 +225,7 @@ Once installed, you can then run one environment locally, to speed up your devel
 $ tox -e py27-django1.8-drf3.0
 ```
 
-Once you submit a pull request, your changes will be run against many environments with Travis.
+Once you submit a pull request, your changes will be run against many environments with Travis CI.
 
 
 ## License
