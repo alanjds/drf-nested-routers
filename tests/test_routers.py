@@ -85,3 +85,14 @@ class TestEmptyPrefix(TestCase):
         self.assertEquals(len(urls), 2)
         self.assertEquals(get_regex_pattern(urls[0]), u'^(?P<a_pk>[0-9a-f]{32})/b/$')
         self.assertEquals(get_regex_pattern(urls[1]), u'^(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
+
+
+class TestBadLookupValue(TestCase):
+    def setUp(self):
+        self.router = SimpleRouter()
+        self.router.register(r'parents', AViewSet, base_name='ui-parent_1')
+
+    def test_bad_lookup(self):
+        with self.assertRaises(ValueError):
+            self.a_router = NestedSimpleRouter(self.router, r'parents', lookup='ui-parent_2')
+            self.a_router.register(r'child', BViewSet, base_name='ui-parent-child')
