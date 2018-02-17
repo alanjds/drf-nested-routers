@@ -15,6 +15,13 @@ The following example is about Domains and DNS Nameservers.
 There are many domains, and each domain has many nameservers. The "nameserver" resource does not
 exist without a domain, so you need it "nested" inside the domain.
 
+Requirements & Compatibility
+----------------------------
+
+-  Python (2.7, 3.3, 3.4, 3.5, 3.6)
+-  Django (1.8, 1.9, 1.10, 1.11, 2.0)
+-  Django REST Framework (2.4.3, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7)
+
 Installation
 ------------
 
