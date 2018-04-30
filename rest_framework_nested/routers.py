@@ -54,6 +54,22 @@ class NestedMixin(object):
 
         super(NestedMixin, self).__init__(*args, **kwargs)
 
+        if 'trailing_slash' not in kwargs:
+            # Inherit trailing_slash only when not specified explicitly.
+            #
+            # drf transposes the trailing_slash argument into the actual appended value
+            # within the route urls. This means that, on the parent class, trailing_slash
+            # is either '/' or '' for the expected kwarg values True or False, respectively.
+            # If, however, the trailing_slash property has been further customized beyond
+            # those two values (for example, to add an optional slash with '/?'), we won't
+            # be able to set it through the kwargs.
+            #
+            # By copying the value of trailing_slash directly, we ensure that our inherited
+            # behavior is ALWAYS consistent with the parent. If we didn't, we might create
+            # a situation where the parent's trailing slash is truthy (but not '/') and
+            # we set our trailing slash to just '/', leading to inconsistent behavior.
+            self.trailing_slash = parent_router.trailing_slash
+
         parent_registry = [registered for registered
                            in self.parent_router.registry
                            if registered[0] == self.parent_prefix]
