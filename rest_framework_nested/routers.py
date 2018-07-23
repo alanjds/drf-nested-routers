@@ -139,7 +139,7 @@ class NestedDefaultRouter(NestedMixin, DefaultRouter):
     """ Create a NestedDefaultRouter nested within `parent_router`
     Args:
 
-    parent_router: Parent router. Maybe be a DefaultRouteror another nested
+    parent_router: Parent router. Maybe be a DefaultRouter or another nested
         router.
 
     parent_prefix: The url prefix within parent_router under which the
