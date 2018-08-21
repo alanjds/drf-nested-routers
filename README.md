@@ -33,10 +33,10 @@ You can install this library using pip:
 
 The desired URL signatures are:
 ```
-\domain\ <- Domains list
-\domain\{pk}\ <- One domain, from {pk}
-\domain\{domain_pk}\nameservers\ <- Nameservers of domain from {domain_pk}
-\domain\{domain_pk}\nameservers\{pk} <- Specific nameserver from {pk}, of domain from {domain_pk}
+/domain/ <- Domains list
+/domain/{pk}/ <- One domain, from {pk}
+/domain/{domain_pk}/nameservers/ <- Nameservers of domain from {domain_pk}
+/domain/{domain_pk}/nameservers/{pk} <- Specific nameserver from {pk}, of domain from {domain_pk}
 ```
 
 How to do it (example):
