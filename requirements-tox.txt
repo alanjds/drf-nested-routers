@@ -1,5 +1,5 @@
 # Test requirements
-pytest-cov==1.6
+pytest-cov==2.7.1
 flake8==2.4.0
 ipdb
 
