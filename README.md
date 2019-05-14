@@ -107,7 +107,7 @@ class DomainSerializer(HyperlinkedModelSerializer):
     nameservers = NestedHyperlinkedRelatedField(
         many=True,
         read_only=True,   # Or add a queryset
-        view_name='domain-nameservers-detail'
+        view_name='domain-nameservers-detail',
         parent_lookup_kwargs={'domain_pk': 'domain__pk'}
     )
 ```
