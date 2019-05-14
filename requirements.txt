@@ -5,6 +5,3 @@
 Django>=1.11
 djangorestframework>=3.6.0
 
-# Test requirements
-pytest==3.0.2
-pytest-django==2.8.0
