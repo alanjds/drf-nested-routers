@@ -13,3 +13,4 @@
 # limitations under the License.
 
 __version__ = '0.91'
+__bimdatafork__ = True
