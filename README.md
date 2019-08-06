@@ -18,8 +18,8 @@ exist without a domain, so you need it "nested" inside the domain.
 ## Requirements & Compatibility
 
 -  Python (2.7, 3.4, 3.5, 3.6, 3.7)
--  Django (1.11, 2.0, 2.1)
--  Django REST Framework (3.6, 3.7, 3.8)
+-  Django (1.11, 2.0, 2.1, 2.2)
+-  Django REST Framework (3.6, 3.7, 3.8, 3.9)
 
 
 ## Installation
@@ -222,7 +222,7 @@ In order to get started with testing, you will need to install [tox](https://tox
 Once installed, you can then run one environment locally, to speed up your development cycle:
 
 ```
-$ tox -e py37-django2.1-drf3.8
+$ tox -e py37-django2.2-drf3.9
 ```
 
 Once you submit a pull request, your changes will be run against many environments with Travis CI.
