@@ -32,13 +32,12 @@ try:
     def list_route_decorator(**kwargs):
         return action(detail=False, **kwargs)
 except ImportError:
-    pass
+    # for DRF < 3.8
+    try:
+        from rest_framework.decorators import detail_route as detail_route_decorator, list_route as list_route_decorator
+    except ImportError:
+        pass
 
-# for DRF < 3.8
-try:
-    from rest_framework.decorators import detail_route as detail_route_decorator, list_route as list_route_decorator
-except ImportError:
-    pass
 
 if 'detail_route_decorator' in globals() and 'list_route_decorator' in globals():
     def map_by_name(iterable):
