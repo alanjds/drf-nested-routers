@@ -50,8 +50,8 @@ router = routers.SimpleRouter()
 router.register(r'domains', DomainViewSet)
 
 domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
-domains_router.register(r'nameservers', NameserverViewSet, base_name='domain-nameservers')
-# 'base_name' is optional. Needed only if the same viewset is registered more than once
+domains_router.register(r'nameservers', NameserverViewSet, basename='domain-nameservers')
+# 'basename' is optional. Needed only if the same viewset is registered more than once
 # Official DRF docs on this option: http://www.django-rest-framework.org/api-guide/routers/
 
 urlpatterns = patterns('',
@@ -155,13 +155,13 @@ Example of nested router 3 levels deep.  You can use this same logic to nest rou
 ```python
 # urls.py
 router = DefaultRouter()
-router.register(r'clients', ClientViewSet, base_name='clients')
+router.register(r'clients', ClientViewSet, basename='clients')
 
 client_router = routers.NestedSimpleRouter(router, r'clients', lookup='client')
-client_router.register(r'maildrops', MailDropViewSet, base_name='maildrops')
+client_router.register(r'maildrops', MailDropViewSet, basename='maildrops')
 
 maildrops_router = routers.NestedSimpleRouter(client_router, r'maildrops', lookup='maildrop')
-maildrops_router.register(r'recipients', MailRecipientViewSet, base_name='recipients')
+maildrops_router.register(r'recipients', MailRecipientViewSet, basename='recipients')
 
 urlpatterns = patterns (
     '',
