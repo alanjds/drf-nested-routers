@@ -28,6 +28,9 @@ Example:
 from __future__ import unicode_literals
 import sys
 import re
+import functools
+import warnings
+import rest_framework
 from rest_framework.routers import SimpleRouter, DefaultRouter  # noqa: F401
 
 
@@ -35,6 +38,11 @@ if sys.version_info[0] < 3:
     IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*$")
 else:
     IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*$", re.UNICODE)
+
+try:
+    DRF_VERSION = tuple([int(i) for i in rest_framework.__version__.split('.')])
+except Exception:
+    DRF_VERSION = (float('+inf'), )  # development version?
 
 
 class LookupMixin(object):
@@ -112,6 +120,13 @@ class NestedMixin(object):
     def check_valid_name(self, value):
         if IDENTIFIER_REGEX.match(value) is None:
             raise ValueError("lookup argument '{}' needs to be valid python identifier".format(value))
+
+    @functools.wraps(SimpleRouter.register)
+    def register(self, *args, **kwargs):
+        if 'base_name' in kwargs and DRF_VERSION >= (3, 11):
+            warnings.warn("DRF 3.11+ replaced 'base_name' with 'basename'. Please update your code", DeprecationWarning)
+            kwargs['basename'] = kwargs.pop('base_name')
+        return super(NestedMixin, self).register(*args, **kwargs)
 
 
 class NestedSimpleRouter(NestedMixin, SimpleRouter):
