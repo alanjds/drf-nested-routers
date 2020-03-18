@@ -73,21 +73,21 @@ class TestNestedSimpleRouter(TestCase):
     def test_recursive_nested_simple_routers(self):
         self.assertFalse(hasattr(self.router, 'parent_regex'))
         urls = self.router.urls
-        self.assertEquals(len(urls), 2)
-        self.assertEquals(get_regex_pattern(urls[0]), u'^a/$')
-        self.assertEquals(get_regex_pattern(urls[1]), u'^a/(?P<pk>[0-9a-f]{32})/$')
+        self.assertEqual(len(urls), 2)
+        self.assertEqual(get_regex_pattern(urls[0]), u'^a/$')
+        self.assertEqual(get_regex_pattern(urls[1]), u'^a/(?P<pk>[0-9a-f]{32})/$')
 
         self.assertEqual(self.a_router.parent_regex, u'a/(?P<a_pk>[0-9a-f]{32})/')
         urls = self.a_router.urls
-        self.assertEquals(len(urls), 2)
-        self.assertEquals(get_regex_pattern(urls[0]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/$')
-        self.assertEquals(get_regex_pattern(urls[1]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
+        self.assertEqual(len(urls), 2)
+        self.assertEqual(get_regex_pattern(urls[0]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/$')
+        self.assertEqual(get_regex_pattern(urls[1]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
 
         self.assertEqual(self.b_router.parent_regex, u'a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/')
         urls = self.b_router.urls
-        self.assertEquals(len(urls), 2)
-        self.assertEquals(get_regex_pattern(urls[0]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/$')
-        self.assertEquals(get_regex_pattern(urls[1]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/(?P<pk>[^/.]+)/$')
+        self.assertEqual(len(urls), 2)
+        self.assertEqual(get_regex_pattern(urls[0]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/$')
+        self.assertEqual(get_regex_pattern(urls[1]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/(?P<pk>[^/.]+)/$')
 
 
 class TestEmptyPrefix(TestCase):
@@ -100,20 +100,20 @@ class TestEmptyPrefix(TestCase):
     def test_empty_prefix(self):
         urls = self.router.urls
         urls = self.a_router.urls
-        self.assertEquals(len(urls), 2)
-        self.assertEquals(get_regex_pattern(urls[0]), u'^(?P<a_pk>[0-9a-f]{32})/b/$')
-        self.assertEquals(get_regex_pattern(urls[1]), u'^(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
+        self.assertEqual(len(urls), 2)
+        self.assertEqual(get_regex_pattern(urls[0]), u'^(?P<a_pk>[0-9a-f]{32})/b/$')
+        self.assertEqual(get_regex_pattern(urls[1]), u'^(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
 
 
 class TestBadLookupValue(TestCase):
     def setUp(self):
         self.router = SimpleRouter()
-        self.router.register(r'parents', AViewSet, base_name='ui-parent_1')
+        self.router.register(r'parents', AViewSet, basename='ui-parent_1')
 
     def test_bad_lookup(self):
         with self.assertRaises(ValueError):
             self.a_router = NestedSimpleRouter(self.router, r'parents', lookup='ui-parent_2')
-            self.a_router.register(r'child', BViewSet, base_name='ui-parent-child')
+            self.a_router.register(r'child', BViewSet, basename='ui-parent-child')
 
 
 class TestRouterSettingInheritance(TestCase):

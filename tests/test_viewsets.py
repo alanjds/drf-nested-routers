@@ -59,10 +59,10 @@ class ChildWithNestedMixinViewSet(NestedViewSetMixin, ModelViewSet):
 
 
 router = SimpleRouter()
-router.register('root', RootViewSet, base_name='root')
+router.register('root', RootViewSet, basename='root')
 root_router = NestedSimpleRouter(router, r'root', lookup='parent')
-root_router.register(r'child', ChildViewSet, base_name='child')
-root_router.register(r'child-with-nested-mixin', ChildWithNestedMixinViewSet, base_name='child-with-nested-mixin')
+root_router.register(r'child', ChildViewSet, basename='child')
+root_router.register(r'child-with-nested-mixin', ChildWithNestedMixinViewSet, basename='child-with-nested-mixin')
 
 
 urlpatterns = [
