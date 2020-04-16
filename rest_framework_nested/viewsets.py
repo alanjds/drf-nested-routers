@@ -6,7 +6,7 @@ class NestedViewSetMixin(object):
         """
         queryset = super(NestedViewSetMixin, self).get_queryset()
         serializer_class = self.get_serializer_class()
-        if hasattr(serializer_class, 'parent_lookup_kwargs'):
+        if hasattr(serializer_class, 'parent_lookup_kwargs') and hasattr(self, 'kwargs') and self.kwargs:
             orm_filters = {}
             for query_param, field_name in serializer_class.parent_lookup_kwargs.items():
                 orm_filters[field_name] = self.kwargs[query_param]
