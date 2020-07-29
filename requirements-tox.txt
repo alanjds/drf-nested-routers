@@ -1,5 +1,5 @@
 # Test requirements
-pytest==5.4.3
+pytest==6.0.0
 pytest-cov==2.9.0
 pytest-django==3.4.2
 flake8==3.8.2
