@@ -6,7 +6,7 @@ flake8==3.8.2
 ipdb
 
 # wheel for PyPI installs
-wheel==0.24.0
+wheel==0.35.1
 
 # MkDocs for documentation previews/deploys
 mkdocs==1.1.2
