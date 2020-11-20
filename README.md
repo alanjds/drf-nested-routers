@@ -17,9 +17,9 @@ exist without a domain, so you need it "nested" inside the domain.
 
 ## Requirements & Compatibility
 
--  Python (2.7, 3.4, 3.5, 3.6, 3.7)
--  Django (1.11, 2.0, 2.1)
--  Django REST Framework (3.6, 3.7, 3.8)
+-  Python (3.5, 3.6, 3.7)
+-  Django (1.11, 2.0, 2.1, 2.2, 3.0)
+-  Django REST Framework (3.6, 3.7, 3.8, 3.9, 3.10)
 
 
 ## Installation
@@ -50,8 +50,8 @@ router = routers.SimpleRouter()
 router.register(r'domains', DomainViewSet)
 
 domains_router = routers.NestedSimpleRouter(router, r'domains', lookup='domain')
-domains_router.register(r'nameservers', NameserverViewSet, base_name='domain-nameservers')
-# 'base_name' is optional. Needed only if the same viewset is registered more than once
+domains_router.register(r'nameservers', NameserverViewSet, basename='domain-nameservers')
+# 'basename' is optional. Needed only if the same viewset is registered more than once
 # Official DRF docs on this option: http://www.django-rest-framework.org/api-guide/routers/
 
 urlpatterns = patterns('',
@@ -155,13 +155,13 @@ Example of nested router 3 levels deep.  You can use this same logic to nest rou
 ```python
 # urls.py
 router = DefaultRouter()
-router.register(r'clients', ClientViewSet, base_name='clients')
+router.register(r'clients', ClientViewSet, basename='clients')
 
 client_router = routers.NestedSimpleRouter(router, r'clients', lookup='client')
-client_router.register(r'maildrops', MailDropViewSet, base_name='maildrops')
+client_router.register(r'maildrops', MailDropViewSet, basename='maildrops')
 
 maildrops_router = routers.NestedSimpleRouter(client_router, r'maildrops', lookup='maildrop')
-maildrops_router.register(r'recipients', MailRecipientViewSet, base_name='recipients')
+maildrops_router.register(r'recipients', MailRecipientViewSet, basename='recipients')
 
 urlpatterns = patterns (
     '',
@@ -222,7 +222,7 @@ In order to get started with testing, you will need to install [tox](https://tox
 Once installed, you can then run one environment locally, to speed up your development cycle:
 
 ```
-$ tox -e py37-django2.1-drf3.8
+$ tox -e py37-django2.2-drf3.9
 ```
 
 Once you submit a pull request, your changes will be run against many environments with Travis CI.

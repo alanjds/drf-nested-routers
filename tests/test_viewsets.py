@@ -77,12 +77,13 @@ class ChildWithNestedMixinViewSetWithoutParentKwargs(NestedViewSetMixin, ModelVi
     queryset = Child.objects.all()
 
 router = SimpleRouter()
-router.register('root', RootViewSet, base_name='root')
+print(router.register)
+router.register('root', RootViewSet, basename='root')
 root_router = NestedSimpleRouter(router, r'root', lookup='parent')
-root_router.register(r'child', ChildViewSet, base_name='child')
-root_router.register(r'child-with-nested-mixin', ChildWithNestedMixinViewSet, base_name='child-with-nested-mixin')
-root_router.register(r'child-with-nested-mixin-in-view', ChildWithNestedMixinViewSetDefinedInViewset, base_name='child-with-nested-mixin-in-view')
-root_router.register(r'child-with-nested-mixin-not-defined', ChildWithNestedMixinViewSetWithoutParentKwargs, base_name='child-with-nested-mixin-not-defined')
+root_router.register(r'child', ChildViewSet, basename='child')
+root_router.register(r'child-with-nested-mixin', ChildWithNestedMixinViewSet, basename='child-with-nested-mixin')
+root_router.register(r'child-with-nested-mixin-in-view', ChildWithNestedMixinViewSetDefinedInViewset, basename='child-with-nested-mixin-in-view')
+root_router.register(r'child-with-nested-mixin-not-defined', ChildWithNestedMixinViewSetWithoutParentKwargs, basename='child-with-nested-mixin-not-defined')
 
 
 urlpatterns = [

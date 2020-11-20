@@ -22,11 +22,24 @@ class BasicModel(models.Model):
         app_label = 'testapp'
 
 
+# DRF 3.8+
 try:
-    from rest_framework.decorators import detail_route, list_route
+    from rest_framework.decorators import action
+
+    def detail_route_decorator(**kwargs):
+        return action(detail=True, **kwargs)
+
+    def list_route_decorator(**kwargs):
+        return action(detail=False, **kwargs)
 except ImportError:
-    pass
-else:
+    # for DRF < 3.8
+    try:
+        from rest_framework.decorators import detail_route as detail_route_decorator, list_route as list_route_decorator
+    except ImportError:
+        pass
+
+
+if 'detail_route_decorator' in globals() and 'list_route_decorator' in globals():
     def map_by_name(iterable):
         ret = {}
         for item in iterable:
@@ -37,7 +50,7 @@ else:
         model = BasicModel
         queryset = QS(BasicModel)
 
-        @detail_route(methods=["post"])
+        @detail_route_decorator(methods=["post"])
         def set_password(self, request, pk=None):
             return Response({'hello': 'ok'})
 
@@ -45,7 +58,7 @@ else:
         model = BasicModel
         queryset = QS(BasicModel)
 
-        @list_route()
+        @list_route_decorator()
         def recent_users(self, request, pk=None):
             return Response([{'hello': 'ok'}])
 

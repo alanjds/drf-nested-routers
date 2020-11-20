@@ -21,4 +21,4 @@ class NestedViewSetMixin(object):
                 orm_filters[field_name] = self.kwargs[query_param]
             return queryset.filter(**orm_filters)
 
-        raise ImproperlyConfigured('Views with NestedViewSetMixin must have parent_lookup_kwargs defined')
+        raise ImproperlyConfigured("Views with NestedViewSetMixin must have 'parent_lookup_kwargs' defined")
