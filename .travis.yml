@@ -1,8 +1,5 @@
-sudo: false
-
 language: python
 python:
-  - "3.5"
   - "3.6"
   - "3.7"
   - "3.8"
@@ -15,18 +12,15 @@ cache: pip
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - python: "3.9"
   include:
-    - python: "3.7"
-      dist: xenial
-      sudo: required
+    - dist: bionic
+      python: 3.6
 
 notifications:
-    webhooks:
-        urls:
-            - https://webhooks.gitter.im/e/4792e76205b696e243ff
-        on_success: change  # options: [always|never|change] default: always
-        on_failure: always  # options: [always|never|change] default: always
-        on_start: never     # options: [always|never|change] default: always
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/09bd4c7cc8961aff307f
+    on_success: change  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: never     # options: [always|never|change] default: always
 
