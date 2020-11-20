@@ -6,7 +6,7 @@ on: [push, workflow_dispatch]
 
 jobs:
   # Allows you to run this workflow manually from the Actions tab
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 5
