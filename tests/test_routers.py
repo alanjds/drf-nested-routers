@@ -108,12 +108,12 @@ class TestEmptyPrefix(TestCase):
 class TestBadLookupValue(TestCase):
     def setUp(self):
         self.router = SimpleRouter()
-        self.router.register(r'parents', AViewSet, base_name='ui-parent_1')
+        self.router.register(r'parents', AViewSet, basename='ui-parent_1')
 
     def test_bad_lookup(self):
         with self.assertRaises(ValueError):
             self.a_router = NestedSimpleRouter(self.router, r'parents', lookup='ui-parent_2')
-            self.a_router.register(r'child', BViewSet, base_name='ui-parent-child')
+            self.a_router.register(r'child', BViewSet, basename='ui-parent-child')
 
 
 class TestRouterSettingInheritance(TestCase):

@@ -5,17 +5,17 @@ from tests.serializers.models import Parent1Viewset, Child1Viewset, Parent2Views
 
 
 router_1 = routers.SimpleRouter()
-router_1.register('parent1', Parent1Viewset, base_name='parent1')
+router_1.register('parent1', Parent1Viewset, basename='parent1')
 parent_1_router = routers.NestedSimpleRouter(router_1, r'parent1', lookup='parent')
-parent_1_router.register(r'child1', Child1Viewset, base_name='child1')
+parent_1_router.register(r'child1', Child1Viewset, basename='child1')
 
 router_2 = routers.SimpleRouter()
-router_2.register('parent2', Parent2Viewset, base_name='parent2')
+router_2.register('parent2', Parent2Viewset, basename='parent2')
 parent_2_router = routers.NestedSimpleRouter(router_2, r'parent2', lookup='root')
-parent_2_router.register(r'child2', Child2Viewset, base_name='child2')
+parent_2_router.register(r'child2', Child2Viewset, basename='child2')
 
 parent_2_grandchild_router = routers.NestedSimpleRouter(parent_2_router, r'child2', lookup='parent')
-parent_2_grandchild_router.register(r'grandchild1', ParentChild2GrandChild1Viewset, base_name='grandchild1')
+parent_2_grandchild_router.register(r'grandchild1', ParentChild2GrandChild1Viewset, basename='grandchild1')
 
 urlpatterns = [
     url(r'^', include(router_1.urls)),
