@@ -24,4 +24,4 @@ jobs:
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions
     - name: Test with tox
-      run: cd $GITHUB_WORKSPACE && ls -F && tox
+      run: cd $GITHUB_WORKSPACE && ls -F && tox -v
