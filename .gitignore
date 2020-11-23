@@ -35,6 +35,7 @@ nosetests.xml
 .pydevproject
 
 # Cookiecutter
+__pycache__
 *.pyc
 *.db
 *~

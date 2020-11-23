@@ -81,14 +81,14 @@ if 'detail_route_decorator' in globals() and 'list_route_decorator' in globals()
         def test_dynamic_routes(self):
             self.assertFalse(hasattr(self.router, 'parent_regex'))
             urls = map_by_name(self.router.urls)
-            self.assertEquals(
+            self.assertEqual(
                 get_regex_pattern(urls['basicmodel-list']), u'^detail/$'
             )
-            self.assertEquals(
+            self.assertEqual(
                 get_regex_pattern(urls['basicmodel-detail']),
                 u'^detail/(?P<pk>[^/.]+)/$'
             )
-            self.assertEquals(
+            self.assertEqual(
                 get_regex_pattern(urls['basicmodel-set-password']),
                 u'^detail/(?P<pk>[^/.]+)/set_password/$'
             )
@@ -100,17 +100,17 @@ if 'detail_route_decorator' in globals() and 'list_route_decorator' in globals()
             )
             urls = map_by_name(self.detail_router.urls)
 
-            self.assertEquals(
+            self.assertEqual(
                 get_regex_pattern(urls['basicmodel-list']),
                 u'^detail/(?P<detail_pk>[^/.]+)/list/$'
             )
 
-            self.assertEquals(
+            self.assertEqual(
                 get_regex_pattern(urls['basicmodel-recent-users']),
                 u'^detail/(?P<detail_pk>[^/.]+)/list/recent_users/$'
             )
 
-            self.assertEquals(
+            self.assertEqual(
                 get_regex_pattern(urls['basicmodel-detail']),
                 u'^detail/(?P<detail_pk>[^/.]+)/list/(?P<pk>[^/.]+)/$'
             )
