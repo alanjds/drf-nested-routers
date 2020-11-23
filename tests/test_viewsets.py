@@ -59,6 +59,7 @@ class ChildWithNestedMixinViewSet(NestedViewSetMixin, ModelViewSet):
 
 
 router = SimpleRouter()
+print(router.register)
 router.register('root', RootViewSet, basename='root')
 root_router = NestedSimpleRouter(router, r'root', lookup='parent')
 root_router.register(r'child', ChildViewSet, basename='child')
