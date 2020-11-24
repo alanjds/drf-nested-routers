@@ -17,9 +17,12 @@ exist without a domain, so you need it "nested" inside the domain.
 
 ## Requirements & Compatibility
 
--  Python (3.5, 3.6, 3.7)
--  Django (1.11, 2.0, 2.1, 2.2, 3.0)
--  Django REST Framework (3.6, 3.7, 3.8, 3.9, 3.10)
+-  Python (3.6, 3.7, 3.8, 3.9)
+-  Django (2.2, 3.0, 3.1)
+-  Django REST Framework (3.11)
+
+It may work with lower versions, but since the release **0.92.1** is no more
+tested on CI for Pythons 2.7 to 3.5, Django 1.11 to 2.1 or DRF 3.6 to 3.10.
 
 
 ## Installation
@@ -222,10 +225,10 @@ In order to get started with testing, you will need to install [tox](https://tox
 Once installed, you can then run one environment locally, to speed up your development cycle:
 
 ```
-$ tox -e py37-django2.2-drf3.9
+$ tox -e py39-django3.1-drf3.11
 ```
 
-Once you submit a pull request, your changes will be run against many environments with Travis CI.
+Once you submit a pull request, your changes will be run against many environments with Github Actions named CI.
 
 
 ## License
