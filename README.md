@@ -4,7 +4,7 @@ but I cannot warranty that it fully "works everywhere" yet. Join us on Gitter (b
 # drf-nested-routers
 
 [![Join the chat at https://gitter.im/alanjds/drf-nested-routers](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/alanjds/drf-nested-routers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/alanjds/drf-nested-routers.svg?branch=master)](https://travis-ci.org/alanjds/drf-nested-routers)
+[![Build Status](https://github.com/alanjds/drf-nested-routers/workflows/CI/badge.svg)](https://github.com/alanjds/drf-nested-routers/actions?query=workflow%3ACI+branch%3Amaster)
 
 This package provides routers and fields to create nested resources in the [Django Rest Framework](http://django-rest-framework.org/)
 
@@ -17,9 +17,12 @@ exist without a domain, so you need it "nested" inside the domain.
 
 ## Requirements & Compatibility
 
--  Python (3.5, 3.6, 3.7)
--  Django (1.11, 2.0, 2.1, 2.2, 3.0)
--  Django REST Framework (3.6, 3.7, 3.8, 3.9, 3.10)
+-  Python (3.6, 3.7, 3.8, 3.9)
+-  Django (2.2, 3.0, 3.1)
+-  Django REST Framework (3.11)
+
+It may work with lower versions, but since the release **0.92.1** is no more
+tested on CI for Pythons 2.7 to 3.5, Django 1.11 to 2.1 or DRF 3.6 to 3.10.
 
 
 ## Installation
@@ -88,6 +91,13 @@ class NameserverViewSet(viewsets.ViewSet):
 ### Hyperlinks for Nested resources
 
 **(optional)** If you need hyperlinks for nested relations, you need a custom serializer.
+
+There you will inform how to access the *parent* of the instance being serialized when
+building the *children* URL.
+
+In the following example, an instance of Nameserver on `/domain/{domain_pk}/nameservers/{pk}`
+is being informed that de *parent* Domain should be looked up using the `domain_pk` kwarg
+from the URl:
 ```python
 # serializers.py
 # (needed only if you want hyperlinks for nested relations on API)
@@ -100,6 +110,8 @@ class DomainSerializer(HyperlinkedModelSerializer):
     nameservers = HyperlinkedIdentityField(
         view_name='domain-nameservers-list',
         lookup_url_kwarg='domain_pk'
+                        # ^-- Nameserver queryset will .get(domain_pk=domain_pk)
+                        #     being this value from URL kwargs
     )
 
 	## OR ##
@@ -109,6 +121,8 @@ class DomainSerializer(HyperlinkedModelSerializer):
         read_only=True,   # Or add a queryset
         view_name='domain-nameservers-detail',
         parent_lookup_kwargs={'domain_pk': 'domain__pk'}
+                            # ^-- Nameserver queryset will .filter(domain__pk=domain_pk)
+                            #     being domain_pk (ONE underscore) value from URL kwargs
     )
 ```
 
@@ -142,7 +156,9 @@ class DomainSerializer(HyperlinkedModelSerializer):
 
 ### Infinite-depth Nesting
 
-Example of nested router 3 levels deep.  You can use this same logic to nest routers as deep as you need.  This example accomplishes the below URL patterns.
+Example of nested router 3 levels deep.
+You can use this same logic to nest routers as deep as you need.
+This example ahead accomplishes the below URL patterns.
 ```
 /clients/
 /clients/{pk}/
@@ -156,12 +172,21 @@ Example of nested router 3 levels deep.  You can use this same logic to nest rou
 # urls.py
 router = DefaultRouter()
 router.register(r'clients', ClientViewSet, basename='clients')
+## generates:
+# /clients/
+# /clients/{pk}/
 
 client_router = routers.NestedSimpleRouter(router, r'clients', lookup='client')
 client_router.register(r'maildrops', MailDropViewSet, basename='maildrops')
+## generates:
+# /clients/{client_pk}/maildrops/
+# /clients/{client_pk}/maildrops/{maildrop_pk}/
 
 maildrops_router = routers.NestedSimpleRouter(client_router, r'maildrops', lookup='maildrop')
 maildrops_router.register(r'recipients', MailRecipientViewSet, basename='recipients')
+## generates:
+# /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/
+# /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/{pk}/
 
 urlpatterns = patterns (
     '',
@@ -222,10 +247,10 @@ In order to get started with testing, you will need to install [tox](https://tox
 Once installed, you can then run one environment locally, to speed up your development cycle:
 
 ```
-$ tox -e py37-django2.2-drf3.9
+$ tox -e py39-django3.1-drf3.11
 ```
 
-Once you submit a pull request, your changes will be run against many environments with Travis CI.
+Once you submit a pull request, your changes will be run against many environments with Github Actions named CI.
 
 
 ## License
