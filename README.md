@@ -91,6 +91,13 @@ class NameserverViewSet(viewsets.ViewSet):
 ### Hyperlinks for Nested resources
 
 **(optional)** If you need hyperlinks for nested relations, you need a custom serializer.
+
+There you will inform how to access the *parent* of the instance being serialized when
+building the *children* URL.
+
+In the following example, an instance of Nameserver on `/domain/{domain_pk}/nameservers/{pk}`
+is being informed that de *parent* Domain should be looked up using the `domain_pk` kwarg
+from the URl:
 ```python
 # serializers.py
 # (needed only if you want hyperlinks for nested relations on API)
@@ -103,6 +110,8 @@ class DomainSerializer(HyperlinkedModelSerializer):
     nameservers = HyperlinkedIdentityField(
         view_name='domain-nameservers-list',
         lookup_url_kwarg='domain_pk'
+                        # ^-- Nameserver queryset will .get(domain_pk=domain_pk)
+                        #     being this value from URL kwargs
     )
 
 	## OR ##
@@ -112,6 +121,8 @@ class DomainSerializer(HyperlinkedModelSerializer):
         read_only=True,   # Or add a queryset
         view_name='domain-nameservers-detail',
         parent_lookup_kwargs={'domain_pk': 'domain__pk'}
+                            # ^-- Nameserver queryset will .filter(domain__pk=domain_pk)
+                            #     being domain_pk (ONE underscore) value from URL kwargs
     )
 ```
 
@@ -145,7 +156,9 @@ class DomainSerializer(HyperlinkedModelSerializer):
 
 ### Infinite-depth Nesting
 
-Example of nested router 3 levels deep.  You can use this same logic to nest routers as deep as you need.  This example accomplishes the below URL patterns.
+Example of nested router 3 levels deep.
+You can use this same logic to nest routers as deep as you need.
+This example ahead accomplishes the below URL patterns.
 ```
 /clients/
 /clients/{pk}/
@@ -159,12 +172,21 @@ Example of nested router 3 levels deep.  You can use this same logic to nest rou
 # urls.py
 router = DefaultRouter()
 router.register(r'clients', ClientViewSet, basename='clients')
+## generates:
+# /clients/
+# /clients/{pk}/
 
 client_router = routers.NestedSimpleRouter(router, r'clients', lookup='client')
 client_router.register(r'maildrops', MailDropViewSet, basename='maildrops')
+## generates:
+# /clients/{client_pk}/maildrops/
+# /clients/{client_pk}/maildrops/{maildrop_pk}/
 
 maildrops_router = routers.NestedSimpleRouter(client_router, r'maildrops', lookup='maildrop')
 maildrops_router.register(r'recipients', MailRecipientViewSet, basename='recipients')
+## generates:
+# /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/
+# /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/{pk}/
 
 urlpatterns = patterns (
     '',
