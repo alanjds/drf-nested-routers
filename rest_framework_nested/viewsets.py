@@ -1,4 +1,20 @@
+import contextlib
+
 from django.core.exceptions import ImproperlyConfigured
+
+
+@contextlib.contextmanager
+def _force_mutable(querydict: dict) -> dict:
+    """
+    Takes a HttpRequest querydict from Django and forces it to be mutable.
+    Reverts the initial state back on exit, if any.
+    """
+    initial_mutability = getattr(querydict, '_mutable', None)
+    if initial_mutability is not None:
+        querydict._mutable = True
+    yield querydict
+    if initial_mutability is not None:
+        querydict._mutable = initial_mutability
 
 
 class NestedViewSetMixin(object):
@@ -46,12 +62,6 @@ class NestedViewSetMixin(object):
             # fk_filter is alike 'grandparent__parent__pk'
             parent_arg = fk_filter.partition('__')[0]
             for querydict in [request.data, request.query_params]:
-                initial_mutability = getattr(querydict, '_mutable', None)
-                if initial_mutability is not None:
-                    querydict._mutable = True
-
-                querydict[parent_arg] = kwargs[url_kwarg]
-
-                if initial_mutability is not None:
-                    querydict._mutable = initial_mutability
+                with _force_mutable(querydict):
+                    querydict[parent_arg] = kwargs[url_kwarg]
         return request
