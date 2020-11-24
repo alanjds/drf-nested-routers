@@ -35,3 +35,23 @@ class NestedViewSetMixin(object):
         for query_param, field_name in parent_lookup_kwargs.items():
             orm_filters[field_name] = self.kwargs[query_param]
         return queryset.filter(**orm_filters)
+
+    def initialize_request(self, request, *args, **kwargs):
+        """
+        Adds the parent params from URL inside the children data available
+        """
+        request = super().initialize_request(request, *args, **kwargs)
+
+        for url_kwarg, fk_filter in self._get_parent_lookup_kwargs().items():
+            # fk_filter is alike 'grandparent__parent__pk'
+            parent_arg = fk_filter.partition('__')[0]
+            for querydict in [request.data, request.query_params]:
+                initial_mutability = getattr(querydict, '_mutable', None)
+                if initial_mutability is not None:
+                    querydict._mutable = True
+
+                querydict[parent_arg] = kwargs[url_kwarg]
+
+                if initial_mutability is not None:
+                    querydict._mutable = initial_mutability
+        return request
