@@ -241,6 +241,53 @@ class MailRecipientViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
+### OneToOne Relation Nesting
+
+Example of implementing order to client OneToOne relation.
+
+```
+/clients/
+/clients/{pk}/
+/clients/{client_pk}/order/
+/clients/{client_pk}/order/plans/
+/clients/{client_pk}/order/plans/{pk}/
+```
+
+```python
+# seriliazers.py
+
+class ClientsSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Classes
+        fields = ('order_url', ...)
+ 
+
+class OrderSerializer(NestedHyperlinkedModelSerializer):
+    class Meta:
+        model = Orders
+        fields = ('url', 'plans_url', ...)
+
+    parent_lookup_kwargs = { 'client_pk': 'client__pk' }
+
+    url = NestedHyperlinkedIdentityField(
+        view_name='client-order-detail',
+        lookup_field=None,
+        parent_lookup_kwargs=parent_lookup_kwargs
+    )
+
+    plans_url = NestedHyperlinkedIdentityField(
+        view_name='client-order-plans-list',
+        lookup_field=None,
+        parent_lookup_kwargs=parent_lookup_kwargs
+    )
+
+
+class PlansSerializer(NestedHyperlinkedModelSerializer):
+    class Meta:
+        model = Plans
+        fields = (...)
+```
+
 ## Testing
 
 In order to get started with testing, you will need to install [tox](https://tox.readthedocs.io/en/latest/).
