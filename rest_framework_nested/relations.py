@@ -37,10 +37,13 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
         # Unsaved objects will not yet have a valid URL.
         if hasattr(obj, 'pk') and obj.pk in (None, ''):
             return None
-
-        # default lookup from rest_framework.relations.HyperlinkedRelatedField
-        lookup_value = getattr(obj, self.lookup_field)
-        kwargs = {self.lookup_url_kwarg: lookup_value}
+        
+        if self.lookup_field:
+            # default lookup from rest_framework.relations.HyperlinkedRelatedField
+            lookup_value = getattr(obj, self.lookup_field)
+            kwargs = {self.lookup_url_kwarg: lookup_value}
+        else:
+            kwargs = {}
 
         # multi-level lookup
         for parent_lookup_kwarg in list(self.parent_lookup_kwargs.keys()):
