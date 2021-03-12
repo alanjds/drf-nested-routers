@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.routers import SimpleRouter
 from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.reverse import reverse as drf_reverse
 
 from rest_framework_nested.routers import NestedSimpleRouter
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
@@ -17,7 +18,6 @@ try:
     from django.core.urlresolvers import reverse
 except ImportError:
     from django.urls import reverse
-
 
 factory = RequestFactory()
 
@@ -76,8 +76,9 @@ class ChildWithNestedMixinViewSetWithoutParentKwargs(NestedViewSetMixin, ModelVi
     serializer_class = ChildSerializerWithoutParentKwargs
     queryset = Child.objects.all()
 
+
 router = SimpleRouter()
-print(router.register)
+
 router.register('root', RootViewSet, basename='root')
 root_router = NestedSimpleRouter(router, r'root', lookup='parent')
 root_router.register(r'child', ChildViewSet, basename='child')
@@ -115,6 +116,7 @@ class TestNestedSimpleRouter(TestCase):
         self.root_2 = Root.objects.create(name='root-2')
         self.root_1_child_a = Child.objects.create(name='root-1-child-a', parent=self.root_1)
         self.root_2_child_b = Child.objects.create(name='root-2-child-b', parent=self.root_2)
+        self.root_2_child_c = Child.objects.create(name='root-2-child-c', parent=self.root_2)
 
     def test_nested_child_viewset(self):
         """
@@ -131,7 +133,7 @@ class TestNestedSimpleRouter(TestCase):
 
         data = json.loads(response.content.decode())
 
-        self.assertEqual(len(data), 2)
+        self.assertEqual(len(data), 3)
 
     def test_nested_child_viewset_with_mixin(self):
         """
@@ -181,3 +183,30 @@ class TestNestedSimpleRouter(TestCase):
 
         with self.assertRaises(ImproperlyConfigured):
             response = self.client.get(url, content_type='application/json')
+
+    def test_create_child_on_viewset_with_mixin(self):
+        """
+        The `ViewSet` that uses `NestedViewSetMixin` automatically sets the
+        parent kwarg on the request.{data,query_params} querydict.
+
+        This allows the parent lookup arg to _not_ be provided on the POST
+        data, as is already provided as part of the URL.
+        """
+        resource_url = reverse('child-with-nested-mixin-list',
+                               kwargs={'parent_pk': self.root_1.pk})
+
+        response = self.client.post(resource_url,
+                                    content_type='application/json',
+                                    data=json.dumps({
+                                        'name': 'New Child',
+                                    }))
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        data = json.loads(response.content.decode())
+
+        self.assertEqual(data['name'], 'New Child')
+        parent_url = drf_reverse('root-detail',
+                                 kwargs={'pk': self.root_1.pk},
+                                 request=response.wsgi_request)
+        self.assertEqual(data['parent'], parent_url)

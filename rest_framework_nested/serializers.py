@@ -1,5 +1,5 @@
 import rest_framework.serializers
-from rest_framework_nested.relations import NestedHyperlinkedIdentityField
+from rest_framework_nested.relations import NestedHyperlinkedIdentityField, NestedHyperlinkedRelatedField
 try:
     from rest_framework.utils.field_mapping import get_nested_relation_kwargs
 except ImportError:
@@ -23,6 +23,7 @@ class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedMod
     }
 
     serializer_url_field = NestedHyperlinkedIdentityField
+    serializer_related_field = NestedHyperlinkedRelatedField
 
     def __init__(self, *args, **kwargs):
         self.parent_lookup_kwargs = kwargs.pop('parent_lookup_kwargs', self.parent_lookup_kwargs)

@@ -8,7 +8,8 @@ from __future__ import unicode_literals
 from functools import reduce  # import reduce from functools for compatibility with python 3
 
 import rest_framework.relations
-
+from rest_framework.relations import ObjectDoesNotExist, ObjectValueError, ObjectTypeError
+from rest_framework.exceptions import ValidationError
 
 # fix for basestring
 try:
@@ -50,8 +51,12 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
             # "parent__super__pk" would be split into "parent", "super" and "pk"
             lookups = underscored_lookup.split('__')
 
-            # use the Django ORM to lookup this value, e.g., obj.parent.pk
-            lookup_value = reduce(getattr, [obj] + lookups)
+            try:
+                # use the Django ORM to lookup this value, e.g., obj.parent.pk
+                lookup_value = reduce(getattr, [obj] + lookups)
+            except AttributeError:
+                # Not nested. Act like a standard HyperlinkedRelatedField
+                return super().get_url(obj, view_name, request, format)
 
             # store the lookup_name and value in kwargs, which is later passed to the reverse method
             kwargs.update({parent_lookup_kwarg: lookup_value})
@@ -65,7 +70,6 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
         Takes the matched URL conf arguments, and should return an
         object instance, or raise an `ObjectDoesNotExist` exception.
         """
-
         # default lookup from rest_framework.relations.HyperlinkedRelatedField
         lookup_value = view_kwargs[self.lookup_url_kwarg]
         kwargs = {self.lookup_url_kwarg: lookup_value}
@@ -79,6 +83,19 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
 
     def use_pk_only_optimization(self):
         return False
+
+    def to_internal_value(self, data):
+        try:
+            return super().to_internal_value(data)
+        except ValidationError as err:
+            if err.detail[0].code != 'no_match':
+                raise
+
+            # data is probable the lookup value, not the resource URL
+            try:
+                return self.get_queryset().get(**{self.lookup_field: data})
+            except (ObjectDoesNotExist, ObjectValueError, ObjectTypeError):
+                self.fail('does_not_exist')
 
 
 class NestedHyperlinkedIdentityField(NestedHyperlinkedRelatedField):
