@@ -31,9 +31,7 @@ You can install this library using pip:
 
 ```pip install drf-nested-routers```
 
-In your Django project's settings.py file, add the following in INSTALLED_APPS:
-
-```'rest_framework_nested',```
+Is not needed to add this library in your Django project's settings.py file, as it does not contain any app, signal or model.
 
 ## Quickstart
 
