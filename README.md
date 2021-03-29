@@ -59,8 +59,8 @@ domains_router.register(r'nameservers', NameserverViewSet, basename='domain-name
 # Official DRF docs on this option: http://www.django-rest-framework.org/api-guide/routers/
 
 urlpatterns = patterns('',
-    url(r'^', include(router.urls)),
-    url(r'^', include(domains_router.urls)),
+    path(r'', include(router.urls)),
+    path(r'', include(domains_router.urls)),
 )
 ```
 ```python
@@ -191,9 +191,9 @@ maildrops_router.register(r'recipients', MailRecipientViewSet, basename='recipie
 
 urlpatterns = patterns (
     '',
-    url(r'^', include(router.urls)),
-    url(r'^', include(client_router.urls)),
-    url(r'^', include(maildrops_router.urls)),
+    path(r'', include(router.urls)),
+    path(r'', include(client_router.urls)),
+    path(r'', include(maildrops_router.urls)),
 )
 ```
 
