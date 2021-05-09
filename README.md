@@ -31,7 +31,7 @@ You can install this library using pip:
 
 ```pip install drf-nested-routers```
 
-Is not needed to add this library in your Django project's settings.py file, as it does not contain any app, signal or model.
+It is not needed to add this library in your Django project's `settings.py` file, as it does not contain any app, signal or model.
 
 ## Quickstart
 
@@ -63,6 +63,7 @@ urlpatterns = patterns('',
     url(r'^', include(domains_router.urls)),
 )
 ```
+
 ```python
 # views.py
 
@@ -86,7 +87,6 @@ class NameserverViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
-
 ## Advanced
 
 ### Hyperlinks for Nested resources
@@ -97,8 +97,8 @@ There you will inform how to access the *parent* of the instance being serialize
 building the *children* URL.
 
 In the following example, an instance of Nameserver on `/domain/{domain_pk}/nameservers/{pk}`
-is being informed that de *parent* Domain should be looked up using the `domain_pk` kwarg
-from the URl:
+is being informed that the *parent* Domain should be looked up using the `domain_pk` kwarg
+from the URL:
 ```python
 # serializers.py
 # (needed only if you want hyperlinks for nested relations on API)
@@ -213,6 +213,7 @@ class ClientViewSet(viewsets.ViewSet):
         serializer = ClientSerializer(client)
         return Response(serializer.data)
 
+
 class MailDropViewSet(viewsets.ViewSet):
     serializer_class = MailDropSerializer
 
@@ -226,6 +227,7 @@ class MailDropViewSet(viewsets.ViewSet):
         maildrop = get_object_or_404(queryset, pk=pk)
         serializer = MailDropSerializer(maildrop)
         return Response(serializer.data)
+
 
 class MailRecipientViewSet(viewsets.ViewSet):
     serializer_class = MailRecipientSerializer
@@ -242,6 +244,33 @@ class MailRecipientViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 ```
 
+```python
+# serializers.py
+class ClientSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = Client
+        fields = (...)
+
+
+class MailDropSerializer(NestedHyperlinkedModelSerializer):
+    parent_lookup_kwargs = {
+        'client_pk': 'client__pk',
+    }
+    class Meta:
+        model = MailDrop
+        fields = (...)
+
+
+class MailRecipientSerializer(NestedHyperlinkedModelSerializer):
+    parent_lookup_kwargs = {
+        'maildrop_pk': 'mail_drop__pk',
+	'client_pk': 'mail_drop__client__pk',
+    }
+    class Meta:
+        model = MailRecipient
+        fields = (...)
+```
+
 ## Testing
 
 In order to get started with testing, you will need to install [tox](https://tox.readthedocs.io/en/latest/).
@@ -251,7 +280,7 @@ Once installed, you can then run one environment locally, to speed up your devel
 $ tox -e py39-django3.1-drf3.11
 ```
 
-Once you submit a pull request, your changes will be run against many environments with Github Actions named CI.
+Once you submit a pull request, your changes will be run against many environments with GitHub Actions named CI.
 
 
 ## License
