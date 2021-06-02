@@ -3,7 +3,7 @@ pytest==6.2.4
 pytest-cov==2.11.1
 pytest-django==4.2.0
 flake8==3.9.1
-ipdb==0.13.7
+ipdb==0.13.9
 
 # wheel for PyPI installs
 wheel==0.36.2
