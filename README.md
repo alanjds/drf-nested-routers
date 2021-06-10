@@ -264,7 +264,7 @@ class MailDropSerializer(NestedHyperlinkedModelSerializer):
 class MailRecipientSerializer(NestedHyperlinkedModelSerializer):
     parent_lookup_kwargs = {
         'maildrop_pk': 'mail_drop__pk',
-	'client_pk': 'mail_drop__client__pk',
+        'client_pk': 'mail_drop__client__pk',
     }
     class Meta:
         model = MailRecipient
