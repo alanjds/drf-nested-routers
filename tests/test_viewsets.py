@@ -9,6 +9,7 @@ from rest_framework.routers import SimpleRouter
 from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.reverse import reverse as drf_reverse
+from rest_framework.schemas import generators
 
 from rest_framework_nested.routers import NestedSimpleRouter
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
@@ -210,3 +211,13 @@ class TestNestedSimpleRouter(TestCase):
                                  kwargs={'pk': self.root_1.pk},
                                  request=response.wsgi_request)
         self.assertEqual(data['parent'], parent_url)
+
+    def test_get_queryset_for_children_resource(self):
+        gen = generators.BaseSchemaGenerator()
+        gen._initialise_endpoints()
+        for path, method, callback in gen.endpoints:
+            view = gen.create_view(callback, method)
+            # drf_yasg set swagger_fake_view attribute for all view
+            setattr(view, 'swagger_fake_view', True)
+            # no error message should be raised here
+            view.get_queryset()
