@@ -9,4 +9,4 @@ ipdb==0.13.7
 wheel==0.37.0
 
 # MkDocs for documentation previews/deploys
-mkdocs==1.2.1
+mkdocs==1.2.2
