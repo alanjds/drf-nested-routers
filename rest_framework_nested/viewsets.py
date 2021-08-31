@@ -46,6 +46,9 @@ class NestedViewSetMixin(object):
         """
         queryset = super(NestedViewSetMixin, self).get_queryset()
 
+        if getattr(self, 'swagger_fake_view', False):
+            return queryset
+
         orm_filters = {}
         parent_lookup_kwargs = self._get_parent_lookup_kwargs()
         for query_param, field_name in parent_lookup_kwargs.items():
