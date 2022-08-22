@@ -1,6 +1,6 @@
 import json
 
-from django.conf.urls import path, include
+from django.urls import path, include
 from django.db import models
 from django.test import TestCase, override_settings, RequestFactory
 from django.core.exceptions import ImproperlyConfigured
