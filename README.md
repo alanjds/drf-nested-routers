@@ -59,10 +59,10 @@ domains_router.register(r'nameservers', NameserverViewSet, basename='domain-name
 # 'basename' is optional. Needed only if the same viewset is registered more than once
 # Official DRF docs on this option: http://www.django-rest-framework.org/api-guide/routers/
 
-urlpatterns = patterns('',
-    url(r'^', include(router.urls)),
-    url(r'^', include(domains_router.urls)),
-)
+urlpatterns = [
+    path(r'', include(router.urls)),
+    path(r'', include(domains_router.urls)),
+]
 ```
 
 ```python
@@ -165,7 +165,7 @@ This example ahead accomplishes the below URL patterns.
 /clients/
 /clients/{pk}/
 /clients/{client_pk}/maildrops/
-/clients/{client_pk}/maildrops/{maildrop_pk}/
+/clients/{client_pk}/maildrops/{pk}/
 /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/
 /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/{pk}/
 ```
@@ -182,7 +182,7 @@ client_router = routers.NestedSimpleRouter(router, r'clients', lookup='client')
 client_router.register(r'maildrops', MailDropViewSet, basename='maildrops')
 ## generates:
 # /clients/{client_pk}/maildrops/
-# /clients/{client_pk}/maildrops/{maildrop_pk}/
+# /clients/{client_pk}/maildrops/{pk}/
 
 maildrops_router = routers.NestedSimpleRouter(client_router, r'maildrops', lookup='maildrop')
 maildrops_router.register(r'recipients', MailRecipientViewSet, basename='recipients')
@@ -190,12 +190,11 @@ maildrops_router.register(r'recipients', MailRecipientViewSet, basename='recipie
 # /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/
 # /clients/{client_pk}/maildrops/{maildrop_pk}/recipients/{pk}/
 
-urlpatterns = patterns (
-    '',
-    url(r'^', include(router.urls)),
-    url(r'^', include(client_router.urls)),
-    url(r'^', include(maildrops_router.urls)),
-)
+urlpatterns = [
+    path(r'', include(router.urls)),
+    path(r'', include(client_router.urls)),
+    path(r'', include(maildrops_router.urls)),
+]
 ```
 
 ```python
