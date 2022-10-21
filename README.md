@@ -23,6 +23,7 @@ exist without a domain, so you need it "nested" inside the domain.
 
 It may work with lower versions, but since the release **0.92.1** is no more
 tested on CI for Pythons 2.7 to 3.5, Django 1.11 to 2.1 or DRF 3.6 to 3.10.
+Before that, the release **0.90.2** was tested also with DRF 2.4.3 up to 3.7.
 
 
 ## Installation
