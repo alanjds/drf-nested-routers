@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.urls import include, path
 from rest_framework_nested import routers
 
 from tests.serializers.models import Parent1Viewset, Child1Viewset, Parent2Viewset, Child2Viewset, ParentChild2GrandChild1Viewset
@@ -18,9 +18,9 @@ parent_2_grandchild_router = routers.NestedSimpleRouter(parent_2_router, r'child
 parent_2_grandchild_router.register(r'grandchild1', ParentChild2GrandChild1Viewset, basename='grandchild1')
 
 urlpatterns = [
-    url(r'^', include(router_1.urls)),
-    url(r'^', include(parent_1_router.urls)),
-    url(r'^', include(router_2.urls)),
-    url(r'^', include(parent_2_router.urls)),
-    url(r'^', include(parent_2_grandchild_router.urls)),
+    path('', include(router_1.urls)),
+    path('', include(parent_1_router.urls)),
+    path('', include(router_2.urls)),
+    path('', include(parent_2_router.urls)),
+    path('', include(parent_2_grandchild_router.urls)),
 ]
