@@ -1,6 +1,6 @@
 import json
 
-from django.conf.urls import url, include
+from django.urls import path, include
 from django.db import models
 from django.test import TestCase, override_settings, RequestFactory
 from django.core.exceptions import ImproperlyConfigured
@@ -89,8 +89,8 @@ root_router.register(r'child-with-nested-mixin-not-defined', ChildWithNestedMixi
 
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^', include(root_router.urls)),
+    path('', include(router.urls)),
+    path('', include(root_router.urls)),
 ]
 
 
