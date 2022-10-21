@@ -21,9 +21,9 @@ exist without a domain, so you need it "nested" inside the domain.
 -  Django (2.2, 3.0, 3.1, 3.2, 4.0)
 -  Django REST Framework (3.11, 3.12, 3.13)
 
-It may work with lower versions, but since the release **0.92.1** is no more
-tested on CI for Pythons 2.7 to 3.5, Django 1.11 to 2.1 or DRF 3.6 to 3.10.
-And since **0.93.5** is no more tested on CI for Python 3.6.
+It may work with lower versions, but since the release **0.93.5** is no more tested on CI for Python 3.6 or lower.
+And since **0.92.1** is no more tested on CI for Pythons 2.7 to 3.5, Django 1.11 to 2.1 or DRF 3.6 to 3.10.
+Before that, the release **0.90.2** was tested also with DRF 2.4.3 up to 3.7.
 
 
 ## Installation
