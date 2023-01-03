@@ -60,6 +60,9 @@ class NestedViewSetMixin(object):
         Adds the parent params from URL inside the children data available
         """
         request = super().initialize_request(request, *args, **kwargs)
+        
+        if getattr(self, 'swagger_fake_view', False):
+            return request
 
         for url_kwarg, fk_filter in self._get_parent_lookup_kwargs().items():
             # fk_filter is alike 'grandparent__parent__pk'
