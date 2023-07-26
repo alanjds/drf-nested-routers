@@ -10,6 +10,6 @@ pytz==2023.3
 wheel==0.40.0
 
 # MkDocs for documentation previews/deploys
-mkdocs==1.2.4; python_version < '3.8'
+mkdocs==1.5.0; python_version < '3.8'
 markdown==3.2.1; python_version < '3.8'
 mkdocs==1.4.1; python_version >= '3.8'
