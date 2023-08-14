@@ -9,7 +9,7 @@ def _force_mutable(querydict: dict) -> dict:
     Takes a HttpRequest querydict from Django and forces it to be mutable.
     Reverts the initial state back on exit, if any.
     """
-    initial_mutability = getattr(querydict, '_mutable', None)
+    initial_mutability = getattr(querydict, "_mutable", None)
     if initial_mutability is not None:
         querydict._mutable = True
     yield querydict
@@ -26,11 +26,13 @@ class NestedViewSetMixin(object):
         For now, fetches from `parent_lookup_kwargs`
         on the ViewSet or Serializer attached. This may change on the future.
         """
-        parent_lookup_kwargs = getattr(self, 'parent_lookup_kwargs', None)
+        parent_lookup_kwargs = getattr(self, "parent_lookup_kwargs", None)
 
         if not parent_lookup_kwargs:
             serializer_class = self.get_serializer_class()
-            parent_lookup_kwargs = getattr(serializer_class, 'parent_lookup_kwargs', None)
+            parent_lookup_kwargs = getattr(
+                serializer_class, "parent_lookup_kwargs", None
+            )
 
         if not parent_lookup_kwargs:
             raise ImproperlyConfigured(
@@ -46,7 +48,7 @@ class NestedViewSetMixin(object):
         """
         queryset = super(NestedViewSetMixin, self).get_queryset()
 
-        if getattr(self, 'swagger_fake_view', False):
+        if getattr(self, "swagger_fake_view", False):
             return queryset
 
         orm_filters = {}
@@ -60,13 +62,12 @@ class NestedViewSetMixin(object):
         Adds the parent params from URL inside the children data available
         """
         request = super().initialize_request(request, *args, **kwargs)
-        
-        if getattr(self, 'swagger_fake_view', False):
-            return request
 
+        if getattr(self, "swagger_fake_view", False):
+            return request
         for url_kwarg, fk_filter in self._get_parent_lookup_kwargs().items():
             # fk_filter is alike 'grandparent__parent__pk'
-            parent_arg = fk_filter.partition('__')[0]
+            parent_arg = fk_filter.partition("__")[0]
             for querydict in [request.data, request.query_params]:
                 with _force_mutable(querydict):
                     querydict[parent_arg] = kwargs[url_kwarg]
