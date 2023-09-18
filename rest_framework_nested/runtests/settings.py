@@ -48,10 +48,6 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale
-USE_L10N = True
-
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = ''
@@ -152,11 +148,6 @@ PASSWORD_HASHERS = (
 AUTH_USER_MODEL = 'auth.User'
 
 import django
-
-if django.VERSION < (1, 3):
-    INSTALLED_APPS += ('staticfiles',)
-
-
 # If we're running on the Jenkins server we want to archive the coverage reports as XML.
 import os
 if os.environ.get('HUDSON_URL', None):

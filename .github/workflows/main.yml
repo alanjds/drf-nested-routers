@@ -2,7 +2,7 @@ name: CI
 
 # Allows you to run this workflow manually from the Actions tab
 on: [push, pull_request, workflow_dispatch]
-# Controls when the action will run. 
+# Controls when the action will run.
 
 jobs:
   # Allows you to run this workflow manually from the Actions tab
@@ -11,7 +11,7 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        python-version: [3.7, 3.8, 3.9, "3.10", "3.11-dev"]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v3
