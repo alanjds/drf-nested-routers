@@ -1,9 +1,9 @@
 language: python
 python:
-  - "3.6"
-  - "3.7"
   - "3.8"
   - "3.9"
+  - "3.10"
+  - "3.11"
 
 install: pip install tox-travis
 script: tox
@@ -13,8 +13,8 @@ cache: pip
 matrix:
   fast_finish: true
   include:
-    - dist: bionic
-      python: 3.6
+    - dist: jammy
+      python: "3.11"
 
 notifications:
   webhooks:

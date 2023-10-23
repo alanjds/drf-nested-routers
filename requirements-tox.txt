@@ -1,15 +1,13 @@
 # Test requirements
-pytest==7.4.0
+pytest==7.4.2
 pytest-cov==4.1.0
 pytest-django==4.5.2
-flake8==5.0.4
+flake8==6.1.0
 ipdb==0.13.13
 pytz==2023.3
 
 # wheel for PyPI installs
-wheel==0.40.0
+wheel==0.41.2
 
 # MkDocs for documentation previews/deploys
-mkdocs==1.2.4; python_version < '3.8'
-markdown==3.2.1; python_version < '3.8'
-mkdocs==1.4.1; python_version >= '3.8'
+mkdocs==1.5.2
