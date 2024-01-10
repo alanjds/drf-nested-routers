@@ -1,6 +1,6 @@
 <div class="badges">
-    <a href="http://travis-ci.org/alanjds/drf-nested-routers">
-        <img src="https://travis-ci.org/alanjds/drf-nested-routers.svg?branch=master">
+    <a href="https://github.com/alanjds/drf-nested-routers/actions?query=workflow%3ACI+branch%3Amaster">
+        <img src="https://github.com/alanjds/drf-nested-routers/workflows/CI/badge.svg?branch=master">
     </a>
     <a href="https://pypi.python.org/pypi/drf-nested-routers">
         <img src="https://img.shields.io/pypi/v/drf-nested-routers.svg">
