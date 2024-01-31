@@ -156,6 +156,28 @@ class DomainSerializer(HyperlinkedModelSerializer):
 	nameservers = DomainNameserverSerializers(many=True, read_only=True)
 ```
 
+### Custom actions
+
+If you have custom actions in your viewset, you'll need to include `**kwargs` to your method signature, like so:
+
+```
+class ParentViewSet(viewsets.ModelViewSet):
+    queryset = Parent.objects.all()
+    serializer_class = ParentSerializer
+    
+class ChildViewSet(viewsets.ModelViewSet):
+    def get_queryset(self):
+        return Child.objects.filter(parent=self.kwargs.get('parent'))
+	
+    @action(methods=['get'], detail=False)
+    def do_something(self, request, **kwargs):
+        pass
+```
+
+Notice that in this case, the custom endpoint registered in the `ChildViewSet` is marked to be a list action (`detail=False`). It's usual signature, would be: `def do_something(self, request):`. If you maintain that signature, `drf-nested-routers` won't be able to inject the necessary parameters in the function. So add the `**kwargs` and it will work just fine.
+
+The same applies for custom detail actions.
+
 ### Infinite-depth Nesting
 
 Example of nested router 3 levels deep.
