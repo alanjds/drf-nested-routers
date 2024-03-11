@@ -7,7 +7,7 @@ ipdb==0.13.13
 pytz==2023.3
 
 # wheel for PyPI installs
-wheel==0.42.0
+wheel==0.43.0
 
 # MkDocs for documentation previews/deploys
 mkdocs==1.5.2
