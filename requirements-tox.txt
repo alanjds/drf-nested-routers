@@ -10,4 +10,4 @@ pytz==2024.1
 wheel==0.43.0
 
 # MkDocs for documentation previews/deploys
-mkdocs==1.5.2
+mkdocs==1.6.0
