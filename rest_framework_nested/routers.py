@@ -25,9 +25,13 @@ Example:
     urlpatterns = router.urls
 """
 
+from __future__ import annotations
 import sys
 import re
-from rest_framework.routers import SimpleRouter, DefaultRouter  # noqa: F401
+from typing import Any
+
+from rest_framework.routers import SimpleRouter, DefaultRouter, DynamicRoute, Route
+from rest_framework.viewsets import ViewSetMixin
 
 
 if sys.version_info[0] < 3:
@@ -45,7 +49,16 @@ class LookupMixin:
 
 
 class NestedMixin:
-    def __init__(self, parent_router, parent_prefix, *args, **kwargs):
+    trailing_slash: str
+    routes: list[Route | DynamicRoute]
+
+    def __init__(
+        self,
+        parent_router: SimpleRouter | DefaultRouter | NestedMixin,
+        parent_prefix: str,
+        *args: Any,
+        **kwargs: Any
+    ) -> None:
         self.parent_router = parent_router
         self.parent_prefix = parent_prefix
         self.nest_count = getattr(parent_router, 'nest_count', 0) + 1
@@ -69,19 +82,21 @@ class NestedMixin:
             # we set our trailing slash to just '/', leading to inconsistent behavior.
             self.trailing_slash = parent_router.trailing_slash
 
-        parent_registry = [registered for registered
-                           in self.parent_router.registry
-                           if registered[0] == self.parent_prefix]
+        parent_registry: list[tuple[str, type[ViewSetMixin], str]] = [
+            registered for registered
+            in self.parent_router.registry  # type: ignore[union-attr]
+            if registered[0] == self.parent_prefix
+        ]
         try:
-            parent_registry = parent_registry[0]
-            parent_prefix, parent_viewset, parent_basename = parent_registry
+            parent_registry_item = parent_registry[0]
+            parent_prefix, parent_viewset, parent_basename = parent_registry_item
         except:
             raise RuntimeError('parent registered resource not found')
 
         self.check_valid_name(self.nest_prefix)
 
         nested_routes = []
-        parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)
+        parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)  # type: ignore[union-attr]
 
         self.parent_regex = f'{parent_prefix}/{parent_lookup_regex}/'
         # If there is no parent prefix, the first part of the url is probably
@@ -105,7 +120,7 @@ class NestedMixin:
 
         self.routes = nested_routes
 
-    def check_valid_name(self, value):
+    def check_valid_name(self, value: str) -> None:
         if IDENTIFIER_REGEX.match(value) is None:
             raise ValueError(f"lookup argument '{value}' needs to be valid python identifier")
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # Django settings for testproject project.
 
 DEBUG = True
@@ -83,7 +85,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS: tuple[str, ...] = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

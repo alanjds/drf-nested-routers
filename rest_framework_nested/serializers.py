@@ -1,4 +1,11 @@
+from __future__ import annotations
+
+from typing import Any, TypeVar
+
 import rest_framework.serializers
+from django.db.models import Model
+from rest_framework.fields import Field
+from rest_framework.utils.model_meta import RelationInfo
 from rest_framework_nested.relations import NestedHyperlinkedIdentityField, NestedHyperlinkedRelatedField
 try:
     from rest_framework.utils.field_mapping import get_nested_relation_kwargs
@@ -8,7 +15,10 @@ except ImportError:
     #    if version too old.
 
 
-class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedModelSerializer):
+T_Model = TypeVar('T_Model', bound=Model)
+
+
+class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedModelSerializer[T_Model]):
     """
     A type of `ModelSerializer` that uses hyperlinked relationships with compound keys instead
     of primary key relationships.  Specifically:
@@ -25,11 +35,11 @@ class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedMod
     serializer_url_field = NestedHyperlinkedIdentityField
     serializer_related_field = NestedHyperlinkedRelatedField
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         self.parent_lookup_kwargs = kwargs.pop('parent_lookup_kwargs', self.parent_lookup_kwargs)
         super().__init__(*args, **kwargs)
 
-    def build_url_field(self, field_name, model_class):
+    def build_url_field(self, field_name: str, model_class: T_Model) -> tuple[type[Field], dict[str, Any]]:
         field_class, field_kwargs = super().build_url_field(
             field_name,
             model_class
@@ -38,7 +48,9 @@ class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedMod
 
         return field_class, field_kwargs
 
-    def build_nested_field(self, field_name, relation_info, nested_depth):
+    def build_nested_field(
+        self, field_name: str, relation_info: RelationInfo, nested_depth: int
+    ) -> tuple[type[Field], dict[str, Any]]:
         """
         Create nested fields for forward and reverse relationships.
         """
