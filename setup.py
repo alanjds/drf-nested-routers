@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import re
 import os
 import sys
@@ -59,8 +58,8 @@ if sys.argv[-1] == 'publish':
     os.system("python setup.py sdist bdist_wheel")
     os.system("twine upload dist/*")
     print("You probably want to also tag the version now:")
-    print("  git tag -a v{0} -m 'version {0}'".format(version))
-    print("  git push origin v{0}".format(version))
+    print(f"  git tag -a v{version} -m 'version {version}'")
+    print(f"  git push origin v{version}")
     sys.exit()
 
 

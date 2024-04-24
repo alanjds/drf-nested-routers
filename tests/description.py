@@ -1,5 +1,3 @@
-# -- coding: utf-8 --
-
 # Apparently there is a python 2.6 issue where docstrings of imported view classes
 # do not retain their encoding information even if a module has a proper
 # encoding declaration at the top of its source file. Therefore for tests

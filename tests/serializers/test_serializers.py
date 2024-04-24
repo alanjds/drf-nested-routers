@@ -44,7 +44,7 @@ class TestSerializers(TestCase):
         GrandChild1.objects.create(parent=child2, name='Child2-GrandChild1-C')
 
         Parent.objects.create(name='Parent2')
-        return super(TestSerializers, cls).setUpClass()
+        return super().setUpClass()
 
     def test_default(self):
         url = reverse('parent1-detail', kwargs={'pk': 1})

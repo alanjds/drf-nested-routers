@@ -4,18 +4,11 @@ Serializer fields that deal with relationships with nested resources.
 These fields allow you to specify the style that should be used to represent
 model relationships with hyperlinks.
 """
-from __future__ import unicode_literals
 from functools import reduce  # import reduce from functools for compatibility with python 3
 
 import rest_framework.relations
 from rest_framework.relations import ObjectDoesNotExist, ObjectValueError, ObjectTypeError
 from rest_framework.exceptions import ValidationError
-
-# fix for basestring
-try:
-    basestring
-except NameError:
-    basestring = str
 
 
 class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedField):
@@ -26,7 +19,7 @@ class NestedHyperlinkedRelatedField(rest_framework.relations.HyperlinkedRelatedF
 
     def __init__(self, *args, **kwargs):
         self.parent_lookup_kwargs = kwargs.pop('parent_lookup_kwargs', self.parent_lookup_kwargs)
-        super(NestedHyperlinkedRelatedField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def get_url(self, obj, view_name, request, format):
         """
@@ -103,4 +96,4 @@ class NestedHyperlinkedIdentityField(NestedHyperlinkedRelatedField):
         assert view_name is not None, 'The `view_name` argument is required.'
         kwargs['read_only'] = True
         kwargs['source'] = '*'
-        super(NestedHyperlinkedIdentityField, self).__init__(view_name=view_name, **kwargs)
+        super().__init__(view_name=view_name, **kwargs)
