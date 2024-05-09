@@ -85,7 +85,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-INSTALLED_APPS: tuple[str, ...] = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -98,7 +98,7 @@ INSTALLED_APPS: tuple[str, ...] = (
     # 'rest_framework.authtoken',
     'rest_framework_nested',
     'rest_framework_nested.tests',
-)
+]
 
 # OAuth is optional and won't work if there is no oauth_provider & oauth2
 try:
@@ -107,19 +107,19 @@ try:
 except ImportError:
     pass
 else:
-    INSTALLED_APPS += (
+    INSTALLED_APPS += [
         'oauth_provider',
-    )
+    ]
 
 try:
     import provider  # noqa: F401
 except ImportError:
     pass
 else:
-    INSTALLED_APPS += (
+    INSTALLED_APPS += [
         'provider',
         'provider.oauth2',
-    )
+    ]
 
 # guardian is optional
 try:
@@ -132,9 +132,9 @@ else:
         'django.contrib.auth.backends.ModelBackend',  # default
         'guardian.backends.ObjectPermissionBackend',
     )
-    INSTALLED_APPS += (
+    INSTALLED_APPS += [
         'guardian',
-    )
+    ]
 
 STATIC_URL = '/static/'
 

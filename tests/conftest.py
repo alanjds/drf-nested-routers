@@ -22,7 +22,7 @@ def pytest_configure():
             'django.contrib.auth.middleware.AuthenticationMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
         ),
-        INSTALLED_APPS=(
+        INSTALLED_APPS=[
             'django.contrib.auth',
             'django.contrib.contenttypes',
             'django.contrib.sessions',
@@ -34,7 +34,7 @@ def pytest_configure():
             'rest_framework.authtoken',
             'tests',
             'tests.serializers',
-        ),
+        ],
         PASSWORD_HASHERS=(
             'django.contrib.auth.hashers.SHA1PasswordHasher',
             'django.contrib.auth.hashers.PBKDF2PasswordHasher',
@@ -51,19 +51,19 @@ def pytest_configure():
     except ImportError:
         pass
     else:
-        settings.INSTALLED_APPS += (
+        settings.INSTALLED_APPS += [
             'oauth_provider',
-        )
+        ]
 
     try:
         import provider  # NOQA
     except ImportError:
         pass
     else:
-        settings.INSTALLED_APPS += (
+        settings.INSTALLED_APPS += [
             'provider',
             'provider.oauth2',
-        )
+        ]
 
     # guardian is optional
     try:
@@ -76,9 +76,9 @@ def pytest_configure():
             'django.contrib.auth.backends.ModelBackend',
             'guardian.backends.ObjectPermissionBackend',
         )
-        settings.INSTALLED_APPS += (
+        settings.INSTALLED_APPS += [
             'guardian',
-        )
+        ]
 
     try:
         import django
