@@ -4,7 +4,7 @@ Serializer fields that deal with relationships with nested resources.
 These fields allow you to specify the style that should be used to represent
 model relationships with hyperlinks.
 """
-from functools import reduce  # import reduce from functools for compatibility with python 3
+from functools import reduce
 
 import rest_framework.relations
 from rest_framework.relations import ObjectDoesNotExist, ObjectValueError, ObjectTypeError
