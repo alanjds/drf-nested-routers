@@ -38,10 +38,10 @@ It is not needed to add this library in your Django project's `settings.py` file
 
 The desired URL signatures are:
 ```
-/domain/ <- Domains list
-/domain/{pk}/ <- One domain, from {pk}
-/domain/{domain_pk}/nameservers/ <- Nameservers of domain from {domain_pk}
-/domain/{domain_pk}/nameservers/{pk} <- Specific nameserver from {pk}, of domain from {domain_pk}
+/domains/ <- Domains list
+/domains/{pk}/ <- One domain, from {pk}
+/domains/{domain_pk}/nameservers/ <- Nameservers of domain from {domain_pk}
+/domains/{domain_pk}/nameservers/{pk} <- Specific nameserver from {pk}, of domain from {domain_pk}
 ```
 
 How to do it (example):
