@@ -17,7 +17,7 @@ def _force_mutable(querydict: dict) -> dict:
         querydict._mutable = initial_mutability
 
 
-class NestedViewSetMixin(object):
+class NestedViewSetMixin:
     def _get_parent_lookup_kwargs(self) -> dict:
         """
         Locates and returns the `parent_lookup_kwargs` dict informing
@@ -44,7 +44,7 @@ class NestedViewSetMixin(object):
         Filter the `QuerySet` based on its parents as defined in the
         `serializer_class.parent_lookup_kwargs` or `viewset.parent_lookup_kwargs`
         """
-        queryset = super(NestedViewSetMixin, self).get_queryset()
+        queryset = super().get_queryset()
 
         if getattr(self, 'swagger_fake_view', False):
             return queryset

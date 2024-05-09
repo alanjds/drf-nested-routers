@@ -1,6 +1,4 @@
 #! /usr/bin/env python
-from __future__ import print_function
-
 import pytest
 import sys
 import os
@@ -32,7 +30,7 @@ def flake8_main(args):
 
 def split_class_and_function(string):
     class_string, function_string = string.split('.', 1)
-    return "%s and %s" % (class_string, function_string)
+    return f"{class_string} and {function_string}"
 
 
 def is_function(string):

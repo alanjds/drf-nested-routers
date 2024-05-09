@@ -82,41 +82,41 @@ if 'detail_route_decorator' in globals() and 'list_route_decorator' in globals()
             self.assertFalse(hasattr(self.router, 'parent_regex'))
             urls = map_by_name(self.router.urls)
             self.assertEqual(
-                get_regex_pattern(urls['basicmodel-list']), u'^detail/$'
+                get_regex_pattern(urls['basicmodel-list']), '^detail/$'
             )
             self.assertEqual(
                 get_regex_pattern(urls['basicmodel-detail']),
-                u'^detail/(?P<pk>[^/.]+)/$'
+                '^detail/(?P<pk>[^/.]+)/$'
             )
             self.assertEqual(
                 get_regex_pattern(urls['basicmodel-set-password']),
-                u'^detail/(?P<pk>[^/.]+)/set_password/$'
+                '^detail/(?P<pk>[^/.]+)/set_password/$'
             )
 
         def test_nested_parent(self):
             self.assertEqual(
                 self.detail_router.parent_regex,
-                u'detail/(?P<detail_pk>[^/.]+)/'
+                'detail/(?P<detail_pk>[^/.]+)/'
             )
             urls = map_by_name(self.detail_router.urls)
 
             self.assertEqual(
                 get_regex_pattern(urls['basicmodel-list']),
-                u'^detail/(?P<detail_pk>[^/.]+)/list/$'
+                '^detail/(?P<detail_pk>[^/.]+)/list/$'
             )
 
             self.assertEqual(
                 get_regex_pattern(urls['basicmodel-recent-users']),
-                u'^detail/(?P<detail_pk>[^/.]+)/list/recent_users/$'
+                '^detail/(?P<detail_pk>[^/.]+)/list/recent_users/$'
             )
 
             self.assertEqual(
                 get_regex_pattern(urls['basicmodel-detail']),
-                u'^detail/(?P<detail_pk>[^/.]+)/list/(?P<pk>[^/.]+)/$'
+                '^detail/(?P<detail_pk>[^/.]+)/list/(?P<pk>[^/.]+)/$'
             )
 
         def test_nested_child(self):
             self.assertEqual(
                 self.list_router.parent_regex,
-                u'detail/(?P<detail_pk>[^/.]+)/list/(?P<list_pk>[^/.]+)/'
+                'detail/(?P<detail_pk>[^/.]+)/list/(?P<list_pk>[^/.]+)/'
             )

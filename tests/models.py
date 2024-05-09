@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from django.db import models
 from rest_framework import serializers
 
@@ -11,7 +10,7 @@ class CustomField(models.CharField):
 
     def __init__(self, *args, **kwargs):
         kwargs['max_length'] = 12
-        super(CustomField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class RESTFrameworkModel(models.Model):

@@ -74,20 +74,20 @@ class TestNestedSimpleRouter(TestCase):
         self.assertFalse(hasattr(self.router, 'parent_regex'))
         urls = self.router.urls
         self.assertEqual(len(urls), 2)
-        self.assertEqual(get_regex_pattern(urls[0]), u'^a/$')
-        self.assertEqual(get_regex_pattern(urls[1]), u'^a/(?P<pk>[0-9a-f]{32})/$')
+        self.assertEqual(get_regex_pattern(urls[0]), '^a/$')
+        self.assertEqual(get_regex_pattern(urls[1]), '^a/(?P<pk>[0-9a-f]{32})/$')
 
-        self.assertEqual(self.a_router.parent_regex, u'a/(?P<a_pk>[0-9a-f]{32})/')
+        self.assertEqual(self.a_router.parent_regex, 'a/(?P<a_pk>[0-9a-f]{32})/')
         urls = self.a_router.urls
         self.assertEqual(len(urls), 2)
-        self.assertEqual(get_regex_pattern(urls[0]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/$')
-        self.assertEqual(get_regex_pattern(urls[1]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
+        self.assertEqual(get_regex_pattern(urls[0]), '^a/(?P<a_pk>[0-9a-f]{32})/b/$')
+        self.assertEqual(get_regex_pattern(urls[1]), '^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
 
-        self.assertEqual(self.b_router.parent_regex, u'a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/')
+        self.assertEqual(self.b_router.parent_regex, 'a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/')
         urls = self.b_router.urls
         self.assertEqual(len(urls), 2)
-        self.assertEqual(get_regex_pattern(urls[0]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/$')
-        self.assertEqual(get_regex_pattern(urls[1]), u'^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/(?P<pk>[^/.]+)/$')
+        self.assertEqual(get_regex_pattern(urls[0]), '^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/$')
+        self.assertEqual(get_regex_pattern(urls[1]), '^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/(?P<pk>[^/.]+)/$')
 
 
 class TestEmptyPrefix(TestCase):
@@ -101,8 +101,8 @@ class TestEmptyPrefix(TestCase):
         urls = self.router.urls
         urls = self.a_router.urls
         self.assertEqual(len(urls), 2)
-        self.assertEqual(get_regex_pattern(urls[0]), u'^(?P<a_pk>[0-9a-f]{32})/b/$')
-        self.assertEqual(get_regex_pattern(urls[1]), u'^(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
+        self.assertEqual(get_regex_pattern(urls[0]), '^(?P<a_pk>[0-9a-f]{32})/b/$')
+        self.assertEqual(get_regex_pattern(urls[1]), '^(?P<a_pk>[0-9a-f]{32})/b/(?P<pk>[^/.]+)/$')
 
 
 class TestBadLookupValue(TestCase):
@@ -134,12 +134,12 @@ class TestRouterSettingInheritance(TestCase):
     """
 
     def _assertHasTrailingSlash(self, router):
-        self.assertEqual(router.trailing_slash, u'/', "router does not have trailing slash when it should")
+        self.assertEqual(router.trailing_slash, '/', "router does not have trailing slash when it should")
         self.assertTrue(pattern_from_url(router.urls[0]).endswith('/$'),
                         "router created url without trailing slash when it should have")
 
     def _assertDoesNotHaveTrailingSlash(self, router):
-        self.assertEqual(router.trailing_slash, u'', "router has trailing slash when it should not")
+        self.assertEqual(router.trailing_slash, '', "router has trailing slash when it should not")
         self.assertFalse(pattern_from_url(router.urls[0]).endswith('/$'),
                          "router created url with trailing slash when it should not have")
 
@@ -198,6 +198,6 @@ class TestRouterSettingInheritance(TestCase):
         a_router = NestedSimpleRouter(router, 'a', lookup='a')
         a_router.register('b', BViewSet)
 
-        self.assertEqual(a_router.trailing_slash, u'/?', "router does not have trailing slash when it should")
+        self.assertEqual(a_router.trailing_slash, '/?', "router does not have trailing slash when it should")
         self.assertTrue(pattern_from_url(a_router.urls[0]).endswith('/?$'),
                         "router created url without trailing slash when it should have")
