@@ -25,7 +25,6 @@ Example:
     urlpatterns = router.urls
 """
 
-from __future__ import unicode_literals
 import sys
 import re
 from rest_framework.routers import SimpleRouter, DefaultRouter  # noqa: F401
@@ -37,7 +36,7 @@ else:
     IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*$", re.UNICODE)
 
 
-class LookupMixin(object):
+class LookupMixin:
     """
     Deprecated.
 
@@ -45,14 +44,14 @@ class LookupMixin(object):
     """
 
 
-class NestedMixin(object):
+class NestedMixin:
     def __init__(self, parent_router, parent_prefix, *args, **kwargs):
         self.parent_router = parent_router
         self.parent_prefix = parent_prefix
         self.nest_count = getattr(parent_router, 'nest_count', 0) + 1
-        self.nest_prefix = kwargs.pop('lookup', 'nested_%i' % self.nest_count) + '_'
+        self.nest_prefix = kwargs.pop('lookup', f'nested_{self.nest_count}') + '_'
 
-        super(NestedMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if 'trailing_slash' not in kwargs:
             # Inherit trailing_slash only when not specified explicitly.
@@ -84,10 +83,7 @@ class NestedMixin(object):
         nested_routes = []
         parent_lookup_regex = parent_router.get_lookup_regex(parent_viewset, self.nest_prefix)
 
-        self.parent_regex = '{parent_prefix}/{parent_lookup_regex}/'.format(
-            parent_prefix=parent_prefix,
-            parent_lookup_regex=parent_lookup_regex
-        )
+        self.parent_regex = f'{parent_prefix}/{parent_lookup_regex}/'
         # If there is no parent prefix, the first part of the url is probably
         #   controlled by the project's urls.py and the router is in an app,
         #   so a slash in the beginning will (A) cause Django to give warnings
@@ -111,7 +107,7 @@ class NestedMixin(object):
 
     def check_valid_name(self, value):
         if IDENTIFIER_REGEX.match(value) is None:
-            raise ValueError("lookup argument '{}' needs to be valid python identifier".format(value))
+            raise ValueError(f"lookup argument '{value}' needs to be valid python identifier")
 
 
 class NestedSimpleRouter(NestedMixin, SimpleRouter):
