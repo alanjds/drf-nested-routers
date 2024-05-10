@@ -30,7 +30,7 @@ import sys
 import re
 from typing import Any
 
-from rest_framework.routers import SimpleRouter, DefaultRouter, DynamicRoute, Route
+from rest_framework.routers import SimpleRouter, DefaultRouter
 from rest_framework.viewsets import ViewSetMixin
 
 
@@ -49,9 +49,6 @@ class LookupMixin:
 
 
 class NestedMixin:
-    trailing_slash: str
-    routes: list[Route | DynamicRoute]
-
     def __init__(
         self,
         parent_router: SimpleRouter | DefaultRouter | NestedMixin,
@@ -80,9 +77,9 @@ class NestedMixin:
             # behavior is ALWAYS consistent with the parent. If we didn't, we might create
             # a situation where the parent's trailing slash is truthy (but not '/') and
             # we set our trailing slash to just '/', leading to inconsistent behavior.
-            self.trailing_slash = parent_router.trailing_slash
+            self.trailing_slash = parent_router.trailing_slash  # type: ignore[has-type]
 
-        parent_registry: list[tuple[str, type[ViewSetMixin], str]] = [
+        parent_registry = [
             registered for registered
             in self.parent_router.registry  # type: ignore[union-attr]
             if registered[0] == self.parent_prefix
@@ -108,7 +105,7 @@ class NestedMixin:
         if hasattr(parent_router, 'parent_regex'):
             self.parent_regex = parent_router.parent_regex + self.parent_regex
 
-        for route in self.routes:
+        for route in self.routes:  # type: ignore[has-type]
             route_contents = route._asdict()
 
             # This will get passed through .format in a little bit, so we need
@@ -125,7 +122,7 @@ class NestedMixin:
             raise ValueError(f"lookup argument '{value}' needs to be valid python identifier")
 
 
-class NestedSimpleRouter(NestedMixin, SimpleRouter):
+class NestedSimpleRouter(NestedMixin, SimpleRouter):  # type: ignore[misc]
     """ Create a NestedSimpleRouter nested within `parent_router`
     Args:
 
@@ -146,7 +143,7 @@ class NestedSimpleRouter(NestedMixin, SimpleRouter):
     pass
 
 
-class NestedDefaultRouter(NestedMixin, DefaultRouter):
+class NestedDefaultRouter(NestedMixin, DefaultRouter):  # type: ignore[misc]
     """ Create a NestedDefaultRouter nested within `parent_router`
     Args:
 
