@@ -8,6 +8,7 @@ Useful tool to run the test suite for rest_framework and generate a coverage rep
 # http://code.djangoproject.com/svn/django/trunk/tests/runtests.py
 import os
 import sys
+from typing import NoReturn
 from coverage import coverage
 
 # fix sys path so we don't need to setup PYTHONPATH
@@ -15,7 +16,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'rest_framework_nested.runtests.settings'
 
 
-def main():
+def main() -> NoReturn:
     """Run the tests for rest_framework and generate a coverage report."""
 
     cov = coverage()
@@ -26,6 +27,7 @@ def main():
     from django.test.utils import get_runner
     TestRunner = get_runner(settings)
 
+    failures: int
     if hasattr(TestRunner, 'func_name'):
         # Pre 1.2 test runners were just functions,
         # and did not support the 'failfast' option.
@@ -34,7 +36,7 @@ def main():
             'Function-based test runners are deprecated. Test runners should be classes with a run_tests() method.',
             DeprecationWarning
         )
-        failures = TestRunner(['tests'])
+        failures = TestRunner(['tests'])  # type: ignore[assignment,arg-type]
     else:
         test_runner = TestRunner()
         failures = test_runner.run_tests(['tests'])

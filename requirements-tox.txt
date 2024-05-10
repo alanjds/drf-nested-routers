@@ -6,6 +6,11 @@ flake8==6.1.0
 ipdb==0.13.13
 pytz==2024.1
 
+# Type checking requirements
+mypy==1.10.0
+django-stubs==5.0.0
+djangorestframework-stubs==3.15.0
+
 # wheel for PyPI installs
 wheel==0.43.0
 

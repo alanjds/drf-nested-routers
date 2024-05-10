@@ -5,6 +5,7 @@
 # http://code.djangoproject.com/svn/django/trunk/tests/runtests.py
 import os
 import sys
+from typing import NoReturn
 
 # fix sys path so we don't need to setup PYTHONPATH
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
@@ -15,7 +16,7 @@ from django.conf import settings
 from django.test.utils import get_runner
 
 
-def usage():
+def usage() -> str:
     return """
     Usage: python runtests.py [UnitTestClass].[method]
 
@@ -25,7 +26,7 @@ def usage():
     """
 
 
-def main():
+def main() -> NoReturn:
     TestRunner = get_runner(settings)
     import ipdb
     ipdb.set_trace()
