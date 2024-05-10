@@ -41,7 +41,7 @@ def get_package_data(package):
             for dirpath, dirnames, filenames in os.walk(package)
             if not os.path.exists(os.path.join(dirpath, '__init__.py'))]
 
-    filepaths = []
+    filepaths = ['py.typed']
     for base, filenames in walk:
         filepaths.extend([os.path.join(base, filename)
                           for filename in filenames])
