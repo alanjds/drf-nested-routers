@@ -29,8 +29,9 @@ from __future__ import annotations
 
 import sys
 import re
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
+from rest_framework.renderers import BaseRenderer
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
 if sys.version_info[0] < 3:
@@ -137,9 +138,18 @@ class NestedSimpleRouter(NestedMixin, SimpleRouter):  # type: ignore[misc]
         In the example above, lookup=domain and the parent viewset looks up
         on 'pk' so the parent lookup regex will be 'domain_pk'.
         Default: 'nested_<n>' where <n> is 1+parent_router.nest_count
-
     """
-    pass
+
+    if TYPE_CHECKING:
+        def __init__(
+            self,
+            parent_router: SimpleRouter | NestedMixin,
+            parent_prefix: str,
+            trailing_slash: bool = True,
+            use_regex_path: bool = True,
+            *,
+            lookup: str = ...
+        ) -> None: ...
 
 
 class NestedDefaultRouter(NestedMixin, DefaultRouter):  # type: ignore[misc]
@@ -158,6 +168,16 @@ class NestedDefaultRouter(NestedMixin, DefaultRouter):  # type: ignore[misc]
         In the example above, lookup=domain and the parent viewset looks up
         on 'pk' so the parent lookup regex will be 'domain_pk'.
         Default: 'nested_<n>' where <n> is 1+parent_router.nest_count
-
     """
-    pass
+
+    if TYPE_CHECKING:
+        def __init__(
+            self,
+            parent_router: DefaultRouter | NestedMixin,
+            parent_prefix: str,
+            trailing_slash: bool = True,
+            use_regex_path: bool = True,
+            *,
+            root_renderers: list[type[BaseRenderer]] = ...,
+            lookup: str = ...
+        ) -> None: ...
