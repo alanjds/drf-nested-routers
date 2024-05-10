@@ -77,15 +77,13 @@ setup(
     package_data=get_package_data(package),
     install_requires=[
         'djangorestframework>=3.14.0',
-        'Django>=3.2',
+        'Django>=4.2',
     ],
     python_requires=">=3.8",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
-        'Framework :: Django :: 3.2',
-        'Framework :: Django :: 4.1',
         'Framework :: Django :: 4.2',
         'Framework :: Django :: 5.0',
         'Intended Audience :: Developers',
