@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import contextlib
-from typing import Any, Generic, TypeVar, Iterator
+from typing import Any, Generic, Iterator, TypeVar
 
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Model, QuerySet

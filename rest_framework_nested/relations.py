@@ -5,12 +5,13 @@ These fields allow you to specify the style that should be used to represent
 model relationships with hyperlinks.
 """
 from __future__ import annotations
+
 from functools import reduce
-from typing import Any, TypeVar, Generic
+from typing import Any, Generic, TypeVar
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model
-from rest_framework.relations import HyperlinkedRelatedField, ObjectValueError, ObjectTypeError
+from rest_framework.relations import HyperlinkedRelatedField, ObjectTypeError, ObjectValueError
 from rest_framework.exceptions import ValidationError
 from rest_framework.request import Request
 

@@ -26,13 +26,12 @@ Example:
 """
 
 from __future__ import annotations
+
 import sys
 import re
 from typing import Any
 
-from rest_framework.routers import SimpleRouter, DefaultRouter
-from rest_framework.viewsets import ViewSetMixin
-
+from rest_framework.routers import DefaultRouter, SimpleRouter
 
 if sys.version_info[0] < 3:
     IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*$")
