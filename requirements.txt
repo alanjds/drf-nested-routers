@@ -3,5 +3,5 @@
 
 # Minimum Django and REST framework version
 Django>=4.2
-djangorestframework>=3.14.0
+djangorestframework>=3.15.0
 

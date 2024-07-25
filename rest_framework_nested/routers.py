@@ -59,6 +59,7 @@ class NestedMixin:
         self.parent_prefix = parent_prefix
         self.nest_count = getattr(parent_router, 'nest_count', 0) + 1
         self.nest_prefix = kwargs.pop('lookup', f'nested_{self.nest_count}') + '_'
+        self.use_regex_path = kwargs.get('use_regex_path', True)
 
         super().__init__(*args, **kwargs)
 
@@ -111,7 +112,11 @@ class NestedMixin:
             # to escape it
             escaped_parent_regex = self.parent_regex.replace('{', '{{').replace('}', '}}')
 
-            route_contents['url'] = route.url.replace('^', '^' + escaped_parent_regex)
+            if self.use_regex_path:
+                route_contents['url'] = route.url.replace('^', '^' + escaped_parent_regex)
+            else:
+                route_contents['url'] = escaped_parent_regex + route_contents['url']
+
             nested_routes.append(type(route)(**route_contents))
 
         self.routes = nested_routes
