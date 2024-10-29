@@ -1,7 +1,7 @@
 # Test requirements
 
 pytest==8.2.0
-pytest-cov==5.0.0
+pytest-cov==6.0.0
 pytest-django==4.8.0
 flake8==7.0.0
 ipdb==0.13.13
