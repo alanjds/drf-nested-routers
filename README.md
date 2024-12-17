@@ -17,8 +17,8 @@ exist without a domain, so you need it "nested" inside the domain.
 
 ## Requirements & Compatibility
 
-- Python (3.8, 3.9, 3.10, 3.11, 3.12)
-- Django (4.2, 5.0)
+- Python (3.8, 3.9, 3.10, 3.11, 3.12, 3.13)
+- Django (4.2, 5.0, 5.1)
 - Django REST Framework (3.14, 3.15)
 
 It may work with lower versions, but since the release **0.93.5** is no more tested on CI for Python 3.6 or lower.<br/>
