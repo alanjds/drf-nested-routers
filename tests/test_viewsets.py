@@ -1,6 +1,6 @@
 import json
 
-from django.urls import path, include
+from django.urls import include, path, reverse
 from django.db import models
 from django.test import TestCase, override_settings, RequestFactory
 from django.core.exceptions import ImproperlyConfigured
@@ -14,11 +14,6 @@ from rest_framework.schemas import generators
 from rest_framework_nested.routers import NestedSimpleRouter
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from rest_framework_nested.viewsets import NestedViewSetMixin
-
-try:
-    from django.core.urlresolvers import reverse
-except ImportError:
-    from django.urls import reverse
 
 factory = RequestFactory()
 
