@@ -76,7 +76,7 @@ setup(
     packages=get_packages(package),
     package_data=get_package_data(package),
     install_requires=[
-        'djangorestframework>=3.14.0',
+        'djangorestframework>=3.15.0',
         'Django>=4.2',
     ],
     python_requires=">=3.8",
