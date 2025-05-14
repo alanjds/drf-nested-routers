@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.94.2
+_May 14, 2025_
+
+* Added tests for Django 5.1 and Python 3.13.
+* Removed tests for Django 4.1, Python 3.8 and DRF 3.13
+* Added support for `use_regex_path=False` in DRF 3.15 (@Gibsondz on PR#355)
+
 ## 0.94.1
 _May 10, 2024_
 
