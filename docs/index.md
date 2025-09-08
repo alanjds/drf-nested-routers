@@ -22,7 +22,7 @@ Nested resources for the Django Rest Framework
 ## Requirements
 
 - Python (3.8, 3.9, 3.10, 3.11, 3.12)
-- Django (4.2, 5.0, 5.1, 5.2)
+- Django (4.2, 5.1, 5.2)
 - Django REST Framework (3.15, 3.16)
 
 ## Installation
