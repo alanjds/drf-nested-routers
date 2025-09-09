@@ -51,6 +51,11 @@ class AViewSet(ModelViewSet):
     queryset = QS(A)
 
 
+class ANonRegexViewSet(ModelViewSet):
+    model = A
+    queryset = QS(A)
+
+
 class BViewSet(ModelViewSet):
     model = B
     queryset = QS(B)
@@ -88,6 +93,35 @@ class TestNestedSimpleRouter(TestCase):
         self.assertEqual(len(urls), 2)
         self.assertEqual(get_regex_pattern(urls[0]), '^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/$')
         self.assertEqual(get_regex_pattern(urls[1]), '^a/(?P<a_pk>[0-9a-f]{32})/b/(?P<b_pk>[^/.]+)/c/(?P<pk>[^/.]+)/$')
+
+
+class TestNonRegexNestedSimpleRouter(TestCase):
+    def setUp(self):
+        self.router = SimpleRouter(use_regex_path=False)
+        self.router.register(r'a', ANonRegexViewSet)
+        self.a_router = NestedSimpleRouter(self.router, r'a', lookup='a', use_regex_path=False)
+        self.a_router.register(r'b', BViewSet)
+        self.b_router = NestedSimpleRouter(self.a_router, r'b', lookup='b', use_regex_path=False)
+        self.b_router.register(r'c', CViewSet)
+
+    def test_non_regex_recursive_nested_simple_routers(self):
+        self.assertFalse(hasattr(self.router, 'parent_regex'))
+        urls = self.router.urls
+
+        self.assertEqual(pattern_from_url(urls[0]), 'a/')
+        self.assertEqual(pattern_from_url(urls[1]), 'a/<str:pk>/')
+
+        self.assertEqual(self.a_router.parent_regex, 'a/<str:a_pk>/')
+        urls = self.a_router.urls
+        self.assertEqual(len(urls), 2)
+        self.assertEqual(pattern_from_url(urls[0]), 'a/<str:a_pk>/b/')
+        self.assertEqual(pattern_from_url(urls[1]), 'a/<str:a_pk>/b/<str:pk>/')
+
+        self.assertEqual(self.b_router.parent_regex, 'a/<str:a_pk>/b/<str:b_pk>/')
+        urls = self.b_router.urls
+        self.assertEqual(len(urls), 2)
+        self.assertEqual(pattern_from_url(urls[0]), 'a/<str:a_pk>/b/<str:b_pk>/c/')
+        self.assertEqual(pattern_from_url(urls[1]), 'a/<str:a_pk>/b/<str:b_pk>/c/<str:pk>/')
 
 
 class TestEmptyPrefix(TestCase):
