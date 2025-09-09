@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.95
+_Aug 27, 2025_
+
+* Fix 500 errors when receiving malformed JSON (@avacaru on PR#381)
+
 ## 0.94.2
 _May 14, 2025_
 
