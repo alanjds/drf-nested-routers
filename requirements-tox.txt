@@ -5,7 +5,7 @@ pytest-cov==5.0.0
 pytest-django==4.9.0
 flake8==7.0.0
 ipdb==0.13.13
-pytz==2024.1
+pytz==2024.2
 
 # Type checking requirements
 mypy==1.10.0
