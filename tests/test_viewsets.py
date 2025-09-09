@@ -1,24 +1,19 @@
 import json
 
-from django.urls import path, include
-from django.db import models
-from django.test import TestCase, override_settings, RequestFactory
 from django.core.exceptions import ImproperlyConfigured
+from django.db import models
+from django.test import RequestFactory, TestCase, override_settings
+from django.urls import include, path, reverse
 from rest_framework import status
+from rest_framework.reverse import reverse as drf_reverse
 from rest_framework.routers import SimpleRouter
+from rest_framework.schemas import generators
 from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.reverse import reverse as drf_reverse
-from rest_framework.schemas import generators
 
 from rest_framework_nested.routers import NestedSimpleRouter
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from rest_framework_nested.viewsets import NestedViewSetMixin
-
-try:
-    from django.core.urlresolvers import reverse
-except ImportError:
-    from django.urls import reverse
 
 factory = RequestFactory()
 
@@ -221,3 +216,32 @@ class TestNestedSimpleRouter(TestCase):
             setattr(view, 'swagger_fake_view', True)
             # no error message should be raised here
             view.get_queryset()
+
+    def test_create_invalid_data_with_mixin(self):
+        """
+        The `NestedViewSetMixin` automatically sets the
+        parent kwarg on the request.{data,query_params} querydict.
+
+        This happens in the `initialize_request()` lifecycle method, but
+        this method is outside the DRF exception handler's scope, so
+        when the `request.data` is accessed, if the data is invalid, then
+        the exception will not be handled by DRF, and it will result in a 500.
+
+        If we handle that after the `initial()` method, which checks all
+        the API policies, like content negotiation, throttling, permisisons, etc, then
+        the invalid data will be caught by the content negotiation and an appropiate
+        HTTP 400 error should be received by the client.
+        """
+        resource_url = reverse(
+            "child-with-nested-mixin-list", kwargs={"parent_pk": self.root_1.pk}
+        )
+
+        response = self.client.post(
+            resource_url, content_type="application/json", data="invalid json"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.json(),
+            {"detail": "JSON parse error - Expecting value: line 1 column 1 (char 0)"},
+        )

@@ -1,4 +1,3 @@
-
 def get_regex_pattern(urlpattern):
     if hasattr(urlpattern, 'pattern'):
         # Django 2.0
