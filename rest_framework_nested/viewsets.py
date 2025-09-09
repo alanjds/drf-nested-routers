@@ -64,23 +64,23 @@ class NestedViewSetMixin(Generic[T_Model]):
             orm_filters[field_name] = self.kwargs[query_param]  # type: ignore[attr-defined]
         return queryset.filter(**orm_filters)
 
-    def initialize_request(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Request:
+    def initial(self, request: Request, *args: Any, **kwargs: Any) -> None:
         """
         Adds the parent params from URL inside the children data available
         """
-        drf_request: Request = super().initialize_request(request, *args, **kwargs)  # type: ignore[misc]
+        # run all the DRF API policies first
+        super().initial(request, *args, **kwargs)  # type: ignore[misc]
 
         if getattr(self, 'swagger_fake_view', False):
-            return drf_request
+            return
 
         for url_kwarg, fk_filter in self._get_parent_lookup_kwargs().items():
             # fk_filter is alike 'grandparent__parent__pk'
             parent_arg = fk_filter.partition('__')[0]
-            for querydict in [drf_request.data, drf_request.query_params]:
+            for querydict in [request.data, request.query_params]:
                 with _force_mutable(querydict):
                     if isinstance(querydict, list):
                         for querydict_item in querydict:
                             querydict_item[parent_arg] = kwargs[url_kwarg]
                     else:
                         querydict[parent_arg] = kwargs[url_kwarg]
-        return drf_request
