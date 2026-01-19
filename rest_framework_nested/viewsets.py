@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import contextlib
-from typing import Any, Generic, Iterator, TypeVar
+from typing import Any, Dict, Generic, Iterator, List, TypeVar, Union, cast
 
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Model, QuerySet
@@ -10,10 +10,13 @@ from rest_framework.request import Request
 from rest_framework.serializers import BaseSerializer
 
 T_Model = TypeVar('T_Model', bound=Model)
+RequestData = Union[Dict[str, Any], List[Dict[str, Any]]]
 
 
 @contextlib.contextmanager
-def _force_mutable(querydict: QueryDict | dict[str, Any]) -> Iterator[QueryDict | dict[str, Any]]:
+def _force_mutable(
+    querydict: QueryDict | dict[str, Any] | list[dict[str, Any]],
+) -> Iterator[QueryDict | dict[str, Any] | list[dict[str, Any]]]:
     """
     Takes a HttpRequest querydict from Django and forces it to be mutable.
     Reverts the initial state back on exit, if any.
@@ -74,10 +77,11 @@ class NestedViewSetMixin(Generic[T_Model]):
         if getattr(self, 'swagger_fake_view', False):
             return
 
+        request_data = cast(RequestData, request.data)
         for url_kwarg, fk_filter in self._get_parent_lookup_kwargs().items():
             # fk_filter is alike 'grandparent__parent__pk'
             parent_arg = fk_filter.partition('__')[0]
-            for querydict in [request.data, request.query_params]:
+            for querydict in [request_data, request.query_params]:
                 with _force_mutable(querydict):
                     if isinstance(querydict, list):
                         for querydict_item in querydict:
