@@ -13,7 +13,7 @@ django-stubs==5.1.1
 djangorestframework-stubs==3.15.0
 
 # wheel for PyPI installs
-wheel==0.45.1
+wheel==0.46.2
 
 # MkDocs for documentation previews/deploys
 mkdocs==1.5.2
