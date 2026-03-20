@@ -79,7 +79,7 @@ setup(
         'djangorestframework>=3.15.0',
         'Django>=4.2',
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
@@ -93,7 +93,6 @@ setup(
         'Operating System :: OS Independent',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
