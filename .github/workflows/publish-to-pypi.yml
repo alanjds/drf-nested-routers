@@ -1,18 +1,21 @@
 name: Publish to PyPI
 
-# Gate 1: fires only when a human opens the draft release on GitHub
-#          and clicks "Publish release".
-# Gate 2: the `pypi` environment can be configured in repo Settings →
-#          Environments to require an additional reviewer approval before
-#          the upload step runs.
+# Human gate: open the pre-release on GitHub, uncheck "This is a pre-release",
+# click "Update release". That edit fires the `released` event below and
+# triggers the production upload.
+#
+# The `released` event fires only when a release is NOT a pre-release — it
+# does NOT fire when the pre-release is first created (that is `prereleased`).
 on:
   release:
-    types: [published]
+    types: [released]
 
 jobs:
   pypi-publish:
     name: Upload to PyPI
     runs-on: ubuntu-latest
+    # Optional second gate: create a `pypi` environment in Settings → Environments
+    # and add yourself as a required reviewer for an extra approval click.
     environment:
       name: pypi
       url: https://pypi.org/p/drf-nested-routers

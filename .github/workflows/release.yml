@@ -1,4 +1,4 @@
-name: Build & Draft Release
+name: Build & Pre-release
 
 on:
   push:
@@ -58,8 +58,8 @@ jobs:
           path: dist/
           if-no-files-found: error
 
-  draft-release:
-    name: Create GitHub draft release
+  github-prerelease:
+    name: Create GitHub pre-release
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -71,7 +71,7 @@ jobs:
           name: dist-${{ needs.build.outputs.version }}
           path: dist/
 
-      - name: Create draft GitHub release
+      - name: Create GitHub pre-release
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.event.inputs.tag || github.ref_name }}
@@ -79,5 +79,27 @@ jobs:
           gh release create "$TAG" dist/* \
             --repo "$GITHUB_REPOSITORY" \
             --title "$TAG" \
-            --draft \
+            --prerelease \
             --generate-notes
+
+  testpypi-publish:
+    name: Publish to TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/drf-nested-routers
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ needs.build.outputs.version }}
+          path: dist/
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
