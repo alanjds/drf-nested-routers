@@ -48,3 +48,12 @@ include = ["rest_framework_nested*"]
 
 [tool.setuptools.package-data]
 rest_framework_nested = ["py.typed"]
+
+[tool.bumpversion]
+current_version = "0.95.0"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "rest_framework_nested/__init__.py"
