@@ -1,0 +1,34 @@
+name: Publish to PyPI
+
+# Gate 1: fires only when a human opens the draft release on GitHub
+#          and clicks "Publish release".
+# Gate 2: the `pypi` environment can be configured in repo Settings →
+#          Environments to require an additional reviewer approval before
+#          the upload step runs.
+on:
+  release:
+    types: [published]
+
+jobs:
+  pypi-publish:
+    name: Upload to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/drf-nested-routers
+    permissions:
+      contents: read
+      id-token: write  # required for OIDC Trusted Publishing (no token/secret needed)
+    steps:
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "${{ github.event.release.tag_name }}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --dir dist/ \
+            --pattern "*.whl" \
+            --pattern "*.tar.gz"
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
