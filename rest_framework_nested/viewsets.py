@@ -79,7 +79,7 @@ class NestedViewSetMixin(Generic[T_Model]):
             parent_arg = fk_filter.partition('__')[0]
             for querydict in [request.data, request.query_params]:
                 with _force_mutable(querydict):
-                    if isinstance(querydict, list):  # type: ignore[unreachable]
+                    if isinstance(querydict, list):
                         for querydict_item in querydict:
                             querydict_item[parent_arg] = kwargs[url_kwarg]
                     else:
