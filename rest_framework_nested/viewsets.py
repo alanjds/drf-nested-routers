@@ -13,7 +13,7 @@ T_Model = TypeVar('T_Model', bound=Model)
 
 
 @contextlib.contextmanager
-def _force_mutable(querydict: QueryDict | dict[str, Any]) -> Iterator[QueryDict | dict[str, Any]]:
+def _force_mutable(querydict: QueryDict | dict[str, Any] | list[Any]) -> Iterator[QueryDict | dict[str, Any] | list[Any]]:
     """
     Takes a HttpRequest querydict from Django and forces it to be mutable.
     Reverts the initial state back on exit, if any.
