@@ -1,0 +1,54 @@
+name: Bump version
+
+# Runs from the Actions tab: select this workflow, click "Run workflow",
+# choose patch / minor / major from the dropdown, click the green button.
+#
+# What happens next:
+#   bump-my-version updates __init__.py, commits, and pushes a vX.Y.Z tag.
+#   That tag push triggers the "Build & Pre-release" workflow automatically.
+#
+# Required one-time setup:
+#   Create a fine-grained PAT with "Contents: Read and write" for this repo
+#   and store it as the repository secret RELEASE_TOKEN.
+#   (Pushes made with GITHUB_TOKEN don't trigger other workflows.)
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version component to bump'
+        required: true
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+
+jobs:
+  bump:
+    name: Bump ${{ inputs.bump }} version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # PAT so the resulting tag push triggers the release workflow.
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install bump-my-version
+        run: pip install bump-my-version
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump ${{ inputs.bump }} version
+        run: bump-my-version bump ${{ inputs.bump }}
+
+      - name: Push commit and tag
+        run: |
+          git push
+          git push --tags
