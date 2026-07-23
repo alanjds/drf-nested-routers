@@ -48,7 +48,7 @@ include = ["rest_framework_nested*"]
 rest_framework_nested = ["py.typed"]
 
 [tool.bumpversion]
-current_version = "0.95.1"
+current_version = "0.95.2"
 commit = true
 tag = true
 tag_name = "v{new_version}"
