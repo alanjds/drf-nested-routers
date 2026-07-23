@@ -8,5 +8,3 @@ pytz==2024.1
 
 # Type checking requirements
 mypy==1.13.0
-django-stubs==6.0.7
-djangorestframework-stubs==3.17.0

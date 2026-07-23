@@ -9,7 +9,7 @@ description = "Nested resources for the Django Rest Framework"
 readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Alan Justino et al.", email = "alan.justino@yahoo.com.br" }]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
     "djangorestframework>=3.15.0",
     "Django>=4.2",
@@ -27,8 +27,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
