@@ -1,0 +1,105 @@
+name: Build & Pre-release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*.[0-9]*.[0-9]*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Git tag to build (e.g. v0.96.0)'
+        required: true
+
+jobs:
+  build:
+    name: Build and verify distribution
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install build tools
+        # packaging>=24.2 needed so twine check understands Metadata-Version 2.4 (PEP 639)
+        run: pip install build twine "packaging>=24.2"
+
+      - name: Build sdist and wheel
+        run: python -m build
+
+      - name: Verify wheel — no __pycache__ or bytecode
+        run: |
+          python -m zipfile -l dist/*.whl \
+            | grep -E '__pycache__|\.pyc$' \
+            && { echo "ERROR: wheel contains cached/bytecode files"; exit 1; } \
+            || echo "OK: wheel contents are clean"
+
+      - name: Check distributions with twine
+        run: twine check dist/*
+
+      - name: Extract version
+        id: version
+        run: |
+          python -c "
+          import re, pathlib
+          m = re.search(r\"__version__ = '([^']+)'\", pathlib.Path('rest_framework_nested/__init__.py').read_text())
+          print('version=' + m.group(1))
+          " >> "$GITHUB_OUTPUT"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ steps.version.outputs.version }}
+          path: dist/
+          if-no-files-found: error
+
+  github-prerelease:
+    name: Create GitHub pre-release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ needs.build.outputs.version }}
+          path: dist/
+
+      - name: Create GitHub pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.tag || github.ref_name }}
+        run: |
+          gh release create "$TAG" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$TAG" \
+            --prerelease \
+            --generate-notes
+
+  testpypi-publish:
+    name: Publish to TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/drf-nested-routers
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-${{ needs.build.outputs.version }}
+          path: dist/
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
