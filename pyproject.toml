@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drf-nested-routers"
+dynamic = ["version"]
+description = "Nested resources for the Django Rest Framework"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Alan Justino et al.", email = "alan.justino@yahoo.com.br" }]
+requires-python = ">=3.10"
+dependencies = [
+    "djangorestframework>=3.15.0",
+    "Django>=4.2",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
+[project.urls]
+Homepage = "https://github.com/alanjds/drf-nested-routers"
+
+[tool.setuptools.dynamic]
+version = { attr = "rest_framework_nested.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rest_framework_nested*"]
+
+[tool.setuptools.package-data]
+rest_framework_nested = ["py.typed"]
+
+[tool.bumpversion]
+current_version = "0.95.1"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "rest_framework_nested/__init__.py"

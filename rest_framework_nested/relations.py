@@ -80,7 +80,9 @@ class NestedHyperlinkedRelatedField(HyperlinkedRelatedField, Generic[T_Model]):
             lookup_value = view_kwargs[parent_lookup_kwarg]
             kwargs.update({self.parent_lookup_kwargs[parent_lookup_kwarg]: lookup_value})
 
-        return self.get_queryset().get(**kwargs)
+        queryset = self.get_queryset()
+        assert queryset is not None
+        return queryset.get(**kwargs)
 
     def use_pk_only_optimization(self) -> bool:
         return False
@@ -94,7 +96,9 @@ class NestedHyperlinkedRelatedField(HyperlinkedRelatedField, Generic[T_Model]):
 
             # data is probable the lookup value, not the resource URL
             try:
-                return self.get_queryset().get(**{self.lookup_field: data})
+                queryset = self.get_queryset()
+                assert queryset is not None
+                return queryset.get(**{self.lookup_field: data})
             except (ObjectDoesNotExist, ObjectValueError, ObjectTypeError):
                 self.fail('does_not_exist')
 
