@@ -55,4 +55,5 @@ lib/
 local/
 
 !.gitignore
+!.github/*
 !.travis.yml
