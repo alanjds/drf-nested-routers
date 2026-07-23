@@ -13,7 +13,7 @@ T_Model = TypeVar('T_Model', bound=Model)
 
 
 @contextlib.contextmanager
-def _force_mutable(querydict: QueryDict | dict[str, Any]) -> Iterator[QueryDict | dict[str, Any]]:
+def _force_mutable(querydict: QueryDict | dict[str, Any] | list[Any]) -> Iterator[QueryDict | dict[str, Any] | list[Any]]:
     """
     Takes a HttpRequest querydict from Django and forces it to be mutable.
     Reverts the initial state back on exit, if any.
@@ -79,8 +79,8 @@ class NestedViewSetMixin(Generic[T_Model]):
             parent_arg = fk_filter.partition('__')[0]
             for querydict in [request.data, request.query_params]:
                 with _force_mutable(querydict):
-                    if isinstance(querydict, list):
-                        for querydict_item in querydict:
+                    if isinstance(querydict, list):  # type: ignore[unreachable]
+                        for querydict_item in querydict:  # type: ignore[unreachable]
                             querydict_item[parent_arg] = kwargs[url_kwarg]
                     else:
                         querydict[parent_arg] = kwargs[url_kwarg]

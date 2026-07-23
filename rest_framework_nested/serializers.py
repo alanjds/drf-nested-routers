@@ -39,7 +39,7 @@ class NestedHyperlinkedModelSerializer(rest_framework.serializers.HyperlinkedMod
         self.parent_lookup_kwargs = kwargs.pop('parent_lookup_kwargs', self.parent_lookup_kwargs)
         super().__init__(*args, **kwargs)
 
-    def build_url_field(self, field_name: str, model_class: T_Model) -> tuple[type[Field], dict[str, Any]]:
+    def build_url_field(self, field_name: str, model_class: type[T_Model]) -> tuple[type[Field], dict[str, Any]]:
         field_class, field_kwargs = super().build_url_field(
             field_name,
             model_class
