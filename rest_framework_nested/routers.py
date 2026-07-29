@@ -33,10 +33,7 @@ from typing import Any
 
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
-if sys.version_info[0] < 3:
-    IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*$")
-else:
-    IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*$", re.UNICODE)
+IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*$", re.UNICODE)
 
 
 class LookupMixin:
