@@ -1,0 +1,37 @@
+name: Publish to PyPI
+
+# Human gate: open the pre-release on GitHub, uncheck "This is a pre-release",
+# click "Update release". That edit fires the `released` event below and
+# triggers the production upload.
+#
+# The `released` event fires only when a release is NOT a pre-release — it
+# does NOT fire when the pre-release is first created (that is `prereleased`).
+on:
+  release:
+    types: [released]
+
+jobs:
+  pypi-publish:
+    name: Upload to PyPI
+    runs-on: ubuntu-latest
+    # Optional second gate: create a `pypi` environment in Settings → Environments
+    # and add yourself as a required reviewer for an extra approval click.
+    environment:
+      name: pypi
+      url: https://pypi.org/p/drf-nested-routers
+    permissions:
+      contents: read
+      id-token: write  # required for OIDC Trusted Publishing (no token/secret needed)
+    steps:
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "${{ github.event.release.tag_name }}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --dir dist/ \
+            --pattern "*.whl" \
+            --pattern "*.tar.gz"
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
