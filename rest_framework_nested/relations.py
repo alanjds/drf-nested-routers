@@ -56,8 +56,12 @@ class NestedHyperlinkedRelatedField(HyperlinkedRelatedField, Generic[T_Model]):
                 # use the Django ORM to lookup this value, e.g., obj.parent.pk
                 lookup_value = reduce(getattr, [obj] + lookups)  # type: ignore[operator,arg-type]
             except AttributeError:
-                # Not nested. Act like a standard HyperlinkedRelatedField
-                return super().get_url(obj, view_name, request, format)
+                # look for the field in the view, allowing to use this without a field relation
+                try:
+                    lookup_value = getattr(self.root.context["view"], underscored_lookup)
+                except (AttributeError, ObjectDoesNotExist):
+                    # Not nested. Act like a standard HyperlinkedRelatedField
+                    return super().get_url(obj, view_name, request, format)
 
             # store the lookup_name and value in kwargs, which is later passed to the reverse method
             kwargs.update({parent_lookup_kwarg: lookup_value})
