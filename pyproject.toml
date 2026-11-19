@@ -11,7 +11,7 @@ license = { text = "Apache-2.0" }
 authors = [{ name = "Alan Justino et al.", email = "alan.justino@yahoo.com.br" }]
 requires-python = ">=3.10"
 dependencies = [
-    "djangorestframework>=3.15.0",
+    "djangorestframework>=3.17.2",
     "Django>=4.2",
 ]
 classifiers = [
