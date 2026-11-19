@@ -26,7 +26,7 @@ And since **0.92.1** is no more tested on CI for Pythons 2.7 to 3.5, Django 1.11
 Before that, the release **0.90.2** was tested also with DRF 2.4.3 up to 3.7.
 And so on...
 
-Support for DRF 3.16- was dropped in response of [CVE-2026-73228](https://github.com/advisories/GHSA-2m8g-3cmr-wg3w) ([GHSA-2m8g-3cmr-wg3w](https://github.com/advisories/GHSA-2m8g-3cmr-wg3w)), also dropping Python<3.11.
+Support for DRF 3.17.2- was dropped in response of [CVE-2026-73228](https://github.com/advisories/GHSA-2m8g-3cmr-wg3w) ([GHSA-2m8g-3cmr-wg3w](https://github.com/advisories/GHSA-2m8g-3cmr-wg3w)), also dropping Python<3.11.
 
 
 ## Installation
